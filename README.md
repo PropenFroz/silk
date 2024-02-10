@@ -1,15 +1,25 @@
+# Authors
+
+| NPM        | Name       | Role   |
+| ---------- | ------------------ | ------------------------------ |
+| 2106634414 | Shafa Najwa Nathania | Lead Programmer |
+| 2106635013 | Nisrina Zakiyah Aeni | Project Manager |
+| 2106637555 | Abdillah Sulthan Naufal Panggabean | Scrum Master |
+| 2106653741 | Ahmad Fatahillah | Lead System Analyst |
+| 2106751442 | Rafli Wasis Anggito | Lead System Designer |
+
+
 # Steps to execute the application
 
 1. `mvn clean install`
 2. `java -jar target/spring-react-1.0.jar`
 3. Open a browser and type this url [http://localhost:8080](http://localhost:8080)
 
-**Note:** You might get a warning in pom.xml saying
+## Run React only (for frontend-focused-changes)
 
-```
-Plugin execution not covered by lifecycle configuration: org.apache.maven.plugins:maven-antrun-plugin:1.8:run (execution: default, phase: generate-resources)
-```
+1. `cd ui`
+2. `npm start`
 
-So just ignore it or if you can fix it then you can.
+## Run Java Springboot only (for backend-focused-changes)
 
-To solve the above warning if you put all the plugins inside the `<pluginManagement>...</pluginManagement>` then `java -jar target/spring-react-1.0.jar` will not work. It will raise an error like `no main manifest attribute, in spring-react-1.0.jar`.
+1. `mvn spring-boot:run -DskipFrontend`

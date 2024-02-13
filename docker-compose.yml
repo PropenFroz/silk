@@ -1,0 +1,100 @@
+#version: '3.3'
+#services:
+#  ui:
+#    container_name: app_ui
+#    build: ui
+#    ports:
+#      - 3000:80
+#
+#  api:
+#    container_name: app_api
+#    build: app-api
+#    environment:
+#      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/silk"
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: secret99
+#      SPRING_LOGGING_LEVEL_ROOT: INFO
+#      SPRING_SERVER_PORT: 5000
+#    ports:
+#      - 8080:5000
+#    depends_on:
+#      - postgres
+#
+#  postgres:
+#    container_name: app_postgres
+#    image: postgres:14-alpine
+#    restart: always
+#    command: [ "postgres", "-c", "log_statement=all", "-c", "log_destination=stderr" ]
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: secret99
+#      POSTGRES_DB: silk # Specify your custom database name if needed
+#    ports:
+#      - 15001:5432
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#
+#volumes:
+#  postgres_data: # Define the volume here
+
+version: '3.3'
+services:
+  postgres:
+    container_name: app_postgres
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret99
+      POSTGRES_DB: silk
+    ports:
+      - "15001:5432"
+
+  backend:
+    container_name: app_backend
+    build: .
+#    command: mvn spring-boot:run
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/silk"
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: secret99
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+
+  ui:
+    container_name: app_ui
+    build: ./ui
+    ports:
+      - "3000:3000"
+#    depends_on:
+#      - backend
+
+
+
+
+#   db:
+#     image: postgres:14-alpine
+#     ports:
+#       - "15001:5432"
+#     restart: "no"
+#     environment:
+#       - POSTGRES_USER=postgres
+#       - POSTGRES_PASSWORD=secret99
+#     volumes:
+#       - db:/var/lib/postgresql/data
+#     networks:
+#       - backend-network
+
+# volumes:
+#   db:
+#     driver: local
+
+# networks:
+#   frontend-network:
+#     driver: bridge
+#   backend-network:
+#     driver: bridge

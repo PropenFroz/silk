@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/core": "^7.23.9",
     "axios": "^0.21.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

@@ -13,7 +13,7 @@
 	<artifactId>silk</artifactId>
 	<version>1.0</version>
 	<name>silk</name>
-	<description>Spring Boot and ReactJS project for financial internal applicationi</description>
+	<description>Spring Boot and ReactJS project for financial internal application</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>

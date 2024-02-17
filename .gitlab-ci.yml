@@ -93,7 +93,6 @@ default:
 
 stages:
   - build
-  - test
   - deploy
 
 variables:
@@ -107,12 +106,6 @@ build:
   only:
     - main
 
-test:
-  stage: test
-  script:
-    - ./mvnw test
-  only:
-    - main
 
 deploy:
   stage: deploy

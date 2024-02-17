@@ -86,41 +86,42 @@
 #     - docker push registry.heroku.com/$APP_NAME_BACKEND/web
 #     - docker run -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli:latest container:release web -a $APP_NAME_BACKEND
 #     - echo "Backend Deployment Complete!"
-
-image: maven:latest
-
 stages:
   - build
   - test
   - deploy
 
 variables:
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
-  RAILWAY_TOKEN: "$RAILWAY_TOKEN"
+  DOCKER_IMAGE_NAME: your-registry/your-project-name
+  DOCKER_TAG: $CI_COMMIT_SHORT_SHA
+  RAILWAY_PROJECT: your-railway-project-id
 
-cache:
-  paths:
-    - .m2/repository
-    - ui/node_modules
+before_script:
+  - echo "$CI_JOB_TOKEN" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
 
-maven_build:
+build:
   stage: build
   script:
-    - mvn clean install
+    - ./mvnw package -DskipTests
+    - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_TAG .
+    - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
+  only:
+    - master
 
 test:
   stage: test
   script:
-    - # Add your test scripts here if needed
+    - ./mvnw test
+  only:
+    - master
 
 deploy:
   stage: deploy
+  image: railway/cli
   script:
-    - java -jar target/silk-1.0.jar &
-    - sleep 10 # Wait for the server to start
-    - # Add any additional setup or configuration steps here if needed
+    - railway login --apiKey $RAILWAY_API_KEY
+    - railway up --service your-service-name --project $RAILWAY_PROJECT
   only:
-    - main
-    
-
-
+    - master
+  environment:
+    name: production

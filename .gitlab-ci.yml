@@ -109,7 +109,7 @@ build:
 
 deploy:
   stage: deploy
-  image: railway/cli
+  image: ubuntu
   script:
     - java -jar target/silk-1.0.jar &
     - curl -fsSL https://railway.app/install.sh | sh

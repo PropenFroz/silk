@@ -98,12 +98,12 @@ variables:
   RAILWAY_PROJECT: 28697091-6c52-4df8-86ed-2c40583a30f5
 
 before_script:
-  - echo "$CI_JOB_TOKEN" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  - echo "$CI_JOB_TOKEN" | docker login https://gitlab.cs.ui.ac.id/shafa.najwa/silk --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD
 
 build:
   stage: build
   script:
-    - ./mvnw package -D skipTests
+    - ./mvn clean install
     - docker-compose -f docker-compose.yml up -d
     - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_TAG .
     - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG

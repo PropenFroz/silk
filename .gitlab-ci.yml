@@ -89,7 +89,7 @@
 
 default:
   tags:
-    - silk
+    - apap
 
 stages:
   - build

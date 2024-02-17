@@ -97,26 +97,15 @@ stages:
   - deploy
 
 variables:
-  DOCKER_IMAGE_NAME: https://gitlab.cs.ui.ac.id/shafa.najwa/silk
-  DOCKER_TAG: $CI_COMMIT_SHORT_SHA
   RAILWAY_PROJECT: 28697091-6c52-4df8-86ed-2c40583a30f5
-  IMAGE_DOCKER_DIND: docker:20.10.16
-  IMAGE_OPENJDK_GRADLE: gradle:7.3.3-jdk17-alpine
-
-before_script:
-  - docker info
-  # - echo "$CI_JOB_TOKEN" | docker login https://gitlab.cs.ui.ac.id/shafa.najwa/silk --username $CI_REGISTRY_USER --password-stdin $CI_REGISTRY_PASSWORD
+  RAILWAY_API_KEY: 8141d166-992b-4003-96ec-1337158c1808
 
 build:
   stage: build
   script:
     - mvn clean install
-    - docker-compose -f docker-compose.yml up -d
-    - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_TAG .
-    - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
   only:
     - main
-
 
 test:
   stage: test
@@ -129,8 +118,9 @@ deploy:
   stage: deploy
   image: railway/cli
   script:
+    - java -jar target/silk-1.0.jar &
     - railway login --apiKey $RAILWAY_API_KEY
-    - railway up --service your-service-name --project $RAILWAY_PROJECT
+    - railway up --service silk --project $RAILWAY_PROJECT
   only:
     - main
   environment:

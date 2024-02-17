@@ -89,7 +89,7 @@
 
 default:
   tags:
-    - apap
+    - silk
 
 stages:
   - build
@@ -107,13 +107,26 @@ build:
     - main
 
 
+# deploy:
+#   stage: deploy
+#   image: ubuntu
+#   script:
+#     # - cd $CI_PROJECT_DIR/target
+#     - java -jar $CI_PROJECT_DIR/target/silk-1.0.jar
+#     - apt-get update && apt-get install -y curl
+#     - curl -fsSL https://railway.app/install.sh | sh
+#     - railway login --apiKey $RAILWAY_API_KEY
+#     - railway up --service silk --project $RAILWAY_PROJECT
+#   only:
+#     - main
+#   environment:
+#     name: production
+
 deploy:
   stage: deploy
-  image: ubuntu
+  image: alpine:latest
   script:
-    # - cd $CI_PROJECT_DIR/target
-    - java -jar $CI_PROJECT_DIR/target/silk-1.0.jar
-    - apt-get update && apt-get install -y curl
+    - apk add --no-cache curl
     - curl -fsSL https://railway.app/install.sh | sh
     - railway login --apiKey $RAILWAY_API_KEY
     - railway up --service silk --project $RAILWAY_PROJECT

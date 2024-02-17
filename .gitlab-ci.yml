@@ -112,6 +112,7 @@ deploy:
   image: railway/cli
   script:
     - java -jar target/silk-1.0.jar &
+    - curl -fsSL https://railway.app/install.sh | sh
     - railway login --apiKey $RAILWAY_API_KEY
     - railway up --service silk --project $RAILWAY_PROJECT
   only:

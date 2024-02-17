@@ -93,7 +93,7 @@ stages:
   - deploy
 
 variables:
-  DOCKER_IMAGE_NAME: silk
+  DOCKER_IMAGE_NAME: https://gitlab.cs.ui.ac.id/shafa.najwa/silk
   DOCKER_TAG: $CI_COMMIT_SHORT_SHA
   RAILWAY_PROJECT: 28697091-6c52-4df8-86ed-2c40583a30f5
 

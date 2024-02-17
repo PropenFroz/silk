@@ -86,6 +86,7 @@
 #     - docker push registry.heroku.com/$APP_NAME_BACKEND/web
 #     - docker run -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli:latest container:release web -a $APP_NAME_BACKEND
 #     - echo "Backend Deployment Complete!"
+
 stages:
   - build
   - test
@@ -102,18 +103,18 @@ before_script:
 build:
   stage: build
   script:
-    - ./mvnw package -DskipTests
+    - ./mvnw package -D skipTests
     - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_TAG .
     - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
   only:
-    - master
+    - main
 
 test:
   stage: test
   script:
     - ./mvnw test
   only:
-    - master
+    - main
 
 deploy:
   stage: deploy
@@ -122,6 +123,6 @@ deploy:
     - railway login --apiKey $RAILWAY_API_KEY
     - railway up --service your-service-name --project $RAILWAY_PROJECT
   only:
-    - master
+    - main
   environment:
     name: production

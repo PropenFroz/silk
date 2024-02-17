@@ -87,9 +87,9 @@
 #     - docker run -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli:latest container:release web -a $APP_NAME_BACKEND
 #     - echo "Backend Deployment Complete!"
 
-default:
-  tags:
-    - apap
+# default:
+#   tags:
+#     - apap
 
 stages:
   - build
@@ -111,7 +111,8 @@ deploy:
   stage: deploy
   image: ubuntu
   script:
-    - java -jar target/silk-1.0.jar &
+    - cd $CI_PROJECT_DIR/target
+    - java -jar target/silk-1.0.jar
     - curl -fsSL https://railway.app/install.sh | sh
     - railway login --apiKey $RAILWAY_API_KEY
     - railway up --service silk --project $RAILWAY_PROJECT

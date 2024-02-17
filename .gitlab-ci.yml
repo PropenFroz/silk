@@ -93,12 +93,13 @@ stages:
   - deploy
 
 variables:
-  DOCKER_IMAGE_NAME: your-registry/your-project-name
+  DOCKER_IMAGE_NAME: silk
   DOCKER_TAG: $CI_COMMIT_SHORT_SHA
-  RAILWAY_PROJECT: your-railway-project-id
+  RAILWAY_PROJECT: 28697091-6c52-4df8-86ed-2c40583a30f5
 
 before_script:
   - echo "$CI_JOB_TOKEN" | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  
 
 build:
   stage: build
@@ -108,6 +109,7 @@ build:
     - docker push $DOCKER_IMAGE_NAME:$DOCKER_TAG
   only:
     - main
+
 
 test:
   stage: test

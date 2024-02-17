@@ -1,0 +1,126 @@
+# stages:
+#   - build
+#   - test
+#   - deploy
+
+# cache:
+#   paths:
+#     - .m2/repository
+#     - target
+
+# variables:
+#   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+# maven_build:
+#   stage: build
+#   script:
+#     - mvn clean install
+
+# deploy_to_supabase:
+#   stage: deploy
+#   script:
+#     - supabase deploy --key $SUPABASE_KEY --url $SUPABASE_URL
+
+# deploy_to_vercel:
+#   stage: deploy
+#   script:
+#     - vercel --token $VERCEL_TOKEN --prod
+
+
+# variables:
+#   APP_NAME_FRONTEND: <YOUR FRONTEND APP NAME>
+#   APP_NAME_BACKEND: <YOUR BACKEND APP NAME>
+
+# stages:
+#   - build
+#   - deploy
+
+# Build-Deploy-Frontend-to-Heroku:
+#   stage: build
+#   image: docker:latest
+#   services:
+#     - docker:dind
+#   only:
+#     - master
+#   script:
+#     - echo "Deploying Frontend..."
+#     - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
+#     - docker build --file=frontend/frontend.dockerfile --rm=true -t registry.heroku.com/$APP_NAME_FRONTEND/web .
+#     - docker push registry.heroku.com/$APP_NAME_FRONTEND/web
+#     - docker run -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli:latest container:release web -a $APP_NAME_FRONTEND
+#     - echo "Frontend Deployment Complete!"
+
+# Build-Backend:
+#   stage: build
+#   image: gradle:6.0.1-jdk13
+#   before_script:
+#     - export GRADLE_USER_HOME=`pwd`/backend/.gradle
+#   script:
+#     - echo "Building Backend..."
+#     - cd ./backend
+#     - gradle build
+#     - echo "Backend Build Complete!"
+#   cache:
+#     key: "$CI_COMMIT_SHA"
+#     policy: push
+#     paths:
+#       - backend/build
+#   artifacts:
+#     paths:
+#       - backend/build/libs/*.jar
+#     expire_in: 1 week
+#   only:
+#     - master
+
+# Deploy-Backend-to-Heroku:
+#   stage: deploy
+#   image: docker:latest
+#   services:
+#     - docker:dind
+#   only:
+#     - master
+#   script:
+#     - echo "Deploying Backend..."
+#     - docker login -u _ -p $HEROKU_API_KEY registry.heroku.com
+#     - docker build --file=backend/backend.dockerfile --rm=true -t registry.heroku.com/$APP_NAME_BACKEND/web .
+#     - docker push registry.heroku.com/$APP_NAME_BACKEND/web
+#     - docker run -e HEROKU_API_KEY=$HEROKU_API_KEY wingrunr21/alpine-heroku-cli:latest container:release web -a $APP_NAME_BACKEND
+#     - echo "Backend Deployment Complete!"
+
+image: maven:latest
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  RAILWAY_TOKEN: "$RAILWAY_TOKEN"
+
+cache:
+  paths:
+    - .m2/repository
+    - ui/node_modules
+
+maven_build:
+  stage: build
+  script:
+    - mvn clean install
+
+test:
+  stage: test
+  script:
+    - # Add your test scripts here if needed
+
+deploy:
+  stage: deploy
+  script:
+    - java -jar target/silk-1.0.jar &
+    - sleep 10 # Wait for the server to start
+    - # Add any additional setup or configuration steps here if needed
+  only:
+    - main
+    
+
+

@@ -12,7 +12,7 @@
 # Steps to execute the application
 
 1. `mvn clean install`
-2. `java -jar target/spring-react-1.0.jar`
+2. `java -jar target/silk-1.0.jar`
 3. Open a browser and type this url [http://localhost:8080](http://localhost:8080)
 
 ## Run React only (for frontend-focused-changes)

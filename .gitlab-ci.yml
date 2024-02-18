@@ -124,6 +124,7 @@ deploy:
   stage: deploy
   image: node:18
   script:
+    - apt-get install npm
     - npm install -g @railway/cli
     - railway login --apiKey $RAILWAY_API_KEY
     - railway up --service silk --project $RAILWAY_PROJECT

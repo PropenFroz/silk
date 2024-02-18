@@ -110,7 +110,7 @@ deploy:
   stage: deploy
   image: docker:latest
   script:
-    - docker run --rm alpine sh -c "apk add --no-cache nodejs npm && npm install -g @railway/cli && railway login --apiKey $RAILWAY_API_KEY && railway up --service silk --project $RAILWAY_PROJECT"
+    - docker run --rm alpine sh -c "apk add --no-cache nodejs npm && npm install -g @railway/cli && railway login --apiKey 8141d166-992b-4003-96ec-1337158c1808 && railway up --service silk --project 28697091-6c52-4df8-86ed-2c40583a30f5"
   only:
     - main
   environment:

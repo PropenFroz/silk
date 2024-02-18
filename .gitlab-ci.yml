@@ -93,18 +93,11 @@ default:
 
 stages:
   - build
-  - prepare_environment
   - deploy
 
 variables:
   RAILWAY_PROJECT: 28697091-6c52-4df8-86ed-2c40583a30f5
   RAILWAY_API_KEY: 8141d166-992b-4003-96ec-1337158c1808
-
-prepare_environment:
-  stage: prepare
-  script:
-    - cd /home/gitlab-runner/
-    - sed -i '/clear_console -q/s/^/#/' .bash_logout
 
 build:
   stage: build

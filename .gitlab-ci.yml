@@ -108,7 +108,7 @@ build:
 
 deploy:
   stage: deploy
-  image: node:alpine
+  image: node:latest
   script:
     - npm install -g @railway/cli &&
     - railway login --apiKey $RAILWAY_API_KEY &&

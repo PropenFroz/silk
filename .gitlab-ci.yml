@@ -139,6 +139,7 @@ deploy:
     - main
   script:
     - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu sh -c "apt-get update && apt-get install -y curl && curl -fsSL https://railway.app/install.sh | sh"
+    - chmod +x /root/.railway/bin/railway  # Ensure the CLI binary has executable permissions
     - export PATH=$PATH:/root/.railway/bin  # Add Railway CLI binary directory to the system path
     - /root/.railway/bin/railway login --apiKey $RAILWAY_API_KEY
     - /root/.railway/bin/railway up --service=$RAILWAY_SERVICE_NAME -d

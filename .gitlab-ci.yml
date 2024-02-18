@@ -137,11 +137,8 @@ deploy:
     - pushes
     - main
   script:
-    docker run --rm \
-      -e RAILWAY_TOKEN=456b13a4-86ca-42bb-aedd-7597688e55fa \
-      -v /var/run/docker.sock:/var/run/docker.sock \
-      ubuntu sh -c "apt-get update && apt-get install -y curl && curl -fsSL https://railway.app/install.sh | sh && railway up --service=silk -d"
-
+    - docker run --rm -e RAILWAY_TOKEN=456b13a4-86ca-42bb-aedd-7597688e55fa RAILWAY_API_KEY=$RAILWAY_API_KEY node:latest sh -c "npm install -g @railway/cli && railway up --service silk"
+    
 # deploy:
 #   stage: deploy
 #   image: ubuntu:latest

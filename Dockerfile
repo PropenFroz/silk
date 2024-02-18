@@ -27,7 +27,6 @@ RUN npm install -g @railway/cli
 WORKDIR /app
 
 # Copy file package.json dan package-lock.json jika ada dan instal dependencies
-COPY package*.json ./
 RUN npm install
 
 # Copy seluruh isi direktori ke dalam kontainer

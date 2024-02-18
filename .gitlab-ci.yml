@@ -89,7 +89,6 @@
 
 default:
   tags:
-    - apap
 
 stages:
   - build

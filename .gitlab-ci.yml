@@ -121,7 +121,7 @@ deploy:
   #   - main
   # environment:
   #   name: production
-  
+
   # stage: deploy
   # script:
   #   - docker run --rm -e RAILWAY_API_KEY=$RAILWAY_TOKEN node:latest sh -c "npm install -g @railway/cli && railway login && railway up --service silk"
@@ -139,6 +139,7 @@ deploy:
     - main
   script:
     - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu sh -c "apt-get update && apt-get install -y curl && curl -fsSL https://railway.app/install.sh | sh"
+    - export PATH=$PATH:/root/.railway/bin  # Add Railway CLI binary directory to the system path
     - railway login --apiKey $RAILWAY_API_KEY
     - railway up --service=$RAILWAY_SERVICE_NAME -d
 

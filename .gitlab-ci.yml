@@ -110,8 +110,8 @@ deploy:
   stage: deploy
   image: node:latest
   script:
-    - CONTAINER_ID=$(docker run -d node:latest)
-    - docker exec $CONTAINER_ID npm install -g @railway/cli
+    - CONTAINER_ID=$(docker run -d node:latest sh)
+    - docker start $CONTAINER_ID && docker exec $CONTAINER_ID npm install -g @railway/cli
     - docker exec $CONTAINER_ID railway login --apiKey $RAILWAY_API_KEY
     - docker exec $CONTAINER_ID railway up --service silk --project $RAILWAY_PROJECT
     - docker stop $CONTAINER_ID

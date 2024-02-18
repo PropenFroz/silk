@@ -147,7 +147,7 @@ deploy:
   stage: deploy
   image: ubuntu
   only:
-    - master
+    - main
   script:
     - apt-get clean
     - apt-get -o Acquire::ForceIPv4=true update

@@ -110,13 +110,20 @@ build:
       - target/silk-1.0.jar
 
 deploy:
+  # stage: deploy
+  # script:
+  #   - CONTAINER_ID=$(docker run -d node:latest sh)
+  #   - docker start $CONTAINER_ID && docker exec $CONTAINER_ID npm install -g @railway/cli
+  #   - docker exec $CONTAINER_ID railway login --apiKey $RAILWAY_API_KEY
+  #   - docker exec $CONTAINER_ID railway up --service silk --project $RAILWAY_PROJECT
+  #   - docker stop $CONTAINER_ID
+  # only:
+  #   - main
+  # environment:
+  #   name: production
   stage: deploy
   script:
-    - CONTAINER_ID=$(docker run -d node:latest sh)
-    - docker start $CONTAINER_ID && docker exec $CONTAINER_ID npm install -g @railway/cli
-    - docker exec $CONTAINER_ID railway login --apiKey $RAILWAY_API_KEY
-    - docker exec $CONTAINER_ID railway up --service silk --project $RAILWAY_PROJECT
-    - docker stop $CONTAINER_ID
+    - docker run --rm -it node:latest sh -c "npm install -g @railway/cli && railway login --apiKey $RAILWAY_API_KEY && railway up --service silk --project $RAILWAY_PROJECT"
   only:
     - main
   environment:

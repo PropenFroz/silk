@@ -101,7 +101,6 @@ variables:
 
 build:
   stage: build
-  image: docker-latest
   script:
     - apk add --no-cache openjdk11
     - apk add --no-cache maven

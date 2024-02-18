@@ -143,9 +143,6 @@ build:
 #   environment:
 #     name: production
 
-stages:
-  - deploy
-
 deploy-railway:
   stage: deploy
   image: ubuntu

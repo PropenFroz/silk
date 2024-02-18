@@ -30,4 +30,4 @@ RUN npm install -g @railway/cli
 COPY . .
 
 # Jalankan perintah login Railway dan perintah deploy saat kontainer dijalankan
-CMD ["railway", "login", "$RAILWAY_API_KEY", "&&", "railway", "up", "--service", "silk", "--project", "$RAILWAY_PROJECT"]
+CMD ["railway", "login", "8141d166-992b-4003-96ec-1337158c1808", "&&", "railway", "up", "--service", "silk", "--project", "28697091-6c52-4df8-86ed-2c40583a30f5"]

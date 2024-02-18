@@ -110,17 +110,37 @@ build:
       - target/silk-1.0.jar
 
 deploy:
+  # stage: deploy
+  # script:
+  #   - CONTAINER_ID=$(docker run -d node:latest sh)
+  #   - docker start $CONTAINER_ID && docker exec $CONTAINER_ID npm install -g @railway/cli
+  #   - docker exec $CONTAINER_ID railway login --apiKey $RAILWAY_API_KEY
+  #   - docker exec $CONTAINER_ID railway up --service silk --project $RAILWAY_PROJECT
+  #   - docker stop $CONTAINER_ID
+  # only:
+  #   - main
+  # environment:
+  #   name: production
+  # stage: deploy
+  # script:
+  #   - docker run --rm -e RAILWAY_API_KEY=$RAILWAY_API_KEY node:latest sh -c "npm install -g @railway/cli && railway login && railway up --service silk"
+  # only:
+  #   - main
+  # environment:
+  #   name: production
+
   stage: deploy
-  script:
-    - CONTAINER_ID=$(docker run -d node:latest sh)
-    - docker start $CONTAINER_ID && docker exec $CONTAINER_ID npm install -g @railway/cli
-    - docker exec $CONTAINER_ID railway login --apiKey $RAILWAY_API_KEY
-    - docker exec $CONTAINER_ID railway up --service silk --project $RAILWAY_PROJECT
-    - docker stop $CONTAINER_ID
+  image: docker:latest
+  services:
+    - docker:dind
   only:
+    - pushes
     - main
-  environment:
-    name: production
+  script:
+    docker run --rm \
+      -e RAILWAY_TOKEN=456b13a4-86ca-42bb-aedd-7597688e55fa \
+      -v /var/run/docker.sock:/var/run/docker.sock \
+      ubuntu sh -c "apt-get update && apt-get install -y curl && curl -fsSL https://railway.app/install.sh | sh && railway up --service=silk -d"
 
 # deploy:
 #   stage: deploy

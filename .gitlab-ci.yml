@@ -121,22 +121,26 @@ deploy:
   #   - main
   # environment:
   #   name: production
-  stage: deploy
-  script:
-    - docker run --rm -e RAILWAY_API_KEY=$RAILWAY_TOKEN node:latest sh -c "npm install -g @railway/cli && railway login && railway up --service silk"
-  only:
-    - main
-  environment:
-    name: production
+  
   # stage: deploy
-  # image: docker:latest
-  # services:
-  #   - docker:dind
-  # only:
-  #   - pushes
-  #   - main
   # script:
-  #   - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu sh -c "apt-get update && apt-get install -y curl && curl -fsSL https://railway.app/install.sh | sh && railway up --service=$RAILWAY_SERVICE_NAME -d"
+  #   - docker run --rm -e RAILWAY_API_KEY=$RAILWAY_TOKEN node:latest sh -c "npm install -g @railway/cli && railway login && railway up --service silk"
+  # only:
+  #   - main
+  # environment:
+  #   name: production
+
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  only:
+    - pushes
+    - main
+  script:
+    - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock ubuntu sh -c "apt-get update && apt-get install -y curl && curl -fsSL https://railway.app/install.sh | sh"
+    - railway login --apiKey $RAILWAY_API_KEY
+    - railway up --service=$RAILWAY_SERVICE_NAME -d
 
 # deploy:
 #   stage: deploy

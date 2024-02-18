@@ -123,7 +123,7 @@ deploy:
   #   name: production
   stage: deploy
   script:
-    - docker run --rm -it node:latest sh -c "npm install -g @railway/cli && railway login --apiKey $RAILWAY_API_KEY && railway up --service silk --project $RAILWAY_PROJECT"
+    - docker run --rm node:latest sh -c "npm install -g @railway/cli && railway login --apiKey $RAILWAY_API_KEY && railway up --service silk --project $RAILWAY_PROJECT"
   only:
     - main
   environment:

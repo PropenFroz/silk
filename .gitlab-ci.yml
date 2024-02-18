@@ -121,19 +121,12 @@ build:
 #     name: production
 
 deploy:
-  runs-on: ubuntu:latest
-  image: ubuntu:latest
-  steps:
-    - name: checkout repo
-      uses: actions/setup-node@v1
-      with:
-        node-version: "18.x"
-    - name: dependencies
-      run: yarn
-    - name: install railway
-      run: npm i -g @railway/cli
-    - name: depl
-      run: railway login --apiKey $RAILWAY_API_KEY && railway up --service silk --project $RAILWAY_PROJECT
+  stage: deploy
+  image: node:18
+  script:
+    - npm install -g @railway/cli
+    - railway login --apiKey $RAILWAY_API_KEY
+    - railway up --service silk --project $RAILWAY_PROJECT
   only:
     - main
   environment:

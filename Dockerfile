@@ -23,11 +23,8 @@ FROM node:18
 # Instal Railway CLI secara global
 RUN npm install -g @railway/cli
 
-# Direktori kerja di dalam kontainer
-WORKDIR /app
-
-# Copy file package.json dan package-lock.json jika ada dan instal dependencies
-RUN npm install
+# # Direktori kerja di dalam kontainer
+# WORKDIR /app
 
 # Copy seluruh isi direktori ke dalam kontainer
 COPY . .

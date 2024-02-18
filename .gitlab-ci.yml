@@ -93,6 +93,7 @@ default:
 
 stages:
   - build
+  - test
   - deploy
 
 variables:
@@ -120,18 +121,40 @@ build:
 #   environment:
 #     name: production
 
+test:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t my-railway-app .
+  only:
+    - main
+
 deploy:
   stage: deploy
-  image: node:18
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    - apt-get install npm
-    - npm install -g @railway/cli
-    - railway login --apiKey $RAILWAY_API_KEY
-    - railway up --service silk --project $RAILWAY_PROJECT
+    - docker run --rm -e RAILWAY_API_KEY=$RAILWAY_API_KEY -e RAILWAY_PROJECT=$RAILWAY_PROJECT my-railway-app
   only:
     - main
   environment:
     name: production
+
+# deploy:
+#   stage: deploy
+#   image: node:18
+#   script:
+#     - apt-get install npm
+#     - npm install -g @railway/cli
+#     - railway login --apiKey $RAILWAY_API_KEY
+#     - railway up --service silk --project $RAILWAY_PROJECT
+#   only:
+#     - main
+#   environment:
+#     name: production
 
 # deploy:
 #   stage: deploy

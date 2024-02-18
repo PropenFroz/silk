@@ -91,6 +91,10 @@ default:
   tags:
     - silk
 
+image: docker:latest
+services: 
+  - docker:dind
+
 stages:
   - build
   - deploy

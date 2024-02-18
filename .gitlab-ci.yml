@@ -99,12 +99,22 @@ variables:
   RAILWAY_PROJECT: 28697091-6c52-4df8-86ed-2c40583a30f5
   RAILWAY_API_KEY: 8141d166-992b-4003-96ec-1337158c1808
 
+# build:
+#   stage: build
+#   script:
+#     - apk add --no-cache openjdk11
+#     - apk add --no-cache maven
+#     - mvn clean install
+#   only:
+#     - main
+
 build:
   stage: build
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    - apk add --no-cache openjdk11
-    - apk add --no-cache maven
-    - mvn clean install
+    - docker build -t my-railway-app .
   only:
     - main
 
@@ -121,16 +131,6 @@ build:
 #     - main
 #   environment:
 #     name: production
-
-# test:
-#   stage: test
-#   image: docker:latest
-#   services:
-#     - docker:dind
-#   script:
-#     - docker build -t my-railway-app .
-#   only:
-#     - main
 
 # deploy:
 #   stage: deploy

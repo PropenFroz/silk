@@ -137,7 +137,7 @@ build:
 
 deploy:
   stage: deploy
-  image: node:alpine  # Gunakan Docker sebagai gambar dasar
+  image: node:latest
   script:
     # - docker run --rm alpine sh -c "apk add --no-cache curl && apk add --no-cache tar && curl -fsSL https://railway.app/install.sh | sh"  # Menjalankan perintah instalasi Railway CLI di dalam container Docker
     - apk add --no-cache nodejs npm

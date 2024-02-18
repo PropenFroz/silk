@@ -89,7 +89,7 @@
 
 default:
   tags:
-    - apap
+    - silk
 
 stages:
   - build
@@ -107,20 +107,18 @@ build:
     - main
 
 
-# deploy:
-#   stage: deploy
-#   image: ubuntu
-#   script:
-#     # - cd $CI_PROJECT_DIR/target
-#     - java -jar $CI_PROJECT_DIR/target/silk-1.0.jar
-#     - apt-get update && apt-get install -y curl
-#     - curl -fsSL https://railway.app/install.sh | sh
-#     - railway login --apiKey $RAILWAY_API_KEY
-#     - railway up --service silk --project $RAILWAY_PROJECT
-#   only:
-#     - main
-#   environment:
-#     name: production
+deploy:
+  stage: deploy
+  image: ubuntu
+  script:
+    - apt-get update && apt-get install -y curl
+    - curl -fsSL https://railway.app/install.sh | sh
+    - railway login --apiKey $RAILWAY_API_KEY
+    - railway up --service silk --project $RAILWAY_PROJECT
+  only:
+    - main
+  environment:
+    name: production
 
 # deploy:
 #   stage: deploy
@@ -135,17 +133,17 @@ build:
 #   environment:
 #     name: production
 
-deploy:
-  stage: deploy
-  image: node:latest
-  script:
-    # - docker run --rm alpine sh -c "apk add --no-cache curl && apk add --no-cache tar && curl -fsSL https://railway.app/install.sh | sh"  # Menjalankan perintah instalasi Railway CLI di dalam container Docker
-    # - apk add --no-cache nodejs npm
-    - npm install -g @railway/cli
-    - railway login --apiKey $RAILWAY_API_KEY  # Login ke Railway menggunakan Railway CLI yang telah diinstal
-    - railway up --service silk --project $RAILWAY_PROJECT  # Mendeploy layanan ke Railway
-  only:
-    - main
-  environment:
-    name: production
+# deploy:
+#   stage: deploy
+#   image: ubuntu
+#   script:
+#     # - docker run --rm alpine sh -c "apk add --no-cache curl && apk add --no-cache tar && curl -fsSL https://railway.app/install.sh | sh"  # Menjalankan perintah instalasi Railway CLI di dalam container Docker
+#     # - apk add --no-cache nodejs npm
+#     - npm install -g @railway/cli
+#     - railway login --apiKey $RAILWAY_API_KEY  # Login ke Railway menggunakan Railway CLI yang telah diinstal
+#     - railway up --service silk --project $RAILWAY_PROJECT  # Mendeploy layanan ke Railway
+#   only:
+#     - main
+#   environment:
+#     name: production
 

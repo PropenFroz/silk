@@ -111,7 +111,6 @@ build:
 
 deploy:
   stage: deploy
-  image: docker:latest
   script:
     - CONTAINER_ID=$(docker run -d node:latest sh)
     - docker start $CONTAINER_ID && docker exec $CONTAINER_ID npm install -g @railway/cli

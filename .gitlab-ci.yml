@@ -140,6 +140,7 @@ deploy:
   image: node:alpine  # Gunakan Docker sebagai gambar dasar
   script:
     # - docker run --rm alpine sh -c "apk add --no-cache curl && apk add --no-cache tar && curl -fsSL https://railway.app/install.sh | sh"  # Menjalankan perintah instalasi Railway CLI di dalam container Docker
+    - apk add --no-cache nodejs npm
     - npm install -g @railway/cli
     - railway login --apiKey $RAILWAY_API_KEY  # Login ke Railway menggunakan Railway CLI yang telah diinstal
     - railway up --service silk --project $RAILWAY_PROJECT  # Mendeploy layanan ke Railway

@@ -101,7 +101,11 @@ variables:
 
 build:
   stage: build
+  image: docker-latest
   script:
+    - apk add --no-cache openjdk11
+    - apk add --no-cache maven
+    - apt-get install mvn
     - mvn clean install
   only:
     - main
@@ -148,9 +152,9 @@ deploy:
   only:
     - main
   script:
-    - apt-get clean
-    - apt-get -o Acquire::ForceIPv4=true update
-    - apt-get install -y curl
+    - sudo apt-get clean
+    - sudo apt-get -o Acquire::ForceIPv4=true update
+    - sudo apt-get install -y curl
     - curl -fsSL https://railway.app/install.sh | sh
     - railway up --service=$RAILWAY_SERVICE_NAME -d
 

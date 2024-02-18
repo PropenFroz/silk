@@ -137,7 +137,7 @@ deploy:
     - pushes
     - main
   script:
-    - docker run --rm -e RAILWAY_TOKEN=456b13a4-86ca-42bb-aedd-7597688e55fa RAILWAY_API_KEY=$RAILWAY_API_KEY node:latest sh -c "npm install -g @railway/cli && railway up --service silk"
+    - docker run --rm -e RAILWAY_TOKEN=456b13a4-86ca-42bb-aedd-7597688e55fa silk node:latest sh -c "npm install -g @railway/cli && railway up --service silk"
     
 # deploy:
 #   stage: deploy

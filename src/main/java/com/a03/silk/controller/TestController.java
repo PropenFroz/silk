@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://silk-purwa.up.railway.app")
 public class TestController {
 
-	@GetMapping("/test")
+	@GetMapping("/api/test")
 	public String test() {
-		return "This is GET request for testing backend. The current time is " + new Date();
+		return "This is GET request for testing Backend propenfroz. The current time is " + new Date();
 	}
 }

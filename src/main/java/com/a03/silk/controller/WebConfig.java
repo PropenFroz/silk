@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**") // Atur path yang ingin diizinkan CORS
-                .allowedOrigins("http://silk-purwa.up.railway.app") // Atur domain FE yang diizinkan
+                .allowedOrigins("http://silk-purwa.up.railway.app/home") // Atur domain FE yang diizinkan
                 .allowedMethods("GET", "POST", "PUT", "DELETE"); // Atur metode HTTP yang diizinkan
     }
 }

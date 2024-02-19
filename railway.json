@@ -1,7 +1,7 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "env": {
-    "PORT": {
+  "PORT": {
       "description": "Port to listen on",
       "required": true,
       "value": 8080
@@ -13,5 +13,5 @@
   "deploy": {
     "startCommand": "java -jar target/silk-1.0.jar"
     }
-    
+  }
 }

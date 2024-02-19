@@ -16,7 +16,7 @@ function App() {
     })
   return (
     <div>
-      <h1>Spring React Testing shafa</h1>
+      <h1>Spring React Testing PROPENFROZ</h1>
       <hr />
       {error ? <div>{error}</div> : <div>{response}</div>}
     </div>

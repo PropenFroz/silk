@@ -41,3 +41,27 @@
 # RUN apk add --no-cache maven
 
 # CMD ["bash"]
+
+# Use a base image with Java and Maven installed
+FROM maven:3.8.4-openjdk-17 AS build
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the source code into the container
+COPY . .
+
+# Build the application using Maven
+RUN mvn clean install
+
+# Use a base image with Java installed
+FROM openjdk:17-jdk-alpine
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the JAR file from the build stage to the current directory in the container
+COPY --from=build /app/target/silk-1.0.jar .
+
+# Specify the command to run your application
+CMD ["java", "-jar", "silk-1.0.jar"]

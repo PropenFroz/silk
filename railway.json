@@ -1,13 +1,17 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
+  "env": {
+    "PORT": {
+      "description": "Port to listen on",
+      "required": true,
+      "value": 8080
+    },
   "build": {
     "builder": "DOCKERFILE",
     "buildCommand": "echo building!"
     },
   "deploy": {
-    "startCommand": "echo starting!",
-    "healthcheckPath": "/",
-    "healthcheckTimeout": 100,
-    "restartPolicyType": "never"
+    "startCommand": "java -jar target/silk-1.0.jar"
     }
+    
 }

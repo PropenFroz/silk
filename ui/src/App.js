@@ -5,7 +5,7 @@ import './App.css'
 function App() {
   const [response, setResponse] = useState('')
   const [error, setError] = useState('')
-  const url = 'http://localhost:8080/test'
+  const url = 'http://silk-purwa.up.railway.app/api/test'
   axios
     .get(url)
     .then((resp) => {

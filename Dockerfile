@@ -35,9 +35,9 @@
 # CMD ["railway", "up", "--service=silk -d"]
 
 
-FROM docker:latest
+# FROM docker:latest
 
-RUN apk add --no-cache openjdk11
-RUN apk add --no-cache maven
+# RUN apk add --no-cache openjdk11
+# RUN apk add --no-cache maven
 
-CMD ["bash"]
+# CMD ["bash"]

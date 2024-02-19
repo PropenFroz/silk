@@ -1,6 +1,7 @@
 {
   "name": "spring-react",
   "version": "0.1.0",
+  "proxy": "http://silk-purwa.up.railway.app",
   "private": true,
   "dependencies": {
     "@babel/core": "^7.23.9",

@@ -50,26 +50,26 @@ services:
     ports:
       - "15001:5432"
 
-  backend:
-    container_name: app_backend
-    build: .
-#    command: mvn spring-boot:run
-    depends_on:
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/silk"
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: secret99
-    ports:
-      - "8080:8080"
-    volumes:
-      - .:/app
+#   backend:
+#     container_name: app_backend
+#     build: .
+# #    command: mvn spring-boot:run
+#     depends_on:
+#       - postgres
+#     environment:
+#       SPRING_DATASOURCE_URL: "jdbc:postgresql://postgres:5432/silk"
+#       SPRING_DATASOURCE_USERNAME: postgres
+#       SPRING_DATASOURCE_PASSWORD: secret99
+#     ports:
+#       - "8080:8080"
+#     volumes:
+#       - .:/app
 
-  ui:
-    container_name: app_ui
-    build: ./ui
-    ports:
-      - "3000:3000"
+#   ui:
+#     container_name: app_ui
+#     build: ./ui
+#     ports:
+#       - "3000:3000"
 #    depends_on:
 #      - backend
 

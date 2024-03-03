@@ -3,6 +3,7 @@ package com.a03.silk.controller;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +44,17 @@ public class LaporanTransaksiSiswaController {
     public void generateLaporanTransaksi(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, 
             @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, 
             HttpServletResponse response) throws DocumentException, IOException {
+
+        DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateStr = dateString.format(startDate);
+        String endDateStr = dateString.format(endDate);
+
+        String title = startDateStr + " - " + endDateStr;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
         
         response.setContentType("application/pdf");
 		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
@@ -60,6 +72,6 @@ public class LaporanTransaksiSiswaController {
         laporanTransaksiSiswaPDF.setEntryKursusList(entryKursusList);
         laporanTransaksiSiswaPDF.setEntryLainnyaList(entryLainnyaList);
         laporanTransaksiSiswaPDF.setEntryPendaftaranList(entryPendaftaranList);
-        laporanTransaksiSiswaPDF.generateLaporanTransaksi(response, "2024");
+        laporanTransaksiSiswaPDF.generateLaporanTransaksi(response, title);
     }
 }

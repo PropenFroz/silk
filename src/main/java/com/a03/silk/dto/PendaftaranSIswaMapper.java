@@ -7,5 +7,7 @@ import com.a03.silk.model.EntryPendaftaran;
 
 @Mapper(componentModel = "spring")
 public interface PendaftaranSiswaMapper {
+    
     EntryPendaftaran toEntryPendaftaran(CreateEntryPendaftaranSiswaRequestDTO createEntryPendaftaranSiswaRequestDTO);
+
 }

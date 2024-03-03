@@ -60,7 +60,7 @@ public class LaporanTransaksiSiswaController {
 		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
 		String currentDateTime = dateFormat.format(new Date());
 		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+		String headervalue = "attachment; filename=LaporanTransaksiSiswa_" + currentDateTime + ".pdf";
 		response.setHeader(headerkey, headervalue);
 
         List<EntryPendaftaran> entryPendaftaranList = pendaftaranSiswaService.getEntryPendaftaranSiswaByDate(startDate, endDate);

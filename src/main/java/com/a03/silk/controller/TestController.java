@@ -15,4 +15,6 @@ public class TestController {
 	public String test() {
 		return "This is GET request for testing Backend propenfroz. The current time is " + new Date();
 	}
+
+	
 }

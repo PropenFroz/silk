@@ -1,7 +1,5 @@
 package com.a03.silk.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,17 +12,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "entry_kursus")
-public class EntryKursus {
+@Table(name = "entry_transaksi_siswa")
+public class EntryTransaksiSiswa {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idEntryKursus;
+    private long idEntryTransaksiSiswa;
+
+    @NotNull
+    @Column(name = "jenis_transaksi", nullable = false)
+    private int jenisTransaksi;
 
     @NotNull
     @Column(name = "tanggal_pembayaran", nullable = false)
@@ -64,6 +68,5 @@ public class EntryKursus {
 
     @NotNull
     @Column(name = "keterangan", nullable = false)
-    private String keterangan;
-    
+    private String keterangan;  
 }

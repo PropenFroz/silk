@@ -5,9 +5,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-import com.a03.silk.model.EntryKursus;
-import com.a03.silk.model.EntryLainnya;
-import com.a03.silk.model.EntryPendaftaran;
+import com.a03.silk.model.EntryTransaksiSiswa;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -25,14 +23,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class LaporanTransaksiSiswaPDF {
 
-    private List<EntryKursus> entryKursusList;
-    private List<EntryLainnya> entryLainnyaList;
-    private List<EntryPendaftaran> entryPendaftaranList;
-
+    private List<EntryTransaksiSiswa> entryTransaksiSiswaList;
     private int entryCounter = 1;
 
     public void generateLaporanTransaksi(HttpServletResponse response, String title) throws DocumentException, IOException {
-
         Document document = new Document(PageSize.A4.rotate());
 
         PdfWriter.getInstance(document, response.getOutputStream());
@@ -92,30 +86,22 @@ public class LaporanTransaksiSiswaPDF {
         long totalCash = 0;
         long totalTransfer = 0;
 
-        for (EntryPendaftaran entry : entryPendaftaranList) {
-            addEntryToTable(table, entryCounter++, entry, fontContent);
-            totalUangPendaftaran += entry.getUangPendaftaran();
-            totalUangKursus += entry.getUangKursus();
-            totalUangBuku += entry.getUangBuku();
-            totalCash += entry.getCash();
-            totalTransfer += entry.getTransfer();
-        }
-
-        for (EntryKursus entry : entryKursusList) {
-            addEntryToTable(table, entryCounter++, entry, fontContent);
-            totalUangKursus += entry.getUangKursus();
-            totalUangBuku += entry.getUangBuku();
-            totalCash += entry.getCash();
-            totalTransfer += entry.getTransfer();
-        }
-
-        for (EntryLainnya entry : entryLainnyaList) {
-            addEntryToTable(table, entry, fontContent);
-            totalUangPendaftaran += entry.getUangPendaftaran();
-            totalUangKursus += entry.getUangKursus();
-            totalUangBuku += entry.getUangBuku();
-            totalCash += entry.getCash();
-            totalTransfer += entry.getTransfer();
+        for (EntryTransaksiSiswa entry : entryTransaksiSiswaList) {
+            if (entry.getJenisTransaksi() == 3) {
+                addEntryLainnyaToTable(table, "", entry, fontContent);
+                totalUangPendaftaran += entry.getUangPendaftaran();
+                totalUangKursus += entry.getUangKursus();
+                totalUangBuku += entry.getUangBuku();
+                totalCash += entry.getCash();
+                totalTransfer += entry.getTransfer();
+            } else {
+                addEntryToTable(table, entryCounter++, entry, fontContent);
+                totalUangPendaftaran += entry.getUangPendaftaran();
+                totalUangKursus += entry.getUangKursus();
+                totalUangBuku += entry.getUangBuku();
+                totalCash += entry.getCash();
+                totalTransfer += entry.getTransfer();
+            }
         }
 
         Font fontTotal = FontFactory.getFont(FontFactory.TIMES_ROMAN);
@@ -142,8 +128,8 @@ public class LaporanTransaksiSiswaPDF {
         document.close();
     }
 
-    private void addEntryToTable(PdfPTable table, int counter, EntryPendaftaran entry, Font fontContent) {
-        table.addCell(new Phrase(String.valueOf(counter), fontContent));
+    private void addEntryLainnyaToTable(PdfPTable table, String counter, EntryTransaksiSiswa entry, Font fontContent) {
+        table.addCell(new Phrase(counter, fontContent));
         table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
         table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
         table.addCell(new Phrase(entry.getJurusan(), fontContent));
@@ -157,23 +143,8 @@ public class LaporanTransaksiSiswaPDF {
         table.addCell(new Phrase(entry.getKeterangan(), fontContent));
     }
 
-    private void addEntryToTable(PdfPTable table, int counter, EntryKursus entry, Font fontContent) {
+    private void addEntryToTable(PdfPTable table, int counter, EntryTransaksiSiswa entry, Font fontContent) {
         table.addCell(new Phrase(String.valueOf(counter), fontContent));
-        table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
-        table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getGrade(), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getCash()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getTransfer()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getTransfer() + entry.getCash()), fontContent));
-        table.addCell(new Phrase(entry.getKeterangan(), fontContent));
-    }
-
-    private void addEntryToTable(PdfPTable table, EntryLainnya entry, Font fontContent) {
-        table.addCell(new Phrase(""));
         table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
         table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
         table.addCell(new Phrase(entry.getJurusan(), fontContent));
@@ -188,20 +159,12 @@ public class LaporanTransaksiSiswaPDF {
     }
 
     private String formatRupiah(long nominal) {
-        // Buat instance NumberFormat dengan locale Indonesia untuk format Rupiah
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
         return currencyFormat.format(nominal);
     }
 
-    public void setEntryKursusList(List<EntryKursus> listEntry) {
-        this.entryKursusList = listEntry;
+    public void setEntryTransaksiSiswaList(List<EntryTransaksiSiswa> listEntry) {
+        this.entryTransaksiSiswaList = listEntry;
     }
 
-    public void setEntryLainnyaList(List<EntryLainnya> listEntry) {
-        this.entryLainnyaList = listEntry;
-    }
-
-    public void setEntryPendaftaranList(List<EntryPendaftaran> listEntry) {
-        this.entryPendaftaranList = listEntry;
-    }
 }

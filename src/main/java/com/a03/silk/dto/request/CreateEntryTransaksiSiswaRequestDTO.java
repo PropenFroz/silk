@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateEntryLainnyaSiswaRequestDTO {
+public class CreateEntryTransaksiSiswaRequestDTO {
+    private int jenisTransaksi;
     private Date tanggalPembayaran;
     private String namaSiswa;
     private String jurusan;

@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
 import java.util.Date;
 
 @Getter
@@ -15,23 +14,18 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "entry_buku")
-public class EntryBuku {
+@Table(name = "entry_transaksi_buku")
+public class EntryTransaksiBuku {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idEntryBuku;
 
-    @NotNull
-    @Column(name = "nama_buku")
-    private String namaBuku;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_buku_purwacaraka", referencedColumnName = "idBukuPurwacaraka")
+    private BukuPurwacaraka bukuPurwacaraka;
 
-    @NotNull
-    @Column(name = "jurusan")
-    private String jurusan;
-
-    @NotNull
-    @Column(name = "jumlah")
-    private int jumlah;
+    @Column(name = "jumlah_stok")
+    private long jumlah;
 
     @Column(name = "tanggal_beli")
     @Temporal(TemporalType.TIMESTAMP)
@@ -42,10 +36,6 @@ public class EntryBuku {
     private int jumlahBeli;
 
     @NotNull
-    @Column(name = "harga_beli")
-    private BigDecimal hargaBeli;
-
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "tanggal_jual")
     private Date tanggalJual;
@@ -54,11 +44,14 @@ public class EntryBuku {
     @Column(name = "jumlah_jual")
     private int jumlahJual;
 
+    @Column(name = "sisa_stok")
+    private long sisa;
+
     @NotNull
-    @Column(name = "sisa")
-    private int sisa;
+    @Column(name = "harga_beli")
+    private long hargaBeli;
 
     @NotNull
     @Column(name = "harga_jual")
-    private BigDecimal hargaJual;
+    private long hargaJual;
 }

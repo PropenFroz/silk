@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.a03.silk.dto.EntryTransaksiSiswaMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
@@ -33,14 +32,10 @@ public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
-
-    @Autowired
-    EntryTransaksiSiswaMapper entryTransaksiSiswaMapper;
     
     @PostMapping("/entry-transaksi-siswa")
     public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
-        var entryTransaksiSiswa = entryTransaksiSiswaMapper.toEntryTransaksiSiswa(createEntryTransaksiSiswaRequestDTO);
-        return entryTransaksiSiswaService.createEntryTransaksiSiswa(entryTransaksiSiswa);
+        return entryTransaksiSiswaService.createEntryTransaksiSiswa(createEntryTransaksiSiswaRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-siswa/all")

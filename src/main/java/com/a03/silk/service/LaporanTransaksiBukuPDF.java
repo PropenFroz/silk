@@ -50,9 +50,9 @@ public class LaporanTransaksiBukuPDF {
         paragraph.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraph);
 
-        PdfPTable table = new PdfPTable(14);
+        PdfPTable table = new PdfPTable(12);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] { 0.5f, 1.5f, 1.5f, 0.8f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f });
+        table.setWidths(new float[] { 0.5f, 1.5f, 1.5f, 0.8f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f });
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(CMYKColor.lightGray);
@@ -68,8 +68,6 @@ public class LaporanTransaksiBukuPDF {
         table.addCell(cell);
         cell.setPhrase(new Phrase("Jurusan", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Jumlah", font));
-        table.addCell(cell);
         cell.setPhrase(new Phrase("Tanggal Beli", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Jumlah Beli", font));
@@ -77,8 +75,6 @@ public class LaporanTransaksiBukuPDF {
         cell.setPhrase(new Phrase("Tanggal Jual", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Jumlah Jual", font));
-        table.addCell(cell);
-        cell.setPhrase(new Phrase("Sisa", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Harga Beli", font));
         table.addCell(cell);
@@ -104,7 +100,7 @@ public class LaporanTransaksiBukuPDF {
 
         PdfPCell totalCell = new PdfPCell(new Phrase("Total", fontTotal));
         totalCell.setHorizontalAlignment(Element.ALIGN_CENTER);
-        totalCell.setColspan(12);
+        totalCell.setColspan(10);
 
         table.addCell(totalCell);
         table.addCell(new Phrase(formatToRupiah(rowTotalKeuntungan), fontTotal));
@@ -121,9 +117,6 @@ public class LaporanTransaksiBukuPDF {
 
         table.addCell(new Phrase(entry.getBukuPurwacaraka().getJurusanKursus().getNamaJurusan(), fontContent));
 
-        long oldStok = entry.getJumlah();
-        table.addCell(new Phrase(String.valueOf(oldStok), fontContent));
-
         table.addCell(new Phrase(entry.getTanggalBeli().toString(), fontContent));
 
         long jumlahBeli = entry.getJumlahBeli();
@@ -133,9 +126,6 @@ public class LaporanTransaksiBukuPDF {
 
         long jumlahJual = entry.getJumlahJual();
         table.addCell(new Phrase(String.valueOf(entry.getJumlahJual()), fontContent));
-
-        long newStok = entry.getSisa();
-        table.addCell(new Phrase(String.valueOf(newStok), fontContent));
 
         long hargaBeli = entry.getHargaBeli();
         table.addCell(new Phrase(formatToRupiah(hargaBeli), fontContent));

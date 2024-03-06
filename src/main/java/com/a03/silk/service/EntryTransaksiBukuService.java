@@ -22,19 +22,19 @@ public class EntryTransaksiBukuService {
     @Autowired
     BukuPurwacarakaDb bukuPurwacarakaDb;
 
-    long previousStock = 0;
+    // long previousStock = 0;
 
     public EntryTransaksiBuku createEntryTransaksiBuku(EntryTransaksiBuku entryTransaksiBuku) {
         EntryTransaksiBuku entry = entryTransaksiBukuDb.save(entryTransaksiBuku);
-        savePreviousStock(entry);
+        // savePreviousStock(entry);
         BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entry.getBukuPurwacaraka().getIdBukuPurwacaraka());
         bukuToUpdate.setJumlah(bukuToUpdate.getJumlah() + entry.getJumlahBeli() - entry.getJumlahJual()); 
         return entryTransaksiBukuDb.save(entry);
     }
 
-    private void savePreviousStock(EntryTransaksiBuku entry) {
-        previousStock = entry.getJumlah();
-    }
+    // private void savePreviousStock(EntryTransaksiBuku entry) {
+    //     previousStock = entry.getJumlah()
+    // }
 
     public List<EntryTransaksiBuku> getAllEntryTransaksiBuku() {
         return entryTransaksiBukuDb.findAll();
@@ -47,25 +47,24 @@ public class EntryTransaksiBukuService {
     public EntryTransaksiBuku updateEntryTransaksiBuku(Long idEntryBuku, EntryTransaksiBuku updatedEntry) {
         EntryTransaksiBuku entryToUpdate = entryTransaksiBukuDb.findById(idEntryBuku).get();
 
-        entryToUpdate.setJumlah(updatedEntry.getJumlah());
+        // entryToUpdate.setJumlah(updatedEntry.getJumlah());
         entryToUpdate.setTanggalBeli(updatedEntry.getTanggalBeli());
         entryToUpdate.setJumlahBeli(updatedEntry.getJumlahBeli());
         entryToUpdate.setTanggalJual(updatedEntry.getTanggalJual());
         entryToUpdate.setJumlahJual(updatedEntry.getJumlahJual());
-        entryToUpdate.setSisa(updatedEntry.getSisa());
+        // entryToUpdate.setSisa(updatedEntry.getSisa());
         entryToUpdate.setHargaBeli(updatedEntry.getHargaBeli());
         entryToUpdate.setHargaJual(updatedEntry.getHargaJual());
     
         BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToUpdate.getBukuPurwacaraka().getIdBukuPurwacaraka());
-        bukuToUpdate.setJumlah((int) previousStock + entryToUpdate.getJumlahBeli() - entryToUpdate.getJumlahJual());
+        bukuToUpdate.setJumlah((int)entryToUpdate.getJumlah() + entryToUpdate.getJumlahBeli() - entryToUpdate.getJumlahJual());
         bukuPurwacarakaDb.save(bukuToUpdate);
 
         return entryTransaksiBukuDb.save(entryToUpdate);
     }
 
     public void deleteEntryTransaksiBuku(Long idEntryBuku) {
-        EntryTransaksiBuku entryToDelete = entryTransaksiBukuDb.findById(idEntryBuku)
-                .orElseThrow(() -> new RuntimeException("Entry Transaksi Buku not found with id: " + idEntryBuku));
+        EntryTransaksiBuku entryToDelete = entryTransaksiBukuDb.findById(idEntryBuku).get();
         BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToDelete.getBukuPurwacaraka().getIdBukuPurwacaraka());
         bukuToUpdate.setJumlah(bukuToUpdate.getJumlah() - entryToDelete.getJumlahBeli() + entryToDelete.getJumlahJual());
         bukuPurwacarakaDb.save(bukuToUpdate);

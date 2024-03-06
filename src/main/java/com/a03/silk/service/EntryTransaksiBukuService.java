@@ -35,4 +35,19 @@ public class EntryTransaksiBukuService {
         return entryTransaksiBukuDb.findAll();
     }
 
+    public EntryTransaksiBuku getEntryTransaksiBukuById(Long idEntryTransaksiBuku){
+        for(EntryTransaksiBuku entryTransaksiBuku : getAllEntryTransaksiBuku()) {
+            if (entryTransaksiBuku.getIdEntryBuku().equals(idEntryTransaksiBuku)){
+                return entryTransaksiBuku;
+            }
+        }
+        return null;
+    }
+
+    public void deleteEntryTransaksiBuku(EntryTransaksiBuku entryTransaksiBuku) {
+        entryTransaksiBuku.setIsDeleted(true);
+
+        entryTransaksiBukuDb.save(entryTransaksiBuku);
+    }
+
 }

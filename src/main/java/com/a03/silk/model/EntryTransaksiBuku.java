@@ -54,4 +54,8 @@ public class EntryTransaksiBuku {
     @NotNull
     @Column(name = "harga_jual")
     private long hargaJual;
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 }

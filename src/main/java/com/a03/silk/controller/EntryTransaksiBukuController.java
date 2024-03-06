@@ -3,6 +3,7 @@ package com.a03.silk.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +17,8 @@ import com.a03.silk.service.EntryTransaksiBukuService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.*;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -43,5 +46,16 @@ public class EntryTransaksiBukuController {
     public List<EntryTransaksiBuku> getAllEntryTransaksiBuku() {
         return entryTransaksiBukuService.getAllEntryTransaksiBuku();
     }
+
+    @GetMapping("/entry-transaksi-buku/delete/{idEntryTransaksiBuku}")
+    public String deleteEntryTransaksiBuku(@PathVariable("idEntryTransaksiBuku") Long idEntryTransaksiBuku) {
+        var entryTransaksiBuku = entryTransaksiBukuService.getEntryTransaksiBukuById(idEntryTransaksiBuku);
+
+
+        entryTransaksiBukuService.deleteEntryTransaksiBuku(entryTransaksiBuku);
+
+        return new String();
+    }
+    
 
 }

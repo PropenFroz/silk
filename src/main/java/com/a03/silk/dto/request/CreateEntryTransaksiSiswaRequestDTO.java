@@ -1,6 +1,10 @@
 package com.a03.silk.dto.request;
 
 import java.util.Date;
+
+import com.a03.silk.model.GradeKursus;
+import com.a03.silk.model.JurusanKursus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,8 +16,8 @@ public class CreateEntryTransaksiSiswaRequestDTO {
     private int jenisTransaksi;
     private Date tanggalPembayaran;
     private String namaSiswa;
-    private String jurusan;
-    private String grade;
+    private JurusanKursus jurusanKursus;
+    private GradeKursus gradeKursus;
     private long uangPendaftaran;
     private long uangKursus;
     private long uangBuku;

@@ -83,7 +83,6 @@ public class EntryTransaksiSiswaController {
         List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDate(startDate, endDate);
 
         LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
-        laporanTransaksiSiswaPDF.setEntryTransaksiSiswaList(entryTransaksiSiswaList);
-        laporanTransaksiSiswaPDF.generateLaporanTransaksi(response, title);
+        laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
     }
 }

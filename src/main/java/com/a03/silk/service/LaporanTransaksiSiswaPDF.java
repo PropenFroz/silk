@@ -23,10 +23,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class LaporanTransaksiSiswaPDF {
 
-    private List<EntryTransaksiSiswa> entryTransaksiSiswaList;
     private int entryCounter = 1;
 
-    public void generateLaporanTransaksi(HttpServletResponse response, String title) throws DocumentException, IOException {
+    public void generateLaporanTransaksiSiswa(HttpServletResponse response, String title, List<EntryTransaksiSiswa> entryTransaksiSiswaList) throws DocumentException, IOException {
         Document document = new Document(PageSize.A4.rotate());
 
         PdfWriter.getInstance(document, response.getOutputStream());
@@ -132,8 +131,8 @@ public class LaporanTransaksiSiswaPDF {
         table.addCell(new Phrase(counter, fontContent));
         table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
         table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getGrade(), fontContent));
+        table.addCell(new Phrase(entry.getJurusanKursus().getNamaJurusan(), fontContent));
+        table.addCell(new Phrase(entry.getGradeKursus().getNamaGrade(), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));
@@ -147,8 +146,8 @@ public class LaporanTransaksiSiswaPDF {
         table.addCell(new Phrase(String.valueOf(counter), fontContent));
         table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
         table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getGrade(), fontContent));
+        table.addCell(new Phrase(entry.getJurusanKursus().getNamaJurusan(), fontContent));
+        table.addCell(new Phrase(entry.getGradeKursus().getNamaGrade(), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));
@@ -160,11 +159,8 @@ public class LaporanTransaksiSiswaPDF {
 
     private String formatRupiah(long nominal) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-        return currencyFormat.format(nominal);
+        String formattedValue = currencyFormat.format(nominal);
+        formattedValue = formattedValue.replace(",00", "");
+        return formattedValue;
     }
-
-    public void setEntryTransaksiSiswaList(List<EntryTransaksiSiswa> listEntry) {
-        this.entryTransaksiSiswaList = listEntry;
-    }
-
 }

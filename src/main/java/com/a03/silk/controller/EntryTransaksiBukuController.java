@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a03.silk.dto.EntryTransaksiBukuMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
+import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiBuku;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.BukuPurwacarakaService;
@@ -47,10 +48,7 @@ public class EntryTransaksiBukuController {
 
     @PostMapping("/entry-transaksi-buku")
     public EntryTransaksiBuku createEntryTransaksiBuku(@RequestBody CreateEntryTransaksiBukuRequestDTO createEntryTransaksiBukuRequestDTO) {
-        var bukuPurwacaraka = bukuPurwacarakaService.getBukuPurwacarakaById(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka().getIdBukuPurwacaraka());
-        createEntryTransaksiBukuRequestDTO.setBukuPurwacaraka(bukuPurwacaraka);
-        var entryTransaksiBuku = entryTransaksiBukuMapper.toEntryBuku(createEntryTransaksiBukuRequestDTO);
-        return entryTransaksiBukuService.createEntryTransaksiBuku(entryTransaksiBuku);
+        return entryTransaksiBukuService.createEntryTransaksiBuku(createEntryTransaksiBukuRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-buku/all")

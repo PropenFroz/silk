@@ -14,7 +14,7 @@ import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
-import com.lowagie.text.DocumentException;
+// import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -52,32 +52,32 @@ public class EntryTransaksiSiswaController {
         return entryTransaksiSiswaService.getEntryTransaksiSiswaByDate(startDate, endDate);
     }
 
-    @GetMapping("/entry-transaksi-siswa/laporan")
-    public void generateLaporanTransaksi(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, 
-            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, 
-            HttpServletResponse response) throws DocumentException, IOException {
+    // @GetMapping("/entry-transaksi-siswa/laporan")
+    // public void generateLaporanTransaksi(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, 
+    //         @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, 
+    //         HttpServletResponse response) throws DocumentException, IOException {
 
-        DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateStr = dateString.format(startDate);
-        String endDateStr = dateString.format(endDate);
+    //     DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
+    //     String startDateStr = dateString.format(startDate);
+    //     String endDateStr = dateString.format(endDate);
 
-        String title = startDateStr + " - " + endDateStr;
+    //     String title = startDateStr + " - " + endDateStr;
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(endDate);
-        calendar.add(Calendar.DATE, 1);
-        endDate = calendar.getTime();
+    //     Calendar calendar = Calendar.getInstance();
+    //     calendar.setTime(endDate);
+    //     calendar.add(Calendar.DATE, 1);
+    //     endDate = calendar.getTime();
         
-        response.setContentType("application/pdf");
-		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
-		String currentDateTime = dateFormat.format(new Date());
-		String headerkey = "Content-Disposition";
-		String headervalue = "attachment; filename=LaporanTransaksiSiswa_" + currentDateTime + ".pdf";
-		response.setHeader(headerkey, headervalue);
+    //     response.setContentType("application/pdf");
+	// 	DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+	// 	String currentDateTime = dateFormat.format(new Date());
+	// 	String headerkey = "Content-Disposition";
+	// 	String headervalue = "attachment; filename=LaporanTransaksiSiswa_" + currentDateTime + ".pdf";
+	// 	response.setHeader(headerkey, headervalue);
 
-        List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDate(startDate, endDate);
+    //     List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDate(startDate, endDate);
 
-        LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
-        laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
-    }
+    //     LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
+    //     laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
+    // }
 }

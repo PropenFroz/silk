@@ -13,6 +13,11 @@ public class PageController {
     @Autowired
     ServerProperties serverProperties;
 
+    @GetMapping("/")
+    public String home() {
+        return "home";
+    }
+
     @RequestMapping("port")
     public String ActivePort(Model model) {
         model.addAttribute("port", serverProperties.getPort());

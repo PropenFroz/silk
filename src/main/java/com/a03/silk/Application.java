@@ -4,6 +4,7 @@ import com.a03.silk.model.Role;
 import com.a03.silk.model.UserModel;
 import com.a03.silk.repository.RoleDb;
 import com.a03.silk.repository.UserDb;
+import com.a03.silk.restservice.UserRestService;
 import com.a03.silk.service.RoleService;
 import jakarta.transaction.Transactional;
 import org.springframework.boot.CommandLineRunner;
@@ -19,7 +20,7 @@ public class Application {
 
 	@Bean
 	@Transactional
-	CommandLineRunner run(RoleDb roleDb, UserDb userDb, RoleService roleService) {
+	CommandLineRunner run(RoleDb roleDb, UserDb userDb, RoleService roleService, UserRestService userRestService) {
 		return args -> {
 			if (roleDb.findAll().size() == 0) {
 				Role admin = new Role();
@@ -43,7 +44,7 @@ public class Application {
 				UserModel adminSafa = new UserModel();
 				adminSafa.setRole(roleService.getRoleByRoleName("Admin"));
 				adminSafa.setUsername("shafanjw");
-				adminSafa.setPassword("Najwaq27");
+				adminSafa.setPassword(userRestService.encryptPassword("Najwaq27"));
 				adminSafa.setName("Shafa");
 
 				userDb.save(adminSafa);

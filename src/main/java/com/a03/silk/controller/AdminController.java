@@ -36,16 +36,4 @@ public class AdminController {
         return "form-add-user";
     }
 
-    @PostMapping("/user/add")
-    public String submitUser(@ModelAttribute CreateUserRequestDTO userDTO, Model model, HttpServletRequest request) {
-
-        CreateUserResponseDTO userResultDTO = userRestController.addUser(userDTO);
-        if (userResultDTO.getId() == null) {
-            return "error-add-user";
-        }
-        model.addAttribute("user", userResultDTO);
-        return "success-add-user";
-    }
-
-
 }

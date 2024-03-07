@@ -6,8 +6,6 @@ import com.a03.silk.model.UserModel;
 public interface UserService {
     UserModel addUser(UserModel user, CreateUserRequestDTO createUserRequestDTO);
 
-    String encrypt(String password);
-
     String loginJwtAdmin(LoginJwtRequestDTO loginJwtRequestDTO);
 
 }

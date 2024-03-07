@@ -38,7 +38,8 @@ public class WebSecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
-                        .requestMatchers("/api/user/add").hasAuthority("Admin")
+                        .requestMatchers("/api/user/create").hasAuthority("Admin")
+                        .requestMatchers("/api/user/**").hasAuthority("Admin")
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/login").permitAll()
                         .anyRequest().authenticated()
@@ -58,8 +59,7 @@ public class WebSecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/css/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/js/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/penerbit/create")).hasAuthority("Pustakawan")
-                        .requestMatchers(new AntPathRequestMatcher("/buku/create")).hasAuthority("Pustakawan")
-                        .requestMatchers(new AntPathRequestMatcher("/buku/{id}/update")).hasAuthority("Pustakawan")
+
                         .anyRequest()
                         .authenticated())
                 .formLogin((form) -> form

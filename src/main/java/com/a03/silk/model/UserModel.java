@@ -18,6 +18,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import java.io.Serializable;
 
@@ -27,6 +29,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_model")
+@SQLDelete(sql = "UPDATE user_model SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 public class UserModel implements Serializable {
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -49,5 +53,9 @@ public class UserModel implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Role role;
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = Boolean.FALSE;
 
 }

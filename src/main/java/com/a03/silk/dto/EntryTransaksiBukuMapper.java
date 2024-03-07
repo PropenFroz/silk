@@ -14,6 +14,5 @@ public interface EntryTransaksiBukuMapper {
     @AfterMapping
     default void setJumlahAndSiswa(CreateEntryTransaksiBukuRequestDTO source, @MappingTarget EntryTransaksiBuku target) {
         target.setJumlah(source.getBukuPurwacaraka().getJumlah());
-        target.setSisa(target.getJumlah() + source.getJumlahBeli() - source.getJumlahJual());
     }
 }

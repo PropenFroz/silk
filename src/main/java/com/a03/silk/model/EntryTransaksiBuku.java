@@ -44,9 +44,6 @@ public class EntryTransaksiBuku {
     @Column(name = "jumlah_jual")
     private int jumlahJual;
 
-    @Column(name = "sisa_stok")
-    private long sisa;
-
     @NotNull
     @Column(name = "harga_beli")
     private long hargaBeli;
@@ -54,8 +51,4 @@ public class EntryTransaksiBuku {
     @NotNull
     @Column(name = "harga_jual")
     private long hargaJual;
-
-    @NotNull
-    @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted = false;
 }

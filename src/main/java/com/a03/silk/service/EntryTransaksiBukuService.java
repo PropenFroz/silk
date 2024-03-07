@@ -35,19 +35,32 @@ public class EntryTransaksiBukuService {
         return entryTransaksiBukuDb.findAll();
     }
 
-    public EntryTransaksiBuku getEntryTransaksiBukuById(Long idEntryTransaksiBuku){
-        for(EntryTransaksiBuku entryTransaksiBuku : getAllEntryTransaksiBuku()) {
-            if (entryTransaksiBuku.getIdEntryBuku().equals(idEntryTransaksiBuku)){
-                return entryTransaksiBuku;
-            }
-        }
-        return null;
+    public List<EntryTransaksiBuku> getEntryBukuByDate(Date startDate, Date endDate) {
+        return entryTransaksiBukuDb.findByTanggalBeliAndTanggalJualBetween(startDate, endDate);
     }
 
-    public void deleteEntryTransaksiBuku(EntryTransaksiBuku entryTransaksiBuku) {
-        entryTransaksiBuku.setIsDeleted(true);
+    public EntryTransaksiBuku updateEntryTransaksiBuku(Long idEntryBuku, EntryTransaksiBuku updatedEntry) {
+        EntryTransaksiBuku entryToUpdate = entryTransaksiBukuDb.findById(idEntryBuku).get();
 
-        entryTransaksiBukuDb.save(entryTransaksiBuku);
+        entryToUpdate.setTanggalBeli(updatedEntry.getTanggalBeli());
+        entryToUpdate.setJumlahBeli(updatedEntry.getJumlahBeli());
+        entryToUpdate.setTanggalJual(updatedEntry.getTanggalJual());
+        entryToUpdate.setJumlahJual(updatedEntry.getJumlahJual());
+        entryToUpdate.setHargaBeli(updatedEntry.getHargaBeli());
+        entryToUpdate.setHargaJual(updatedEntry.getHargaJual());
+    
+        BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToUpdate.getBukuPurwacaraka().getIdBukuPurwacaraka());
+        bukuToUpdate.setJumlah((int)entryToUpdate.getJumlah() + entryToUpdate.getJumlahBeli() - entryToUpdate.getJumlahJual());
+        bukuPurwacarakaDb.save(bukuToUpdate);
+        
+        return entryTransaksiBukuDb.save(entryToUpdate);
     }
 
+    public void deleteEntryTransaksiBuku(Long idEntryBuku) {
+        EntryTransaksiBuku entryToDelete = entryTransaksiBukuDb.findById(idEntryBuku).get();
+        BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToDelete.getBukuPurwacaraka().getIdBukuPurwacaraka());
+        bukuToUpdate.setJumlah(bukuToUpdate.getJumlah() - entryToDelete.getJumlahBeli() + entryToDelete.getJumlahJual());
+        bukuPurwacarakaDb.save(bukuToUpdate);
+        entryTransaksiBukuDb.deleteById(idEntryBuku);
+    }
 }

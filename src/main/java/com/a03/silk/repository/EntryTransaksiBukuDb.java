@@ -13,4 +13,12 @@ import com.a03.silk.model.EntryTransaksiBuku;
 @Repository
 public interface EntryTransaksiBukuDb extends JpaRepository<EntryTransaksiBuku, Long> {
 
+    @Query("SELECT etb FROM EntryTransaksiBuku etb " +
+            "WHERE etb.tanggalBeli BETWEEN :startDate AND :endDate " +
+            "AND etb.tanggalJual BETWEEN :startDate AND :endDate")
+    List<EntryTransaksiBuku> findByTanggalBeliAndTanggalJualBetween(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate
+    );
+
 }

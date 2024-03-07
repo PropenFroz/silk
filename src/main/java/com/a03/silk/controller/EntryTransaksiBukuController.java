@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.a03.silk.dto.EntryTransaksiBukuMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
 import com.a03.silk.model.EntryTransaksiBuku;
 import com.a03.silk.service.BukuPurwacarakaService;
@@ -36,9 +35,6 @@ public class EntryTransaksiBukuController {
 
     @Autowired
     EntryTransaksiBukuService entryTransaksiBukuService;
-
-    @Autowired
-    EntryTransaksiBukuMapper entryTransaksiBukuMapper;
 
     @Autowired
     BukuPurwacarakaService bukuPurwacarakaService;

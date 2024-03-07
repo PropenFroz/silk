@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.repository.EntryTransaksiSiswaDb;
 import com.a03.silk.repository.GradeKursusDb;
@@ -49,5 +50,40 @@ public class EntryTransaksiSiswaService {
 
     public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDate(Date startDate, Date endDate) {
         return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenOrderByTanggalPembayaranAsc(startDate, endDate);
+    }
+
+    public EntryTransaksiSiswa getEntryTransaksiSiswaById(long id){
+        for(EntryTransaksiSiswa entryTransaksiSiswa : getAllEntryTransaksiSiswa()) {
+            if (entryTransaksiSiswa.getIdEntryTransaksiSiswa() == id){
+                return entryTransaksiSiswa;
+            }
+        }
+        return null;
+    }
+
+    public void deleteEntryTransaksiSiswa(EntryTransaksiSiswa entryTransaksiSiswa) {
+        entryTransaksiSiswa.setIsDeleted(true);
+        entryTransaksiSiswaDb.save(entryTransaksiSiswa);
+    }
+
+    public EntryTransaksiSiswa updateEntry(UpdateEntryTransaksiSiswaRequestDTO updateEntryTransaksiSiswaFromDTO){
+        EntryTransaksiSiswa entryTransaksiSiswa = getEntryTransaksiSiswaById(updateEntryTransaksiSiswaFromDTO.getIdEntryTransaksiSiswa());
+
+        if (entryTransaksiSiswa != null) {
+            entryTransaksiSiswa.setJenisTransaksi(updateEntryTransaksiSiswaFromDTO.getJenisTransaksi());
+            entryTransaksiSiswa.setTanggalPembayaran(updateEntryTransaksiSiswaFromDTO.getTanggalPembayaran());
+
+            entryTransaksiSiswa.setJurusanKursus(jurusanKursusDb.findById(updateEntryTransaksiSiswaFromDTO.getJurusanKursus()).get());
+            entryTransaksiSiswa.setGradeKursus(gradeKursusDb.findById(updateEntryTransaksiSiswaFromDTO.getGradeKursus()).get());
+
+            entryTransaksiSiswa.setUangPendaftaran(updateEntryTransaksiSiswaFromDTO.getUangPendaftaran());
+            entryTransaksiSiswa.setUangKursus(updateEntryTransaksiSiswaFromDTO.getUangKursus());
+            entryTransaksiSiswa.setUangBuku(updateEntryTransaksiSiswaFromDTO.getUangBuku());
+            entryTransaksiSiswa.setCash(updateEntryTransaksiSiswaFromDTO.getCash());
+            entryTransaksiSiswa.setTransfer(updateEntryTransaksiSiswaFromDTO.getTransfer());
+            entryTransaksiSiswa.setKeterangan(updateEntryTransaksiSiswaFromDTO.getKeterangan());
+            return entryTransaksiSiswaDb.save(entryTransaksiSiswa);
+        }
+        return entryTransaksiSiswa;
     }
 }

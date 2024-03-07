@@ -72,4 +72,8 @@ public class EntryTransaksiSiswa {
     @NotNull
     @Column(name = "keterangan", nullable = false)
     private String keterangan;  
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
 }

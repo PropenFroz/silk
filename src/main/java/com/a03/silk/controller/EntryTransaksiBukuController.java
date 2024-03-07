@@ -12,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a03.silk.dto.EntryTransaksiBukuMapper;
+import com.a03.silk.dto.EntryTransaksiSiswaMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
 import com.a03.silk.model.EntryTransaksiBuku;
+import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.BukuPurwacarakaService;
 import com.a03.silk.service.EntryTransaksiBukuService;
+import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiBukuPDF;
 // import com.lowagie.text.DocumentException;
 
@@ -103,4 +106,24 @@ public class EntryTransaksiBukuController {
     public void deleteEntryTransaksiBuku(@PathVariable("id") Long idEntryBuku) {
         entryTransaksiBukuService.deleteEntryTransaksiBuku(idEntryBuku);
     }
+
+    @Autowired
+    EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    EntryTransaksiSiswaMapper entryTransaksiSiswaMapper;
+
+    @GetMapping("/entry-transaksi-siswa/{id}")
+    public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
+        var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
+
+        return entryTransaksiSiswa;
+    }
+
+    @GetMapping("/shafa")
+    public String safaGaming() {
+        return "safa ";
+    }
+
+
 }

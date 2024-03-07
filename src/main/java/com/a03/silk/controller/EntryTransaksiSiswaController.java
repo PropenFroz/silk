@@ -2,21 +2,30 @@ package com.a03.silk.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a03.silk.dto.EntryTransaksiBukuMapper;
+import com.a03.silk.dto.EntryTransaksiSiswaMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
 // import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Date;
@@ -32,6 +41,16 @@ public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    EntryTransaksiSiswaMapper entryTransaksiSiswaMapper;
+
+    // @GetMapping("entry-transaksi-siswa/{id}")
+    // public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
+    //     var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
+
+    //     return entryTransaksiSiswa;
+    // }
     
     @PostMapping("/entry-transaksi-siswa")
     public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
@@ -80,4 +99,26 @@ public class EntryTransaksiSiswaController {
     //     LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
     //     laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
     // }
+
+    @GetMapping("entry-transaksi-siswa/delete/{id}")
+    public EntryTransaksiSiswa deleteEntryTransaksiSiswa(@PathVariable("id") long id) {
+        var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
+
+        entryTransaksiSiswaService.deleteEntryTransaksiSiswa(entryTransaksiSiswa);
+
+        return entryTransaksiSiswa;
+    }
+
+   
+
+    @PutMapping("/entry-transaksi-siswa/update/{id}")
+    public EntryTransaksiSiswa updateEntryTransaksiSiswa(@RequestBody UpdateEntryTransaksiSiswaRequestDTO entryTransaksiSiswaDTO, @PathVariable("id") long idEntryTransaksi){
+        entryTransaksiSiswaDTO.setIdEntryTransaksiSiswa(idEntryTransaksi);
+        var entryTransaksiSiswa = entryTransaksiSiswaService.updateEntry(entryTransaksiSiswaDTO);
+
+        // var entryTransaksiSiswaFromDTO = entryTransaksiSiswaMapper.updateEntryTransaksiSiswaRequestDTOToEntryTransaksiSiswa(entryTransaksiSiswaDTO);
+        // var entryTransaksiSiswa = entryTransaksiSiswaService.updateEntry(entryTransaksiSiswaFromDTO);
+
+        return entryTransaksiSiswa;
+    }
 }

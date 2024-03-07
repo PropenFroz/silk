@@ -45,10 +45,7 @@ public class EntryTransaksiBukuController {
 
     @PostMapping("/entry-transaksi-buku")
     public EntryTransaksiBuku createEntryTransaksiBuku(@RequestBody CreateEntryTransaksiBukuRequestDTO createEntryTransaksiBukuRequestDTO) {
-        var bukuPurwacaraka = bukuPurwacarakaService.getBukuPurwacarakaById(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka().getIdBukuPurwacaraka());
-        createEntryTransaksiBukuRequestDTO.setBukuPurwacaraka(bukuPurwacaraka);
-        var entryTransaksiBuku = entryTransaksiBukuMapper.toEntryBuku(createEntryTransaksiBukuRequestDTO);
-        return entryTransaksiBukuService.createEntryTransaksiBuku(entryTransaksiBuku);
+        return entryTransaksiBukuService.createEntryTransaksiBuku(createEntryTransaksiBukuRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-buku/all")

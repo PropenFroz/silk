@@ -33,8 +33,8 @@ public class EntryTransaksiSiswaService {
         entryTransaksiSiswa.setJenisTransaksi(createEntryTransaksiSiswaRequestDTO.getJenisTransaksi());
         entryTransaksiSiswa.setTanggalPembayaran(createEntryTransaksiSiswaRequestDTO.getTanggalPembayaran());
         entryTransaksiSiswa.setNamaSiswa(createEntryTransaksiSiswaRequestDTO.getNamaSiswa());
-        entryTransaksiSiswa.setJurusanKursus(jurusanKursusDb.findById(createEntryTransaksiSiswaRequestDTO.getJurusanKursus()).get());
-        entryTransaksiSiswa.setGradeKursus(gradeKursusDb.findById(createEntryTransaksiSiswaRequestDTO.getGradeKursus()).get());
+        entryTransaksiSiswa.setJurusanKursus(createEntryTransaksiSiswaRequestDTO.getJurusanKursus());
+        entryTransaksiSiswa.setGradeKursus(createEntryTransaksiSiswaRequestDTO.getGradeKursus());
         entryTransaksiSiswa.setUangPendaftaran(createEntryTransaksiSiswaRequestDTO.getUangPendaftaran());
         entryTransaksiSiswa.setUangKursus(createEntryTransaksiSiswaRequestDTO.getUangKursus());
         entryTransaksiSiswa.setUangBuku(createEntryTransaksiSiswaRequestDTO.getUangBuku());
@@ -73,8 +73,8 @@ public class EntryTransaksiSiswaService {
             entryTransaksiSiswa.setJenisTransaksi(updateEntryTransaksiSiswaFromDTO.getJenisTransaksi());
             entryTransaksiSiswa.setTanggalPembayaran(updateEntryTransaksiSiswaFromDTO.getTanggalPembayaran());
 
-            entryTransaksiSiswa.setJurusanKursus(jurusanKursusDb.findById(updateEntryTransaksiSiswaFromDTO.getJurusanKursus()).get());
-            entryTransaksiSiswa.setGradeKursus(gradeKursusDb.findById(updateEntryTransaksiSiswaFromDTO.getGradeKursus()).get());
+            entryTransaksiSiswa.setJurusanKursus(updateEntryTransaksiSiswaFromDTO.getJurusanKursus());
+            entryTransaksiSiswa.setGradeKursus(updateEntryTransaksiSiswaFromDTO.getGradeKursus());
 
             entryTransaksiSiswa.setUangPendaftaran(updateEntryTransaksiSiswaFromDTO.getUangPendaftaran());
             entryTransaksiSiswa.setUangKursus(updateEntryTransaksiSiswaFromDTO.getUangKursus());

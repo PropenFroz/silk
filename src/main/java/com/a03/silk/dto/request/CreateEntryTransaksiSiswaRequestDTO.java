@@ -16,8 +16,8 @@ public class CreateEntryTransaksiSiswaRequestDTO {
     private int jenisTransaksi;
     private Date tanggalPembayaran;
     private String namaSiswa;
-    private JurusanKursus jurusanKursus;
-    private GradeKursus gradeKursus;
+    private long jurusanKursus;
+    private long gradeKursus;
     private long uangPendaftaran;
     private long uangKursus;
     private long uangBuku;

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a03.silk.dto.EntryTransaksiBukuMapper;
-import com.a03.silk.dto.EntryTransaksiSiswaMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
 import com.a03.silk.model.EntryTransaksiBuku;
 import com.a03.silk.model.EntryTransaksiSiswa;
@@ -20,7 +19,7 @@ import com.a03.silk.service.BukuPurwacarakaService;
 import com.a03.silk.service.EntryTransaksiBukuService;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiBukuPDF;
-// import com.lowagie.text.DocumentException;
+import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -68,34 +67,34 @@ public class EntryTransaksiBukuController {
         return entryTransaksiBukuService.getEntryBukuByDate(startDate, endDate);
     }
 
-    // @GetMapping("/entry-transaksi-buku/laporan")
-    // public void generateLaporanTransaksi(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, 
-    //         @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, 
-    //         HttpServletResponse response) throws DocumentException, IOException {
+    @GetMapping("/entry-transaksi-buku/laporan")
+    public void generateLaporanTransaksi(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, 
+            @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, 
+            HttpServletResponse response) throws DocumentException, IOException {
         
-    //     DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
-    //     String startDateStr = dateString.format(startDate);
-    //     String endDateStr = dateString.format(endDate);
+        DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateStr = dateString.format(startDate);
+        String endDateStr = dateString.format(endDate);
 
-    //     String title = startDateStr + " - " + endDateStr;
+        String title = startDateStr + " - " + endDateStr;
 
-    //     Calendar calendar = Calendar.getInstance();
-    //     calendar.setTime(endDate);
-    //     calendar.add(Calendar.DATE, 1);
-    //     endDate = calendar.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
         
-    //     response.setContentType("application/pdf");
-	// 	DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
-	// 	String currentDateTime = dateFormat.format(new Date());
-	// 	String headerkey = "Content-Disposition";
-	// 	String headervalue = "attachment; filename=LaporanTransaksiBuku_" + currentDateTime + ".pdf";
-	// 	response.setHeader(headerkey, headervalue);
+        response.setContentType("application/pdf");
+		DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+		String currentDateTime = dateFormat.format(new Date());
+		String headerkey = "Content-Disposition";
+		String headervalue = "attachment; filename=LaporanTransaksiBuku_" + currentDateTime + ".pdf";
+		response.setHeader(headerkey, headervalue);
 
-    //     List<EntryTransaksiBuku> entryTransaksiBukuList = entryTransaksiBukuService.getEntryBukuByDate(startDate, endDate);
+        List<EntryTransaksiBuku> entryTransaksiBukuList = entryTransaksiBukuService.getEntryBukuByDate(startDate, endDate);
 
-    //     LaporanTransaksiBukuPDF laporanTransaksiBukuPDF = new LaporanTransaksiBukuPDF();
-    //     laporanTransaksiBukuPDF.generateLaporanTransaksiBuku(response, title, entryTransaksiBukuList);
-    // }
+        LaporanTransaksiBukuPDF laporanTransaksiBukuPDF = new LaporanTransaksiBukuPDF();
+        laporanTransaksiBukuPDF.generateLaporanTransaksiBuku(response, title, entryTransaksiBukuList);
+    }
 
     @PutMapping("/entry-transaksi-buku/{id}")
     public EntryTransaksiBuku updateEntryTransaksiBuku(@PathVariable("id") Long idEntryBuku, @RequestBody EntryTransaksiBuku updatedEntry) {
@@ -110,8 +109,6 @@ public class EntryTransaksiBukuController {
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
 
-    @Autowired
-    EntryTransaksiSiswaMapper entryTransaksiSiswaMapper;
 
     @GetMapping("/entry-transaksi-siswa/{id}")
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
@@ -119,11 +116,5 @@ public class EntryTransaksiBukuController {
 
         return entryTransaksiSiswa;
     }
-
-    @GetMapping("/shafa")
-    public String safaGaming() {
-        return "safa ";
-    }
-
 
 }

@@ -69,7 +69,7 @@ public class EntryTransaksiSiswaService {
     }
 
     public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDate(Date startDate, Date endDate) {
-        return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenOrderByTanggalPembayaranAsc(startDate, endDate);
+        return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenAndIsDeletedOrderByTanggalPembayaranAsc(startDate, endDate, false);
     }
 
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(long id){

@@ -11,4 +11,6 @@ import java.util.Date;
 @Repository
 public interface EntryTransaksiSiswaDb extends JpaRepository<EntryTransaksiSiswa, Long> {
     List<EntryTransaksiSiswa> findByTanggalPembayaranBetweenOrderByTanggalPembayaranAsc(Date startDate, Date endDate);
+
+    List<EntryTransaksiSiswa> findByTanggalPembayaranBetweenAndIsDeletedOrderByTanggalPembayaranAsc(Date startDate, Date endDate, boolean isDeleted);
 }

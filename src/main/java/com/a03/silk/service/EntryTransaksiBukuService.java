@@ -47,34 +47,6 @@ public class EntryTransaksiBukuService {
         return entryTransaksiBukuDb.findByTanggalBeliAndTanggalJualBetween(startDate, endDate);
     }
 
-    // public EntryTransaksiBuku updateEntryTransaksiBuku(Long idEntryBuku, EntryTransaksiBuku updatedEntry) {
-    //     EntryTransaksiBuku entryToUpdate = entryTransaksiBukuDb.findById(idEntryBuku).get();
-
-    //     // entryToUpdate.setJumlah(updatedEntry.getJumlah());
-    //     entryToUpdate.setTanggalBeli(updatedEntry.getTanggalBeli());
-    //     entryToUpdate.setJumlahBeli(updatedEntry.getJumlahBeli());
-    //     entryToUpdate.setTanggalJual(updatedEntry.getTanggalJual());
-    //     entryToUpdate.setJumlahJual(updatedEntry.getJumlahJual());
-    //     // entryToUpdate.setSisa(updatedEntry.getSisa());
-    //     entryToUpdate.setHargaBeli(updatedEntry.getHargaBeli());
-    //     entryToUpdate.setHargaJual(updatedEntry.getHargaJual());
-    
-    //     BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToUpdate.getBukuPurwacaraka().getIdBukuPurwacaraka());
-    //     bukuToUpdate.setJumlah((int)entryToUpdate.getJumlah() + entryToUpdate.getJumlahBeli() - entryToUpdate.getJumlahJual());
-    //     bukuPurwacarakaDb.save(bukuToUpdate);
-
-    //     return entryTransaksiBukuDb.save(entryToUpdate);
-    // }
-
-    public EntryTransaksiBuku getEntryTransaksiBukuById(long id){
-        for(EntryTransaksiBuku entryTransaksiBuku : getAllEntryTransaksiBuku()) {
-            if (entryTransaksiBuku.getIdEntryBuku() == id){
-                return entryTransaksiBuku;
-            }
-        }
-        return null;
-    }
-
     public EntryTransaksiBuku updateEntryTransaksiBuku(UpdateEntryTransaksiBukuRequestDTO updateEntryTransaksiBukuFromDTO) {
         EntryTransaksiBuku entryToUpdate = getEntryTransaksiBukuById(updateEntryTransaksiBukuFromDTO.getIdEntryBuku());
 
@@ -100,6 +72,10 @@ public class EntryTransaksiBukuService {
         bukuToUpdate.setJumlah(bukuToUpdate.getJumlah() - entryToDelete.getJumlahBeli() + entryToDelete.getJumlahJual());
         bukuPurwacarakaDb.save(bukuToUpdate);
         entryTransaksiBukuDb.deleteById(idEntryBuku);
+    }
+
+    public EntryTransaksiBuku getEntryTransaksiBukuById(Long idEntryBuku) {
+        return entryTransaksiBukuDb.findById(idEntryBuku).get();
     }
     
 }

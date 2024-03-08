@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.a03.silk.dto.EntryTransaksiBukuMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiBukuRequestDTO;
+import com.a03.silk.dto.response.ReadEntryTransaksiBukuResponseDTO;
 import com.a03.silk.model.EntryTransaksiBuku;
 import com.a03.silk.service.BukuPurwacarakaService;
 import com.a03.silk.service.EntryTransaksiBukuService;
@@ -65,6 +66,21 @@ public class EntryTransaksiBukuController {
     @DeleteMapping("/entry-transaksi-buku/delete/{id}")
     public void deleteEntryTransaksiBuku(@PathVariable("id") Long idEntryBuku) {
         entryTransaksiBukuService.deleteEntryTransaksiBuku(idEntryBuku);
+    }
+
+    @GetMapping("/entry-transaksi-buku/get/{id}")
+    public ReadEntryTransaksiBukuResponseDTO getEntryTransaksiBukuById(@PathVariable("id") Long idEntryBuku) {
+        var entryBuku = entryTransaksiBukuService.getEntryTransaksiBukuById(idEntryBuku);
+        ReadEntryTransaksiBukuResponseDTO entryDTO = new ReadEntryTransaksiBukuResponseDTO();
+        entryDTO.setBukuPurwacaraka(entryBuku.getBukuPurwacaraka().getIdBukuPurwacaraka());
+        entryDTO.setHargaBeli(entryBuku.getHargaBeli());
+        entryDTO.setHargaJual(entryBuku.getHargaJual());
+        entryDTO.setTanggalBeli(entryBuku.getTanggalBeli());
+        entryDTO.setTanggalJual(entryBuku.getTanggalJual());
+        entryDTO.setJumlahBeli(entryBuku.getJumlahBeli());
+        entryDTO.setJumlahJual(entryBuku.getJumlahJual());
+        return entryDTO;
+
     }
 
     

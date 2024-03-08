@@ -96,4 +96,9 @@ public class EntryTransaksiBukuController {
     public void deleteEntryTransaksiBuku(@PathVariable("id") Long idEntryBuku) {
         entryTransaksiBukuService.deleteEntryTransaksiBuku(idEntryBuku);
     }
+
+    @GetMapping("/entry-transaksi-buku/get/{id}")
+    public EntryTransaksiBuku getEntryTransaksiBukuById(@PathVariable("id") Long idEntryBuku) {
+        return entryTransaksiBukuService.getEntryTransaksiBukuById(idEntryBuku);
+    }
 }

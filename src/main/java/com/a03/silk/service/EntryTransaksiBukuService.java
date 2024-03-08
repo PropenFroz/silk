@@ -70,4 +70,8 @@ public class EntryTransaksiBukuService {
         bukuPurwacarakaDb.save(bukuToUpdate);
         entryTransaksiBukuDb.deleteById(idEntryBuku);
     }
+
+    public EntryTransaksiBuku getEntryTransaksiBukuById(Long idEntryBuku) {
+        return entryTransaksiBukuDb.findById(idEntryBuku).get();
+    }
 }

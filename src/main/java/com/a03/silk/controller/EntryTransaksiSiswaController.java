@@ -88,13 +88,9 @@ public class EntryTransaksiSiswaController {
     @DeleteMapping("entry-transaksi-siswa/delete/{id}")
     public EntryTransaksiSiswa deleteEntryTransaksiSiswa(@PathVariable("id") long id) {
         var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
-
         entryTransaksiSiswaService.deleteEntryTransaksiSiswa(entryTransaksiSiswa);
-
         return entryTransaksiSiswa;
     }
-
-   
 
     @PutMapping("/entry-transaksi-siswa/update/{id}")
     public EntryTransaksiSiswa updateEntryTransaksiSiswa(@RequestBody UpdateEntryTransaksiSiswaRequestDTO entryTransaksiSiswaDTO, @PathVariable("id") long idEntryTransaksi){

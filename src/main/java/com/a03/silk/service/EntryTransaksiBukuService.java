@@ -25,7 +25,7 @@ public class EntryTransaksiBukuService {
 
     public EntryTransaksiBuku createEntryTransaksiBuku(CreateEntryTransaksiBukuRequestDTO createEntryTransaksiBukuRequestDTO) {
         var entryTransaksiBuku = new EntryTransaksiBuku();
-        BukuPurwacaraka bukuPurwacaraka = bukuPurwacarakaDb.findByIdBukuPurwacaraka(createEntryTransaksiBukuRequestDTO.getIdBukuPurwacaraka());
+        BukuPurwacaraka bukuPurwacaraka = bukuPurwacarakaDb.findByIdBukuPurwacaraka(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka());
         entryTransaksiBuku.setJumlah(bukuPurwacaraka.getJumlah());
         bukuPurwacaraka.setJumlah(bukuPurwacaraka.getJumlah() + createEntryTransaksiBukuRequestDTO.getJumlahBeli() - createEntryTransaksiBukuRequestDTO.getJumlahJual()); 
         entryTransaksiBuku.setBukuPurwacaraka(bukuPurwacaraka);

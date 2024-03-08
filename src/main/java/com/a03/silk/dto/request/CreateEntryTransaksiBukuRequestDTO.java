@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateEntryTransaksiBukuRequestDTO {
-    private long idBukuPurwacaraka;
+    private long bukuPurwacaraka;
     private Date tanggalBeli;
     private Date tanggalJual;
     private int jumlahBeli;

@@ -26,7 +26,7 @@ public class BukuPurwacarakaController {
     @Autowired
     BukuPurwacarakaMapper bukuPurwacarakaMapper;
 
-    @PostMapping("/buku-purwacaraka") 
+    @PostMapping("/buku-purwacaraka")
     public BukuPurwacaraka createBukuPurwacaraka(@RequestBody CreateBukuPurwacarakaRequestDTO createBukuPurwacarakaRequestDTO) {
         var bukuPurwacaraka =  bukuPurwacarakaMapper.toBukuPurwacaraka(createBukuPurwacarakaRequestDTO);
         return bukuPurwacarakaService.createBukuPurwacaraka(bukuPurwacaraka);

@@ -3,14 +3,18 @@ package com.a03.silk.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
@@ -79,5 +83,22 @@ public class EntryTransaksiSiswaController {
 
         LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
         laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
+    }
+
+    @DeleteMapping("entry-transaksi-siswa/delete/{id}")
+    public EntryTransaksiSiswa deleteEntryTransaksiSiswa(@PathVariable("id") long id) {
+        var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
+
+        entryTransaksiSiswaService.deleteEntryTransaksiSiswa(entryTransaksiSiswa);
+
+        return entryTransaksiSiswa;
+    }
+
+   
+
+    @PutMapping("/entry-transaksi-siswa/update/{id}")
+    public EntryTransaksiSiswa updateEntryTransaksiSiswa(@RequestBody UpdateEntryTransaksiSiswaRequestDTO entryTransaksiSiswaDTO, @PathVariable("id") long idEntryTransaksi){
+        entryTransaksiSiswaDTO.setIdEntryTransaksiSiswa(idEntryTransaksi);
+        return entryTransaksiSiswaService.updateEntry(entryTransaksiSiswaDTO);
     }
 }

@@ -19,6 +19,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -97,10 +99,10 @@ public class UserRestController {
             // Soft delete by updating the 'deleted' flag
             userRestService.deleteUser(user);
 
-            // Save the updated user to the database
-            userDb.save(user);
+//            // Save the updated user to the database
+//            userDb.save(user);
 
-            return ResponseEntity.ok("User with ID " + id + " has been soft-deleted.");
+            return new ResponseEntity<>("User with ID " + id + " has been soft-deleted.", HttpStatus.OK);
 
         } catch (NoSuchElementException e) {
 
@@ -109,4 +111,23 @@ public class UserRestController {
             );
         }
     }
+
+    @GetMapping("/user/all")
+    public List<UserResponseDTO> getAllUser() {
+        List<UserModel> users = userRestService.retrieveRestAllUser();
+        List<UserResponseDTO> userDtos = new ArrayList<>();
+
+        for (UserModel user : users) {
+            UserResponseDTO userDto = new UserResponseDTO();
+            userDto.setId(user.getId());
+            userDto.setName(user.getName());
+            userDto.setUsername(user.getUsername());
+            userDto.setRole(user.getRole().getRole()); // Assuming Role has a 'name' property
+            userDtos.add(userDto);
+        }
+
+        return userDtos;
+    }
+
+
 }

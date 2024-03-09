@@ -24,9 +24,5 @@ public class PageController {
         return "active-port";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
 
 }

@@ -110,7 +110,7 @@ public class UserRestServiceImpl implements UserRestService {
     public UserModel deleteUser(UserModel user) {
         userDb.delete(user);
 
-        entityManager.flush();
+//        entityManager.flush();
         return user;
     }
 

@@ -50,7 +50,6 @@ public class EntryTransaksiBukuService {
     public EntryTransaksiBuku updateEntryTransaksiBuku(UpdateEntryTransaksiBukuRequestDTO updateEntryTransaksiBukuFromDTO) {
         EntryTransaksiBuku entryToUpdate = getEntryTransaksiBukuById(updateEntryTransaksiBukuFromDTO.getIdEntryBuku());
 
-        // entryToUpdate.setJumlah(updatedEntry.getJumlah());
         entryToUpdate.setTanggalBeli(updateEntryTransaksiBukuFromDTO.getTanggalBeli());
         entryToUpdate.setJumlahBeli(updateEntryTransaksiBukuFromDTO.getJumlahBeli());
         entryToUpdate.setTanggalJual(updateEntryTransaksiBukuFromDTO.getTanggalJual());

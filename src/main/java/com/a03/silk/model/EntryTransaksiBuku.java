@@ -15,7 +15,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(name = "entry_transaksi_buku")
-public class EntryTransaksiBuku {
+public class EntryTransaksiBuku { 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idEntryBuku;

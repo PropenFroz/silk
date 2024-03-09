@@ -75,4 +75,5 @@ public class EntryTransaksiBukuService {
     public EntryTransaksiBuku getEntryTransaksiBukuById(Long idEntryBuku) {
         return entryTransaksiBukuDb.findById(idEntryBuku).get();
     }
+    
 }

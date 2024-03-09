@@ -97,4 +97,11 @@ public class EntryTransaksiSiswaController {
         entryTransaksiSiswaDTO.setIdEntryTransaksiSiswa(idEntryTransaksi);
         return entryTransaksiSiswaService.updateEntry(entryTransaksiSiswaDTO);
     }
+
+    @GetMapping("/entry-transaksi-siswa/{id}")
+    public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
+        var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
+
+        return entryTransaksiSiswa;
+    }
 }

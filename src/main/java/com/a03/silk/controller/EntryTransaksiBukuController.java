@@ -104,15 +104,4 @@ public class EntryTransaksiBukuController {
         entryTransaksiBukuService.deleteEntryTransaksiBuku(idEntryBuku);
     }
 
-    @Autowired
-    EntryTransaksiSiswaService entryTransaksiSiswaService;
-
-
-    @GetMapping("/entry-transaksi-siswa/{id}")
-    public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
-        var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
-
-        return entryTransaksiSiswa;
-    }
-
 }

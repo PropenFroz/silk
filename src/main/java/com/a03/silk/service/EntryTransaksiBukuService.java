@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryTransaksiBukuRequestDTO;
 import com.a03.silk.model.BukuPurwacaraka;
 import com.a03.silk.model.EntryTransaksiBuku;
 import com.a03.silk.repository.BukuPurwacarakaDb;
@@ -24,24 +25,17 @@ public class EntryTransaksiBukuService {
     BukuPurwacarakaDb bukuPurwacarakaDb;
 
     public EntryTransaksiBuku createEntryTransaksiBuku(CreateEntryTransaksiBukuRequestDTO createEntryTransaksiBukuRequestDTO) {
-
         var entryTransaksiBuku = new EntryTransaksiBuku();
-
-       BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka());
-
-        entryTransaksiBuku.setJumlah(bukuToUpdate.getJumlah());
-
-        bukuToUpdate.setJumlah(bukuToUpdate.getJumlah() + createEntryTransaksiBukuRequestDTO.getJumlahBeli() - createEntryTransaksiBukuRequestDTO.getJumlahJual()); 
-
-        entryTransaksiBuku.setBukuPurwacaraka(bukuToUpdate);
-
+        BukuPurwacaraka bukuPurwacaraka = bukuPurwacarakaDb.findByIdBukuPurwacaraka(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka());
+        entryTransaksiBuku.setJumlah(bukuPurwacaraka.getJumlah());
+        bukuPurwacaraka.setJumlah(bukuPurwacaraka.getJumlah() + createEntryTransaksiBukuRequestDTO.getJumlahBeli() - createEntryTransaksiBukuRequestDTO.getJumlahJual()); 
+        entryTransaksiBuku.setBukuPurwacaraka(bukuPurwacaraka);
         entryTransaksiBuku.setJumlahBeli(createEntryTransaksiBukuRequestDTO.getJumlahBeli());
         entryTransaksiBuku.setJumlahJual(createEntryTransaksiBukuRequestDTO.getJumlahJual());
         entryTransaksiBuku.setHargaBeli(createEntryTransaksiBukuRequestDTO.getHargaBeli());
         entryTransaksiBuku.setHargaJual(createEntryTransaksiBukuRequestDTO.getHargaJual());
         entryTransaksiBuku.setTanggalBeli(createEntryTransaksiBukuRequestDTO.getTanggalBeli());
         entryTransaksiBuku.setTanggalJual(createEntryTransaksiBukuRequestDTO.getTanggalJual());
-
         return entryTransaksiBukuDb.save(entryTransaksiBuku);
     }
 
@@ -53,20 +47,21 @@ public class EntryTransaksiBukuService {
         return entryTransaksiBukuDb.findByTanggalBeliAndTanggalJualBetween(startDate, endDate);
     }
 
-    public EntryTransaksiBuku updateEntryTransaksiBuku(Long idEntryBuku, EntryTransaksiBuku updatedEntry) {
-        EntryTransaksiBuku entryToUpdate = entryTransaksiBukuDb.findById(idEntryBuku).get();
+    public EntryTransaksiBuku updateEntryTransaksiBuku(UpdateEntryTransaksiBukuRequestDTO updateEntryTransaksiBukuFromDTO) {
+        EntryTransaksiBuku entryToUpdate = getEntryTransaksiBukuById(updateEntryTransaksiBukuFromDTO.getIdEntryBuku());
+        BukuPurwacaraka newBukuPurwacaraka = bukuPurwacarakaDb.findByIdBukuPurwacaraka(updateEntryTransaksiBukuFromDTO.getBukuPurwacaraka());
 
-        entryToUpdate.setTanggalBeli(updatedEntry.getTanggalBeli());
-        entryToUpdate.setJumlahBeli(updatedEntry.getJumlahBeli());
-        entryToUpdate.setTanggalJual(updatedEntry.getTanggalJual());
-        entryToUpdate.setJumlahJual(updatedEntry.getJumlahJual());
-        entryToUpdate.setHargaBeli(updatedEntry.getHargaBeli());
-        entryToUpdate.setHargaJual(updatedEntry.getHargaJual());
+        entryToUpdate.setBukuPurwacaraka(newBukuPurwacaraka);
+        entryToUpdate.setTanggalBeli(updateEntryTransaksiBukuFromDTO.getTanggalBeli());
+        entryToUpdate.setJumlahBeli(updateEntryTransaksiBukuFromDTO.getJumlahBeli());
+        entryToUpdate.setTanggalJual(updateEntryTransaksiBukuFromDTO.getTanggalJual());
+        entryToUpdate.setJumlahJual(updateEntryTransaksiBukuFromDTO.getJumlahJual());
+        entryToUpdate.setHargaBeli(updateEntryTransaksiBukuFromDTO.getHargaBeli());
+        entryToUpdate.setHargaJual(updateEntryTransaksiBukuFromDTO.getHargaJual());
     
         BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToUpdate.getBukuPurwacaraka().getIdBukuPurwacaraka());
         bukuToUpdate.setJumlah((int)entryToUpdate.getJumlah() + entryToUpdate.getJumlahBeli() - entryToUpdate.getJumlahJual());
-        bukuPurwacarakaDb.save(bukuToUpdate);
-        
+
         return entryTransaksiBukuDb.save(entryToUpdate);
     }
 
@@ -77,4 +72,9 @@ public class EntryTransaksiBukuService {
         bukuPurwacarakaDb.save(bukuToUpdate);
         entryTransaksiBukuDb.deleteById(idEntryBuku);
     }
+
+    public EntryTransaksiBuku getEntryTransaksiBukuById(Long idEntryBuku) {
+        return entryTransaksiBukuDb.findById(idEntryBuku).get();
+    }
+    
 }

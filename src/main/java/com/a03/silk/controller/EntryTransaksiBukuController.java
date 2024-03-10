@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.a03.silk.dto.EntryTransaksiBukuMapper;
 import com.a03.silk.dto.request.CreateEntryTransaksiBukuRequestDTO;
-import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryTransaksiBukuRequestDTO;
+import com.a03.silk.dto.response.ReadEntryTransaksiBukuResponseDTO;
 import com.a03.silk.model.EntryTransaksiBuku;
-import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.BukuPurwacarakaService;
 import com.a03.silk.service.EntryTransaksiBukuService;
-import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiBukuPDF;
 import com.lowagie.text.DocumentException;
 
@@ -39,9 +37,6 @@ public class EntryTransaksiBukuController {
 
     @Autowired
     EntryTransaksiBukuService entryTransaksiBukuService;
-
-    @Autowired
-    EntryTransaksiBukuMapper entryTransaksiBukuMapper;
 
     @Autowired
     BukuPurwacarakaService bukuPurwacarakaService;
@@ -93,15 +88,33 @@ public class EntryTransaksiBukuController {
         LaporanTransaksiBukuPDF laporanTransaksiBukuPDF = new LaporanTransaksiBukuPDF();
         laporanTransaksiBukuPDF.generateLaporanTransaksiBuku(response, title, entryTransaksiBukuList);
     }
-
-    @PutMapping("/entry-transaksi-buku/{id}")
-    public EntryTransaksiBuku updateEntryTransaksiBuku(@PathVariable("id") Long idEntryBuku, @RequestBody EntryTransaksiBuku updatedEntry) {
-        return entryTransaksiBukuService.updateEntryTransaksiBuku(idEntryBuku, updatedEntry);
+    
+    @PutMapping("/entry-transaksi-buku/update/{id}")
+    public EntryTransaksiBuku updateEntryTransaksiSiswa(@RequestBody UpdateEntryTransaksiBukuRequestDTO entryTransaksiBukuDTO, @PathVariable("id") long idEntryBuku){
+        entryTransaksiBukuDTO.setIdEntryBuku(idEntryBuku);
+        return entryTransaksiBukuService.updateEntryTransaksiBuku(entryTransaksiBukuDTO);
     }
 
     @DeleteMapping("/entry-transaksi-buku/delete/{id}")
     public void deleteEntryTransaksiBuku(@PathVariable("id") Long idEntryBuku) {
         entryTransaksiBukuService.deleteEntryTransaksiBuku(idEntryBuku);
     }
+
+    @GetMapping("/entry-transaksi-buku/get/{id}")
+    public ReadEntryTransaksiBukuResponseDTO getEntryTransaksiBukuById(@PathVariable("id") Long idEntryBuku) {
+        var entryBuku = entryTransaksiBukuService.getEntryTransaksiBukuById(idEntryBuku);
+        ReadEntryTransaksiBukuResponseDTO entryDTO = new ReadEntryTransaksiBukuResponseDTO();
+        entryDTO.setBukuPurwacaraka(entryBuku.getBukuPurwacaraka().getIdBukuPurwacaraka());
+        entryDTO.setHargaBeli(entryBuku.getHargaBeli());
+        entryDTO.setHargaJual(entryBuku.getHargaJual());
+        entryDTO.setTanggalBeli(entryBuku.getTanggalBeli());
+        entryDTO.setTanggalJual(entryBuku.getTanggalJual());
+        entryDTO.setJumlahBeli(entryBuku.getJumlahBeli());
+        entryDTO.setJumlahJual(entryBuku.getJumlahJual());
+        return entryDTO;
+
+    }
+
+    
 
 }

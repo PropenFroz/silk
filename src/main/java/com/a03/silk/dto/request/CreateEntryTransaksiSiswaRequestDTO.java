@@ -2,9 +2,6 @@ package com.a03.silk.dto.request;
 
 import java.util.Date;
 
-import com.a03.silk.model.GradeKursus;
-import com.a03.silk.model.JurusanKursus;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

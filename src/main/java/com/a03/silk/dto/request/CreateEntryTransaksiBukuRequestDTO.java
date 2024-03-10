@@ -2,8 +2,6 @@ package com.a03.silk.dto.request;
 
 import java.util.Date;
 
-import com.a03.silk.model.BukuPurwacaraka;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

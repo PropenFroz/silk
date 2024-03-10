@@ -1,7 +1,5 @@
 package com.a03.silk.repository;
 
-import com.a03.silk.model.Siswa;
-
 import com.a03.silk.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

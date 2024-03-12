@@ -16,7 +16,7 @@ import com.a03.silk.model.JurusanKursus;
 import com.a03.silk.service.JurusanKursusService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://silk-client.railway.internal")
 @RequestMapping("/api")
 public class JurusanKursusController {
     

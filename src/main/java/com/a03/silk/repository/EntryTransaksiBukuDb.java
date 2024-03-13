@@ -19,6 +19,6 @@ public interface EntryTransaksiBukuDb extends JpaRepository<EntryTransaksiBuku, 
     List<EntryTransaksiBuku> findByTanggalBeliAndTanggalJualBetween(
             @Param("startDate") Date startDate,
             @Param("endDate") Date endDate
-    ); // WASIS
+    );
 
 }

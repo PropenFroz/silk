@@ -12,7 +12,7 @@ import com.a03.silk.repository.EntryTransaksiBukuDb;
 
 import jakarta.transaction.Transactional;
 
-import java.util.*;;
+import java.util.*;
 
 @Service
 @Transactional
@@ -26,10 +26,10 @@ public class EntryTransaksiBukuService {
 
     public EntryTransaksiBuku createEntryTransaksiBuku(CreateEntryTransaksiBukuRequestDTO createEntryTransaksiBukuRequestDTO) {
         var entryTransaksiBuku = new EntryTransaksiBuku();
-        BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka());
-        entryTransaksiBuku.setJumlah(bukuToUpdate.getJumlah());
-        bukuToUpdate.setJumlah(bukuToUpdate.getJumlah() + createEntryTransaksiBukuRequestDTO.getJumlahBeli() - createEntryTransaksiBukuRequestDTO.getJumlahJual()); 
-        entryTransaksiBuku.setBukuPurwacaraka(bukuToUpdate);
+        BukuPurwacaraka bukuPurwacaraka = bukuPurwacarakaDb.findByIdBukuPurwacaraka(createEntryTransaksiBukuRequestDTO.getBukuPurwacaraka());
+        entryTransaksiBuku.setJumlah(bukuPurwacaraka.getJumlah());
+        bukuPurwacaraka.setJumlah(bukuPurwacaraka.getJumlah() + createEntryTransaksiBukuRequestDTO.getJumlahBeli() - createEntryTransaksiBukuRequestDTO.getJumlahJual()); 
+        entryTransaksiBuku.setBukuPurwacaraka(bukuPurwacaraka);
         entryTransaksiBuku.setJumlahBeli(createEntryTransaksiBukuRequestDTO.getJumlahBeli());
         entryTransaksiBuku.setJumlahJual(createEntryTransaksiBukuRequestDTO.getJumlahJual());
         entryTransaksiBuku.setHargaBeli(createEntryTransaksiBukuRequestDTO.getHargaBeli());

@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.a03.silk.model.GradeKursus;
 
+
 @Repository
 public interface GradeKursusDb extends JpaRepository<GradeKursus, Long> {
-    
+    GradeKursus findByIdGradeKursus(long idGradeKursus);
 }

@@ -103,9 +103,6 @@ public class UserRestController {
             // Soft delete by updating the 'deleted' flag
             userRestService.deleteUser(user);
 
-//            // Save the updated user to the database
-//            userDb.save(user);
-
             return new ResponseEntity<>("User with ID " + id + " has been soft-deleted.", HttpStatus.OK);
 
         } catch (NoSuchElementException e) {

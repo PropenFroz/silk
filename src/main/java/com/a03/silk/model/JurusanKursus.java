@@ -41,5 +41,13 @@ public class JurusanKursus {
 
     @JsonIgnore
     @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<EntryGajiGuru> daftarGajiGuru;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BukuPurwacaraka> daftarBukuPurwacaraka;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<GuruJurusan> listGuruJurusan;
 }

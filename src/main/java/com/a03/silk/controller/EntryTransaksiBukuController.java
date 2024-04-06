@@ -31,7 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
-@CrossOrigin(origins = "https://silk-client.railway.internal")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class EntryTransaksiBukuController {
 

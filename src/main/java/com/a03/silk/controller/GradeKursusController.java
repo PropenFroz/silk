@@ -17,7 +17,7 @@ import com.a03.silk.service.GradeKursusService;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "https://silk-client.railway.internal")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class GradeKursusController {
     

@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class UserRestController {
 
@@ -49,16 +50,16 @@ public class UserRestController {
         }
         else {
             if (userDb.existsByUsername(createUserRequestDTO.getUsername())) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Username is already taken."
-                );
+                return new ResponseEntity<>("Username yang anda masukkan sudah ada.", HttpStatus.BAD_REQUEST);
+            }
+            if (createUserRequestDTO.getPassword() == null || createUserRequestDTO.getPassword().length() < 8) {
+                return new ResponseEntity<>("Password setidaknya harus 8 karakter.", HttpStatus.BAD_REQUEST);
             }
 
-            String role = createUserRequestDTO.getRole(); // Contoh: Anda dapat menambahkan atribut userType ke CreateUserRequestDTO.
+        
+            String role = createUserRequestDTO.getRole();
             if (role == null) {
-                throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Invalid role"
-                );
+                return new ResponseEntity<>("Role tidak valid.", HttpStatus.BAD_REQUEST);
             }
             else {
                 UserModel userModel =  userMapper.createUserRequestDTOToUserModel(createUserRequestDTO);
@@ -72,7 +73,7 @@ public class UserRestController {
     }
 
     @PutMapping(value = "/user/{id}")
-    public UserModel restUpdateUser(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO, BindingResult bindingResult) {
+    public ResponseEntity<?> restUpdateUser(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         }
@@ -83,10 +84,13 @@ public class UserRestController {
             var userDariDatabase = userRestService.getRestUserById(id);
 
             if (userFromDTO.getPassword().equals(userDariDatabase.getPassword())) {
-                throw new ResponseStatusException(HttpStatus.CONFLICT, "New password is the same as the existing password");
+                return new ResponseEntity<>("Password baru tidak boleh sama dengan password lama.", HttpStatus.BAD_REQUEST);
+            }
+            if (userFromDTO.getPassword()== null || userFromDTO.getPassword().length() < 8) {
+                return new ResponseEntity<>("Password setidaknya harus 8 karakter.", HttpStatus.BAD_REQUEST);
             }
 
-            return userRestService.updateRestUser(userFromDTO, id);
+            return new ResponseEntity<>(userFromDTO, HttpStatus.OK);
         }
     }
 
@@ -98,9 +102,6 @@ public class UserRestController {
 
             // Soft delete by updating the 'deleted' flag
             userRestService.deleteUser(user);
-
-//            // Save the updated user to the database
-//            userDb.save(user);
 
             return new ResponseEntity<>("User with ID " + id + " has been soft-deleted.", HttpStatus.OK);
 

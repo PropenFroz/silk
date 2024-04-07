@@ -29,7 +29,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "user_model")
-@SQLDelete(sql = "UPDATE user_model SET is_deleted = true WHERE id=?")
 @Where(clause = "is_deleted=false")
 public class UserModel implements Serializable {
     @Id

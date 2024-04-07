@@ -1,9 +1,5 @@
 package com.a03.silk.model;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,28 +15,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "grade_kursus")
-public class GradeKursus {
+@Table(name = "guru")
+public class Guru {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idGradeKursus;
+    private long idGuru;
 
     @NotNull
-    @Column(name = "nama_grade")
-    private String namaGrade;
+    @Column(name = "nama_guru")
+    private String namaGuru;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "gradeKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EntryTransaksiSiswa> daftarTransaksiSiswa;
+    @OneToMany(mappedBy = "guru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<GuruJurusan> listGuruJurusan;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "gradeKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EntryGajiGuruDetail> daftarGajiGuruDetail;
-
+    @OneToMany(mappedBy = "guru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<EntryGajiGuru> daftarGajiGuru;
 }

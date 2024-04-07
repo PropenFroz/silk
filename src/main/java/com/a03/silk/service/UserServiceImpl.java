@@ -32,24 +32,4 @@ public class UserServiceImpl implements UserService {
         user.setPassword(hashedPass);
         return userDb.save(user);
     }
-
-    @Override
-    public String loginJwtAdmin(LoginJwtRequestDTO loginJwtRequestDTO) {
-        String username = loginJwtRequestDTO.getUsername();
-        String name = loginJwtRequestDTO.getName();
-
-        UserModel user = userDb.findByUsername(username);
-
-        if (user == null) {
-            user = new UserModel();
-            user.setName(name);
-            user.setPassword("bacabaca");
-            user.setUsername(username);
-            user.setRole(roleService.getRoleByRoleName("Admin"));
-            userDb.save(user);
-        }
-
-        return jwtUtils.generateJwtToken(loginJwtRequestDTO.getUsername());
-    }
-
 }

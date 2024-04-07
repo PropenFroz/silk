@@ -9,11 +9,16 @@ import lombok.Setter;
 
 import java.util.Date;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE entry_gaji_guru_detail SET is_deleted = true WHERE id=?")
+@Where(clause = "is_deleted=false")
 @Table(name = "entry_gaji_guru_detail")
 public class EntryGajiGuruDetail {
 
@@ -64,4 +69,9 @@ public class EntryGajiGuruDetail {
     @NotNull
     @Column(name = "keterangan")
     private String keterangan;
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = Boolean.FALSE;
+
 }

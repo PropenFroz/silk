@@ -1,6 +1,7 @@
 package com.a03.silk.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.a03.silk.dto.request.CreateEntryGajiGuruRequestDTO;
 import com.a03.silk.model.EntryGajiGuru;
 import com.a03.silk.model.EntryGajiGuruDetail;
 import com.a03.silk.repository.EntryGajiGuruDb;
+import com.a03.silk.repository.EntryGajiGuruDetailDb;
 import com.a03.silk.repository.GradeKursusDb;
 import com.a03.silk.repository.GuruDb;
 import com.a03.silk.repository.JurusanKursusDb;
@@ -23,6 +25,9 @@ public class EntryGajiGuruService {
     
     @Autowired
     EntryGajiGuruDb entryGajiGuruDb;
+
+    @Autowired
+    EntryGajiGuruDetailDb entryGajiGuruDetailDb;
 
     @Autowired
     JurusanKursusDb jurusanKursusDb;
@@ -63,5 +68,18 @@ public class EntryGajiGuruService {
 
     public List<EntryGajiGuru> getAllEntryGajiGuru() {
         return entryGajiGuruDb.findAll();
+    }
+
+    public List<EntryGajiGuruDetail> filterEntryGajiGuru(long idGuru, Date startDate, Date endDate) {
+        var guru = guruDb.findById(idGuru).get();
+        return entryGajiGuruDetailDb.findByEntryGajiGuru_GuruAndTanggalBetween(guru, startDate, endDate);
+    }
+
+    public void deleteEntryGajiGuruDetail(EntryGajiGuruDetail entryGajiGuruDetail) {
+        entryGajiGuruDetailDb.delete(entryGajiGuruDetail);
+    }
+
+    public EntryGajiGuruDetail getEntryGajiGuruDetailById(long id) {
+        return entryGajiGuruDetailDb.findById(id).get();
     }
 }

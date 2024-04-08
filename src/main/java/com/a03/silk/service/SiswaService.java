@@ -20,5 +20,9 @@ public class SiswaService {
     public List<Siswa> getAllSiswa() {
         return siswaDb.findByIsDeletedFalse();
     }
+
+    public Siswa getSiswaById(long idSiswa) {
+        return siswaDb.findById(idSiswa).get();
+    }
     
 }

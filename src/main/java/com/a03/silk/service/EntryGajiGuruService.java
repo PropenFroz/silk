@@ -18,6 +18,7 @@ import com.a03.silk.repository.GradeKursusDb;
 import com.a03.silk.repository.GuruDb;
 import com.a03.silk.repository.GuruJurusanDb;
 import com.a03.silk.repository.JurusanKursusDb;
+import com.a03.silk.repository.SiswaDb;
 
 import jakarta.transaction.Transactional;
 
@@ -43,6 +44,9 @@ public class EntryGajiGuruService {
     @Autowired
     GuruJurusanDb guruJurusanDb;
 
+    @Autowired
+    SiswaDb siswaDb;
+
     public EntryGajiGuru createEntryGajiGuru(CreateEntryGajiGuruRequestDTO createEntryGajiGuruRequestDTO) {
         var guruJurusan = new GuruJurusan();
         guruJurusan.setGuru(guruDb.findById(createEntryGajiGuruRequestDTO.getIdGuru()).get());
@@ -58,8 +62,7 @@ public class EntryGajiGuruService {
         
         for (CreateEntryGajiGuruDetailRequestDTO item : listCreateEntryGajiGuruDetailRequestDTO) {
             EntryGajiGuruDetail detail = new EntryGajiGuruDetail();
-            detail.setMurid(item.getMurid());
-            detail.setGradeKursus(gradeKursusDb.findById(item.getIdGradeKursus()).get());
+            detail.setSiswa(siswaDb.findById(item.getSiswa()).get());
             detail.setUangKursus(item.getUangKursus());
             detail.setTanggal(item.getTanggal());
             detail.setMinggu1(item.getMinggu1());

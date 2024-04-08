@@ -37,17 +37,9 @@ public class EntryTransaksiSiswa {
     @Column(name = "tanggal_pembayaran", nullable = false)
     private Date tanggalPembayaran;
 
-    @NotNull
-    @Column(name = "nama_siswa", nullable = false)
-    private String namaSiswa;
-
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_jurusan_kursus", referencedColumnName = "idJurusanKursus")
-    private JurusanKursus jurusanKursus;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_grade_kursus", referencedColumnName = "idGradeKursus")
-    private GradeKursus gradeKursus;
+    @JoinColumn(name = "id_siswa", referencedColumnName = "idSiswa")
+    private Siswa siswa;
 
     @NotNull
     @Column(name = "uang_pendaftaran", nullable = false)

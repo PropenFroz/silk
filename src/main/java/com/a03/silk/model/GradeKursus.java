@@ -37,10 +37,10 @@ public class GradeKursus {
 
     @JsonIgnore
     @OneToMany(mappedBy = "gradeKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EntryTransaksiSiswa> daftarTransaksiSiswa;
+    private List<EntryGajiGuruDetail> daftarGajiGuruDetail;
 
     @JsonIgnore
     @OneToMany(mappedBy = "gradeKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EntryGajiGuruDetail> daftarGajiGuruDetail;
+    List<Siswa> listSiswa;
 
 }

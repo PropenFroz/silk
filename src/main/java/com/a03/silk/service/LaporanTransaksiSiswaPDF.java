@@ -130,9 +130,9 @@ public class LaporanTransaksiSiswaPDF {
     private void addEntryLainnyaToTable(PdfPTable table, String counter, EntryTransaksiSiswa entry, Font fontContent) {
         table.addCell(new Phrase(counter, fontContent));
         table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
-        table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getJurusanKursus().getNamaJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getGradeKursus().getNamaGrade(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getJurusanKursus().getNamaJurusan(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));
@@ -145,9 +145,9 @@ public class LaporanTransaksiSiswaPDF {
     private void addEntryToTable(PdfPTable table, int counter, EntryTransaksiSiswa entry, Font fontContent) {
         table.addCell(new Phrase(String.valueOf(counter), fontContent));
         table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
-        table.addCell(new Phrase(entry.getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getJurusanKursus().getNamaJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getGradeKursus().getNamaGrade(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getJurusanKursus().getNamaJurusan(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));

@@ -11,10 +11,12 @@ import com.a03.silk.dto.request.CreateEntryGajiGuruDetailRequestDTO;
 import com.a03.silk.dto.request.CreateEntryGajiGuruRequestDTO;
 import com.a03.silk.model.EntryGajiGuru;
 import com.a03.silk.model.EntryGajiGuruDetail;
+import com.a03.silk.model.GuruJurusan;
 import com.a03.silk.repository.EntryGajiGuruDb;
 import com.a03.silk.repository.EntryGajiGuruDetailDb;
 import com.a03.silk.repository.GradeKursusDb;
 import com.a03.silk.repository.GuruDb;
+import com.a03.silk.repository.GuruJurusanDb;
 import com.a03.silk.repository.JurusanKursusDb;
 
 import jakarta.transaction.Transactional;
@@ -38,9 +40,16 @@ public class EntryGajiGuruService {
     @Autowired
     GuruDb guruDb;
 
-    public EntryGajiGuru createEntryGajiGuru(CreateEntryGajiGuruRequestDTO createEntryGajiGuruRequestDTO) {
-        var entryGajiGuru = new EntryGajiGuru();
+    @Autowired
+    GuruJurusanDb guruJurusanDb;
 
+    public EntryGajiGuru createEntryGajiGuru(CreateEntryGajiGuruRequestDTO createEntryGajiGuruRequestDTO) {
+        var guruJurusan = new GuruJurusan();
+        guruJurusan.setGuru(guruDb.findById(createEntryGajiGuruRequestDTO.getIdGuru()).get());
+        guruJurusan.setJurusanKursus(jurusanKursusDb.findById(createEntryGajiGuruRequestDTO.getIdJurusanKursus()).get());
+        guruJurusanDb.save(guruJurusan);
+
+        var entryGajiGuru = new EntryGajiGuru();
         entryGajiGuru.setGuru(guruDb.findById(createEntryGajiGuruRequestDTO.getIdGuru()).get());
         entryGajiGuru.setJurusanKursus(jurusanKursusDb.findById(createEntryGajiGuruRequestDTO.getIdJurusanKursus()).get());
 

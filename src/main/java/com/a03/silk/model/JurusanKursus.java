@@ -34,10 +34,6 @@ public class JurusanKursus {
     @NotNull
     @Column(name = "nama_jurusan")
     private String namaJurusan;
-    
-    @JsonIgnore
-    @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EntryTransaksiSiswa> daftarTransaksiSiswa;
 
     @JsonIgnore
     @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -50,4 +46,8 @@ public class JurusanKursus {
     @JsonIgnore
     @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<GuruJurusan> listGuruJurusan;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "jurusanKursus", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Siswa> listSiswa;
 }

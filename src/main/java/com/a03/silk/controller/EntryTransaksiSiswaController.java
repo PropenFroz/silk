@@ -20,6 +20,7 @@ import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
+import com.a03.silk.service.SiswaService;
 import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,15 +39,22 @@ public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    SiswaService siswaService;
     
     @PostMapping("/entry-transaksi-siswa-daftar")
     public EntryTransaksiSiswa createEntryDaftarSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
-        return entryTransaksiSiswaService.createEntryTransaksiSiswaDaftar(createEntryTransaksiSiswaRequestDTO);
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaDaftar(createEntryTransaksiSiswaRequestDTO);
+        siswaService.updateIdPendaftaran(entry.getSiswa().getIdSiswa(), entry.getIdEntryTransaksiSiswa());
+        return entry;
     }
 
     @PostMapping("/entry-transaksi-siswa-kursus")
     public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryKursusSiswaRequestDTO createEntryKursusSiswaRequestDTO) {
-        return entryTransaksiSiswaService.createEntryTransaksiSiswaKursus(createEntryKursusSiswaRequestDTO);
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaKursus(createEntryKursusSiswaRequestDTO);
+        siswaService.updateKursus(entry.getSiswa(), entry, createEntryKursusSiswaRequestDTO.getTahunKursus());
+        return entry;
     }
 
     @PostMapping("/entry-transaksi-siswa-lainnya")

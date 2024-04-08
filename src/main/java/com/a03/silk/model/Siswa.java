@@ -51,11 +51,15 @@ public class Siswa {
     @Column(name = "tanggal_daftar")
     private Date tanggalDaftar;
 
+    @NotNull
+    @Column(name = "id_pendaftaran")
+    private long idPendaftaran;
+
     @ElementCollection
     @CollectionTable(name = "tanggal_kursus", joinColumns = @JoinColumn(name = "siswa_id"))
     @MapKeyColumn(name = "tahun")
     @Column(name = "tanggal")
-    private Map<Integer, List<Date>> tanggalKursusPerTahun = new HashMap<>();
+    private Map<Integer, List<Long>> tanggalKursusPerTahun = new HashMap<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_jurusan_kursus", referencedColumnName = "idJurusanKursus")

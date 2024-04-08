@@ -66,21 +66,6 @@ public class EntryTransaksiSiswaService {
         entryTransaksiSiswa.setTanggalPembayaran(createEntryKursusSiswaRequestDTO.getTanggalPembayaran());
 
         var siswa = siswaDb.findById(createEntryKursusSiswaRequestDTO.getSiswa()).get();
-
-        List<Date> tanggalKursus = new ArrayList<>();
-
-        if (siswa.getTanggalKursusPerTahun().get(createEntryKursusSiswaRequestDTO.getTahunKursus()) == null || siswa.getTanggalKursusPerTahun().get(createEntryKursusSiswaRequestDTO.getTahunKursus()).isEmpty()) {
-            tanggalKursus.add(createEntryKursusSiswaRequestDTO.getTanggalPembayaran());
-        } 
-        else {
-            for (Date date : siswa.getTanggalKursusPerTahun().get(createEntryKursusSiswaRequestDTO.getTahunKursus())) {
-                tanggalKursus.add(date);
-            }
-            tanggalKursus.add(createEntryKursusSiswaRequestDTO.getTanggalPembayaran());
-        }
-
-        siswa.getTanggalKursusPerTahun().put(createEntryKursusSiswaRequestDTO.getTahunKursus(), tanggalKursus);
-
         entryTransaksiSiswa.setSiswa(siswa);
         entryTransaksiSiswa.setUangPendaftaran(createEntryKursusSiswaRequestDTO.getUangPendaftaran());
         entryTransaksiSiswa.setUangKursus(createEntryKursusSiswaRequestDTO.getUangKursus());
@@ -89,7 +74,6 @@ public class EntryTransaksiSiswaService {
         entryTransaksiSiswa.setTransfer(createEntryKursusSiswaRequestDTO.getTransfer());
         entryTransaksiSiswa.setKeterangan(createEntryKursusSiswaRequestDTO.getKeterangan());
     
-        siswaDb.save(siswa);
         return entryTransaksiSiswaDb.save(entryTransaksiSiswa);
     }
 
@@ -118,21 +102,8 @@ public class EntryTransaksiSiswaService {
         EntryTransaksiSiswa entryTransaksiSiswa = getEntryTransaksiSiswaById(updateEntryTransaksiSiswaFromDTO.getIdEntryTransaksiSiswa());
 
         var siswa = siswaDb.findById(updateEntryTransaksiSiswaFromDTO.getSiswa()).get();
-        List<Date> tanggalKursus = siswa.getTanggalKursusPerTahun().get(updateEntryTransaksiSiswaFromDTO.getTahunKursus());
-
         if (entryTransaksiSiswa.getJenisTransaksi() == 1) {
             siswa.setTanggalDaftar(updateEntryTransaksiSiswaFromDTO.getTanggalPembayaran());
-        }
-        else if (entryTransaksiSiswa.getJenisTransaksi() == 2) {
-            for (int i = 0 ; i < tanggalKursus.size(); i++) {
-                if (tanggalKursus.get(i).equals(entryTransaksiSiswa.getTanggalPembayaran())) {
-                    tanggalKursus.set(i, updateEntryTransaksiSiswaFromDTO.getTanggalPembayaran());
-                }
-                else {
-                    continue;
-                }
-            }
-            siswa.getTanggalKursusPerTahun().put(updateEntryTransaksiSiswaFromDTO.getTahunKursus(), tanggalKursus);
         }
 
         entryTransaksiSiswa.setTanggalPembayaran(updateEntryTransaksiSiswaFromDTO.getTanggalPembayaran());
@@ -173,18 +144,15 @@ public class EntryTransaksiSiswaService {
             var siswa = siswaDb.findById(entryTransaksiSiswa.getSiswa().getIdSiswa()).get();
             siswa.setDeleted(true);
             siswaDb.save(siswa);
-        }
-
-        if (entryTransaksiSiswa.getJenisTransaksi() == 2) {
+        } else if (entryTransaksiSiswa.getJenisTransaksi() == 2) {
             var siswa = siswaDb.findById(entryTransaksiSiswa.getSiswa().getIdSiswa()).get();
-            for (Entry<Integer, List<Date>> entry : siswa.getTanggalKursusPerTahun().entrySet()) {
-                List<Date> list = entry.getValue();
-                if (list.contains(entryTransaksiSiswa.getTanggalPembayaran())) {
-                    list.remove(entryTransaksiSiswa.getTanggalPembayaran());
+            for (Entry<Integer, List<Long>> entry : siswa.getTanggalKursusPerTahun().entrySet()) {
+                List<Long> list = entry.getValue();
+                if (list.contains(entryTransaksiSiswa.getIdEntryTransaksiSiswa())) {
+                    list.remove(entryTransaksiSiswa.getIdEntryTransaksiSiswa());
                 }
             }
-    
-            siswaDb.save(siswa);  
+            siswaDb.save(siswa);
         }
         entryTransaksiSiswaDb.save(entryTransaksiSiswa);
     }

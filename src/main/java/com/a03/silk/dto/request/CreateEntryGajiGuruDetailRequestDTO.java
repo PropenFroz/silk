@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class CreateEntryGajiGuruDetailRequestDTO {
-    private String murid;
-    private long idGradeKursus;
+    private long siswa;
     private long uangKursus;
     private Date tanggal;
     private long minggu1;

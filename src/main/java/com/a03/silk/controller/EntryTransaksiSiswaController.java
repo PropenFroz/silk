@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a03.silk.dto.request.CreateEntryKursusSiswaRequestDTO;
+import com.a03.silk.dto.request.CreateEntryLainnyaSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
@@ -37,9 +39,19 @@ public class EntryTransaksiSiswaController {
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
     
-    @PostMapping("/entry-transaksi-siswa")
-    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
-        return entryTransaksiSiswaService.createEntryTransaksiSiswa(createEntryTransaksiSiswaRequestDTO);
+    @PostMapping("/entry-transaksi-siswa-daftar")
+    public EntryTransaksiSiswa createEntryDaftarSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
+        return entryTransaksiSiswaService.createEntryTransaksiSiswaDaftar(createEntryTransaksiSiswaRequestDTO);
+    }
+
+    @PostMapping("/entry-transaksi-siswa-kursus")
+    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryKursusSiswaRequestDTO createEntryKursusSiswaRequestDTO) {
+        return entryTransaksiSiswaService.createEntryTransaksiSiswaKursus(createEntryKursusSiswaRequestDTO);
+    }
+
+    @PostMapping("/entry-transaksi-siswa-lainnya")
+    public EntryTransaksiSiswa createEntryLainnyaSiswa(@RequestBody CreateEntryLainnyaSiswaRequestDTO createEntryLainnyaSiswaRequestDTO) {
+        return entryTransaksiSiswaService.createEntryTransaksiSiswaLainnya(createEntryLainnyaSiswaRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-siswa/all")

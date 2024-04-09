@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a03.silk.dto.request.CreateEntryKursusSiswaRequestDTO;
+import com.a03.silk.dto.request.CreateEntryLainnyaSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
+import com.a03.silk.service.SiswaService;
 import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,10 +39,27 @@ public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    SiswaService siswaService;
     
-    @PostMapping("/entry-transaksi-siswa")
-    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
-        return entryTransaksiSiswaService.createEntryTransaksiSiswa(createEntryTransaksiSiswaRequestDTO);
+    @PostMapping("/entry-transaksi-siswa-daftar")
+    public EntryTransaksiSiswa createEntryDaftarSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaDaftar(createEntryTransaksiSiswaRequestDTO);
+        siswaService.updateIdPendaftaran(entry.getSiswa().getIdSiswa(), entry.getIdEntryTransaksiSiswa());
+        return entry;
+    }
+
+    @PostMapping("/entry-transaksi-siswa-kursus")
+    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryKursusSiswaRequestDTO createEntryKursusSiswaRequestDTO) {
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaKursus(createEntryKursusSiswaRequestDTO);
+        siswaService.updateKursus(entry.getSiswa(), entry, createEntryKursusSiswaRequestDTO.getTahunKursus());
+        return entry;
+    }
+
+    @PostMapping("/entry-transaksi-siswa-lainnya")
+    public EntryTransaksiSiswa createEntryLainnyaSiswa(@RequestBody CreateEntryLainnyaSiswaRequestDTO createEntryLainnyaSiswaRequestDTO) {
+        return entryTransaksiSiswaService.createEntryTransaksiSiswaLainnya(createEntryLainnyaSiswaRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-siswa/all")

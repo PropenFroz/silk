@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "https://silk-client.railway.internal")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class AuthRestController {
     @Autowired

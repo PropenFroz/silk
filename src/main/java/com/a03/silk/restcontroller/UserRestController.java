@@ -25,7 +25,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RestController
-@CrossOrigin(origins = "https://silk-client.railway.internal")
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class UserRestController {
 

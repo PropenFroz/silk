@@ -9,12 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CreateEntryTransaksiSiswaRequestDTO {
+public class CreateEntryKursusSiswaRequestDTO {
     private int jenisTransaksi;
+    private int tahunKursus;
     private Date tanggalPembayaran;
-    private String namaSiswa;
-    private long jurusanKursus;
-    private long gradeKursus;
+    private long siswa;
     private long uangPendaftaran;
     private long uangKursus;
     private long uangBuku;

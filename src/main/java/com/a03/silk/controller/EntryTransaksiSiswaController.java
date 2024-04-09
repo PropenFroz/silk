@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a03.silk.dto.request.CreateEntryKursusSiswaRequestDTO;
+import com.a03.silk.dto.request.CreateEntryLainnyaSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
+import com.a03.silk.service.SiswaService;
 import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,16 +33,33 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://silk-client.railway.internal")
 @RequestMapping("/api")
 public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    SiswaService siswaService;
     
-    @PostMapping("/entry-transaksi-siswa")
-    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
-        return entryTransaksiSiswaService.createEntryTransaksiSiswa(createEntryTransaksiSiswaRequestDTO);
+    @PostMapping("/entry-transaksi-siswa-daftar")
+    public EntryTransaksiSiswa createEntryDaftarSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaDaftar(createEntryTransaksiSiswaRequestDTO);
+        siswaService.updateIdPendaftaran(entry.getSiswa().getIdSiswa(), entry.getIdEntryTransaksiSiswa());
+        return entry;
+    }
+
+    @PostMapping("/entry-transaksi-siswa-kursus")
+    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryKursusSiswaRequestDTO createEntryKursusSiswaRequestDTO) {
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaKursus(createEntryKursusSiswaRequestDTO);
+        siswaService.updateKursus(entry.getSiswa(), entry, createEntryKursusSiswaRequestDTO.getTahunKursus());
+        return entry;
+    }
+
+    @PostMapping("/entry-transaksi-siswa-lainnya")
+    public EntryTransaksiSiswa createEntryLainnyaSiswa(@RequestBody CreateEntryLainnyaSiswaRequestDTO createEntryLainnyaSiswaRequestDTO) {
+        return entryTransaksiSiswaService.createEntryTransaksiSiswaLainnya(createEntryLainnyaSiswaRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-siswa/all")
@@ -101,7 +121,15 @@ public class EntryTransaksiSiswaController {
     @GetMapping("/entry-transaksi-siswa/{id}")
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
         var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
-
         return entryTransaksiSiswa;
+    }
+
+    @GetMapping("/entry-transaksi-siswa/filter-by-date-jurusan")
+        public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam("idJurusan") long idJurusan) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
+        return entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
     }
 }

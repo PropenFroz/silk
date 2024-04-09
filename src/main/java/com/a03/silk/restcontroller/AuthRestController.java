@@ -3,6 +3,7 @@ package com.a03.silk.restcontroller;
 import com.a03.silk.dto.UserMapper;
 import com.a03.silk.dto.request.LoginJwtRequestDTO;
 import com.a03.silk.dto.request.LoginRequestDTO;
+import com.a03.silk.dto.response.AuthResponse;
 import com.a03.silk.dto.response.LoginJwtResponseDTO;
 import com.a03.silk.security.jwt.JwtUtils;
 import com.a03.silk.service.RoleService;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api")
 public class AuthRestController {
     @Autowired
@@ -49,9 +51,11 @@ public class AuthRestController {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            String jwtToken = jwtUtils.generateJwtToken(loginRequest.getUsername());
+            String jwtToken = jwtUtils.generateJwtToken(loginRequest.getUsername(), authentication);
 
-            return new ResponseEntity<>(Collections.singletonMap("token", jwtToken), HttpStatus.OK);
+//            return new ResponseEntity<>(Collections.singletonMap("token", jwtToken), HttpStatus.OK);
+            return ResponseEntity.ok().body(new AuthResponse(jwtToken));
+
         } catch (Exception e) {
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("status", false);

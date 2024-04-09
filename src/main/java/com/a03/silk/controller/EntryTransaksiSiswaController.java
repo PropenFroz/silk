@@ -121,7 +121,46 @@ public class EntryTransaksiSiswaController {
     @GetMapping("/entry-transaksi-siswa/{id}")
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
         var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
-
         return entryTransaksiSiswa;
     }
+
+    @GetMapping("/entry-transaksi-siswa/filter-by-date-jurusan")
+        public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam("idJurusan") long idJurusan) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
+        return entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
+    }
+
+    @GetMapping("/entry-transaksi-siswa/laporan-jurusan")
+    public void generateLaporanTransaksiSiswaByJurusan(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                              @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                              @RequestParam("idJurusan") long idJurusan,
+                                              HttpServletResponse response) throws DocumentException, IOException {
+
+        DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateStr = dateString.format(startDate);
+        String endDateStr = dateString.format(endDate);
+
+        String title = startDateStr + " - " + endDateStr;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=LaporanTransaksiSiswaByJurusan_" + currentDateTime + ".pdf";
+        response.setHeader(headerkey, headervalue);
+
+        List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
+
+        LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
+        laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
+    }
+
 }

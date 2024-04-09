@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.model.Siswa;
+import com.a03.silk.repository.JurusanKursusDb;
 import com.a03.silk.repository.SiswaDb;
 
 import jakarta.transaction.Transactional;
@@ -18,6 +19,9 @@ public class SiswaService {
 
     @Autowired
     SiswaDb siswaDb;
+
+    @Autowired
+    JurusanKursusDb jurusanKursusDb;
 
     public List<Siswa> getAllSiswa() {
         return siswaDb.findByIsDeletedFalse();
@@ -46,4 +50,8 @@ public class SiswaService {
         }
     }
 
+    public List<Siswa> getIuranSiswaByTahunJurusan(long idJurusan, int tahun) {
+        var jurusanKursus = jurusanKursusDb.findById(idJurusan).get();
+        return siswaDb.findByJurusanKursusAndTahun(jurusanKursus, tahun);
+    }
 }

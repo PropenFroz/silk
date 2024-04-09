@@ -121,7 +121,15 @@ public class EntryTransaksiSiswaController {
     @GetMapping("/entry-transaksi-siswa/{id}")
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
         var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
-
         return entryTransaksiSiswa;
+    }
+
+    @GetMapping("/entry-transaksi-siswa/filter-by-date-jurusan")
+        public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam("idJurusan") long idJurusan) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
+        return entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
     }
 }

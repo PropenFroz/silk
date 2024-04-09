@@ -95,8 +95,6 @@ public class EntryTransaksiSiswaService {
         return entryTransaksiSiswaDb.save(entryTransaksiSiswa);
     }
 
-
-
     public EntryTransaksiSiswa updateEntry(UpdateEntryTransaksiSiswaRequestDTO updateEntryTransaksiSiswaFromDTO){
         EntryTransaksiSiswa entryTransaksiSiswa = getEntryTransaksiSiswaById(updateEntryTransaksiSiswaFromDTO.getIdEntryTransaksiSiswa());
 
@@ -154,5 +152,10 @@ public class EntryTransaksiSiswaService {
             siswaDb.save(siswa);
         }
         entryTransaksiSiswaDb.save(entryTransaksiSiswa);
+    }
+
+    public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(Date startDate, Date endDate, long idJurusan) {
+        var jurusan = jurusanKursusDb.findById(idJurusan).get();
+        return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenAndIsDeletedAndSiswaJurusanKursusOrderByTanggalPembayaranAsc(startDate, endDate, false, jurusan);
     }
 }

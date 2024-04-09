@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.a03.silk.model.Siswa;
 import com.a03.silk.service.SiswaService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -29,5 +31,9 @@ public class SiswaController {
     public Siswa getGuruById(@PathVariable("idSiswa") long idSiswa) {
         return siswaService.getSiswaById(idSiswa);
     }
-    
+
+    @GetMapping("/siswa/filter-by-tahun-jurusan")
+    public List<Siswa> getEntryTransaksiSiswaByDateJurusan(@RequestParam("tahun") int tahun, @RequestParam("idJurusan") long idJurusan) {
+        return siswaService.getIuranSiswaByTahunJurusan(idJurusan, tahun);
+    }
 }

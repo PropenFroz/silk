@@ -31,12 +31,8 @@ public class EntryGajiGuruDetail {
     private EntryGajiGuru entryGajiGuru;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_grade_kursus", referencedColumnName = "idGradeKursus")
-    private GradeKursus gradeKursus;
-
-    @NotNull
-    @Column(name = "murid", nullable = false)
-    private String murid;
+    @JoinColumn(name = "id_siswa", referencedColumnName = "idSiswa")
+    private Siswa siswa;
 
     @NotNull
     @Column(name = "uang_kursus")

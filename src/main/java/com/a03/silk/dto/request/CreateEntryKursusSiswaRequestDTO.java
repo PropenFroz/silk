@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CreateEntryKursusSiswaRequestDTO {
     private int jenisTransaksi;
     private int tahunKursus;
+    private int bulanKursus;
     private Date tanggalPembayaran;
     private long siswa;
     private long uangPendaftaran;

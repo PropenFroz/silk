@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UpdateEntryTransaksiSiswaRequestDTO {
+public class UpdateEntryKursusSiswaRequestDTO {
     private long idEntryTransaksiSiswa;
+    private int tahunKursus;
+    private int bulanKursus;
     private Date tanggalPembayaran;
     private long siswa;
     private long uangPendaftaran;

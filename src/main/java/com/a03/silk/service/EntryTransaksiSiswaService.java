@@ -70,17 +70,17 @@ public class EntryTransaksiSiswaService {
 
         if (iuranSiswaDb.existsBySiswaAndTahunAndBulan(siswa, createEntryKursusSiswaRequestDTO.getTahunKursus(), createEntryKursusSiswaRequestDTO.getBulanKursus()) == true) {
             return null;
-        } 
+        }
         else {
             var iuranSiswa = new IuranSiswa();
             iuranSiswa.setSiswa(siswa);
             iuranSiswa.setTahun(createEntryKursusSiswaRequestDTO.getTahunKursus());
             iuranSiswa.setBulan(createEntryKursusSiswaRequestDTO.getBulanKursus());
-    
+
             var entryTransaksiSiswa = new EntryTransaksiSiswa();
             entryTransaksiSiswa.setJenisTransaksi(createEntryKursusSiswaRequestDTO.getJenisTransaksi());
             entryTransaksiSiswa.setTanggalPembayaran(createEntryKursusSiswaRequestDTO.getTanggalPembayaran());
-    
+
             entryTransaksiSiswa.setSiswa(siswa);
             entryTransaksiSiswa.setUangPendaftaran(createEntryKursusSiswaRequestDTO.getUangPendaftaran());
             entryTransaksiSiswa.setUangKursus(createEntryKursusSiswaRequestDTO.getUangKursus());
@@ -88,11 +88,11 @@ public class EntryTransaksiSiswaService {
             entryTransaksiSiswa.setCash(createEntryKursusSiswaRequestDTO.getCash());
             entryTransaksiSiswa.setTransfer(createEntryKursusSiswaRequestDTO.getTransfer());
             entryTransaksiSiswa.setKeterangan(createEntryKursusSiswaRequestDTO.getKeterangan());
-    
+
             var entryKursus = entryTransaksiSiswaDb.save(entryTransaksiSiswa);
             iuranSiswa.setEntryKursus(entryKursus);
             iuranSiswaDb.save(iuranSiswa);
-        
+
             return entryKursus;
         }
     }
@@ -111,7 +111,7 @@ public class EntryTransaksiSiswaService {
         entryTransaksiSiswa.setCash(createEntryLainnyaSiswaRequestDTO.getCash());
         entryTransaksiSiswa.setTransfer(createEntryLainnyaSiswaRequestDTO.getTransfer());
         entryTransaksiSiswa.setKeterangan(createEntryLainnyaSiswaRequestDTO.getKeterangan());
-    
+
         siswaDb.save(siswa);
         return entryTransaksiSiswaDb.save(entryTransaksiSiswa);
     }
@@ -191,6 +191,8 @@ public class EntryTransaksiSiswaService {
             siswaDb.save(siswa);
         } else if (entryTransaksiSiswa.getJenisTransaksi() == 2) {
             var siswa = siswaDb.findById(entryTransaksiSiswa.getSiswa().getIdSiswa()).get();
+            var iuranSiswa = iuranSiswaDb.findByEntryKursus(entryTransaksiSiswa);
+            iuranSiswaDb.delete(iuranSiswa);
             for (Entry<Integer, List<Long>> entry : siswa.getTanggalKursusPerTahun().entrySet()) {
                 List<Long> list = entry.getValue();
                 if (list.contains(entryTransaksiSiswa.getIdEntryTransaksiSiswa())) {

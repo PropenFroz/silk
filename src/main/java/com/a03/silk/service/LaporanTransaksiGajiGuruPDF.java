@@ -1,5 +1,6 @@
 package com.a03.silk.service;
 
+// LaporanTransaksiGajiGuruPDF.java
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -141,9 +142,9 @@ public class LaporanTransaksiGajiGuruPDF {
     }
 
     private PdfPTable createTable(String jurusan) {
-        PdfPTable table = new PdfPTable(10);
+        PdfPTable table = new PdfPTable(11);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] { 0.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f });
+        table.setWidths(new float[] { 0.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f, 1.5f });
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(CMYKColor.lightGray);
@@ -158,6 +159,8 @@ public class LaporanTransaksiGajiGuruPDF {
         cell.setPhrase(new Phrase("Murid", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Grade", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Uang Kursus", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Tanggal", font));
         table.addCell(cell);
@@ -178,6 +181,7 @@ public class LaporanTransaksiGajiGuruPDF {
         table.addCell(""); // Kolom No
         table.addCell(""); // Kolom Murid
         table.addCell(""); // Kolom Grade
+        table.addCell(""); // Kolom Uang Kursus
         table.addCell(""); // Kolom Tanggal
         table.addCell(""); // Kolom Minggu 1 (akan diisi dengan total)
         table.addCell(""); // Kolom Minggu 2 (akan diisi dengan total)
@@ -196,12 +200,14 @@ public class LaporanTransaksiGajiGuruPDF {
         fontContent.setSize(10);
 
         table.addCell(new Phrase(String.valueOf(entryCounter), fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent)); // YG INI JD GINI KAH
+        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));
+        table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent)); // Menambahkan Uang Kursus
         table.addCell(new Phrase(entry.getTanggal().toString(), fontContent));
-        table.addCell(new Phrase(String.valueOf(entry.getMinggu1()), fontContent));
-        table.addCell(new Phrase(String.valueOf(entry.getMinggu2()), fontContent));
-        table.addCell(new Phrase(String.valueOf(entry.getMinggu3()), fontContent));
-        table.addCell(new Phrase(String.valueOf(entry.getMinggu4()), fontContent));
+        table.addCell(new Phrase(formatRupiah(entry.getMinggu1()), fontContent));
+        table.addCell(new Phrase(formatRupiah(entry.getMinggu2()), fontContent));
+        table.addCell(new Phrase(formatRupiah(entry.getMinggu3()), fontContent));
+        table.addCell(new Phrase(formatRupiah(entry.getMinggu4()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getFeeGuru()), fontContent));
         table.addCell(new Phrase(entry.getKeterangan(), fontContent));
     }
@@ -230,12 +236,14 @@ public class LaporanTransaksiGajiGuruPDF {
         table.addCell(new Phrase("", fontContent)); // Kolom No
         table.addCell(new Phrase("Total", fontContent)); // Kolom Keterangan
         table.addCell(new Phrase("", fontContent)); // Kolom Grade
+        table.addCell(new Phrase("", fontContent)); // Kolom Uang Kursus
         table.addCell(new Phrase("", fontContent)); // Kolom Tanggal
-        table.addCell(new Phrase(String.valueOf(totalMinggu1), fontContent)); // Kolom Total Minggu 1
-        table.addCell(new Phrase(String.valueOf(totalMinggu2), fontContent)); // Kolom Total Minggu 2
-        table.addCell(new Phrase(String.valueOf(totalMinggu3), fontContent)); // Kolom Total Minggu 3
-        table.addCell(new Phrase(String.valueOf(totalMinggu4), fontContent)); // Kolom Total Minggu 4
+        table.addCell(new Phrase(formatRupiah(totalMinggu1), fontContent)); // Kolom Total Minggu 1
+        table.addCell(new Phrase(formatRupiah(totalMinggu2), fontContent)); // Kolom Total Minggu 2
+        table.addCell(new Phrase(formatRupiah(totalMinggu3), fontContent)); // Kolom Total Minggu 3
+        table.addCell(new Phrase(formatRupiah(totalMinggu4), fontContent)); // Kolom Total Minggu 4
         table.addCell(new Phrase(formatRupiah(totalFeeGuru), fontContent)); // Kolom Total Fee Guru
+
         table.addCell(new Phrase("", fontContent)); // Kolom Keterangan
 
         // Menghapus baris kosong di bagian atas tabel

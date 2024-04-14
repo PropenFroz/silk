@@ -100,6 +100,7 @@ public class EntryGajiGuruService {
         EntryGajiGuruDetail entryGajiGuru = getEntryGajiGuruDetailById(updateEntryGajiGuruFormDTO.getIdEntryGajiGuruDetail());
         var siswa = siswaDb.findById(updateEntryGajiGuruFormDTO.getSiswa()).get();
         entryGajiGuru.setSiswa(siswa);
+        entryGajiGuru.setUangKursus(updateEntryGajiGuruFormDTO.getUangKursus());
         entryGajiGuru.setTanggal(updateEntryGajiGuruFormDTO.getTanggal());
         entryGajiGuru.setMinggu1(updateEntryGajiGuruFormDTO.getMinggu1());
         entryGajiGuru.setMinggu2(updateEntryGajiGuruFormDTO.getMinggu2());
@@ -111,4 +112,5 @@ public class EntryGajiGuruService {
         entryGajiGuruDetailDb.save(entryGajiGuru);
         return entryGajiGuru;
     }
+
 }

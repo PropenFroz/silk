@@ -103,5 +103,11 @@ public class EntryGajiGuruController {
         laporanTransaksiGajiGuruPDF.generateLaporanTransaksiGajiGuru(response, title, entryGajiGuruList);
     }
 
+    @GetMapping("/entry-gaji-guru/{id}")
+    public EntryGajiGuruDetail getEntryGajiGuruById(@PathVariable("id") long id) {
+        var entryGajiGuru = entryGajiGuruService.getEntryGajiGuruDetailById(id);
+        return entryGajiGuru;
+    }
+
 
 }

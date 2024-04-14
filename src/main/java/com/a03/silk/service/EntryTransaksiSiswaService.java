@@ -210,4 +210,9 @@ public class EntryTransaksiSiswaService {
     public IuranSiswa getIuranSiswaByEntryKursus(Long idEntryKursus) {
         return iuranSiswaDb.findByEntryKursus(entryTransaksiSiswaDb.findById(idEntryKursus).get());
     }
+
+    public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(long idJurusanKursus, int tahun) {
+        return iuranSiswaDb.findBySiswa_JurusanKursus_IdJurusanKursusAndTahun(idJurusanKursus, tahun);
+    }
+}
 }

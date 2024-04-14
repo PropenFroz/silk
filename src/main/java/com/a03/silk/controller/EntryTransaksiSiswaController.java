@@ -175,5 +175,10 @@ public class EntryTransaksiSiswaController {
     public IuranSiswa getIuranSiswaByEntryKursus(@PathVariable("id") long idEntryTransaksi) {
         return entryTransaksiSiswaService.getIuranSiswaByEntryKursus(idEntryTransaksi); 
     }
+
+    @GetMapping("/iuran-siswa/filter")
+    public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus, @RequestParam("tahun") int tahun) {
+        return entryTransaksiSiswaService.getIuranSiswaByJurusanAndTahun(idJurusanKursus, tahun);
+    }
     
 }

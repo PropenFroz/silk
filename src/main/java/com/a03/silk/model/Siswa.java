@@ -77,6 +77,10 @@ public class Siswa {
     @OneToMany(mappedBy = "siswa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<EntryGajiGuruDetail> daftarGajiGuruDetail;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "siswa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<IuranSiswa> daftarIuranSiswa;
+
     @NotNull
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = Boolean.FALSE;

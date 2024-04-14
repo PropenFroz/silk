@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.a03.silk.dto.request.CreateEntryKursusSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryLainnyaSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryKursusSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
+import com.a03.silk.model.IuranSiswa;
 import com.a03.silk.service.EntryTransaksiSiswaService;
 import com.a03.silk.service.LaporanTransaksiSiswaPDF;
 import com.a03.silk.service.SiswaService;
@@ -118,6 +120,12 @@ public class EntryTransaksiSiswaController {
         return entryTransaksiSiswaService.updateEntry(entryTransaksiSiswaDTO);
     }
 
+    @PutMapping("/entry-transaksi-kursus/update/{id}")
+    public EntryTransaksiSiswa updateEntryTransaksiKursus(@RequestBody UpdateEntryKursusSiswaRequestDTO entryKursusSiswaDTO, @PathVariable("id") long idEntryTransaksi){
+        entryKursusSiswaDTO.setIdEntryTransaksiSiswa(idEntryTransaksi);
+        return entryTransaksiSiswaService.updateEntryKursus(entryKursusSiswaDTO);
+    }
+
     @GetMapping("/entry-transaksi-siswa/{id}")
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
         var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
@@ -163,4 +171,14 @@ public class EntryTransaksiSiswaController {
         laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
     }
 
+    @GetMapping("/iuran-siswa/{id}")
+    public IuranSiswa getIuranSiswaByEntryKursus(@PathVariable("id") long idEntryTransaksi) {
+        return entryTransaksiSiswaService.getIuranSiswaByEntryKursus(idEntryTransaksi); 
+    }
+
+    @GetMapping("/iuran-siswa/filter")
+    public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus, @RequestParam("tahun") int tahun) {
+        return entryTransaksiSiswaService.getIuranSiswaByJurusanAndTahun(idJurusanKursus, tahun);
+    }
+    
 }

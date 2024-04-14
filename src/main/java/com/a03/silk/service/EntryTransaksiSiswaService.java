@@ -6,11 +6,14 @@ import org.springframework.stereotype.Service;
 import com.a03.silk.dto.request.CreateEntryKursusSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryLainnyaSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryKursusSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
+import com.a03.silk.model.IuranSiswa;
 import com.a03.silk.model.Siswa;
 import com.a03.silk.repository.EntryTransaksiSiswaDb;
 import com.a03.silk.repository.GradeKursusDb;
+import com.a03.silk.repository.IuranSiswaDb;
 import com.a03.silk.repository.JurusanKursusDb;
 import com.a03.silk.repository.SiswaDb;
 
@@ -36,6 +39,9 @@ public class EntryTransaksiSiswaService {
     @Autowired
     SiswaDb siswaDb;
 
+    @Autowired
+    IuranSiswaDb iuranSiswaDb;
+
     public EntryTransaksiSiswa createEntryTransaksiSiswaDaftar(CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
         var entryTransaksiSiswa = new EntryTransaksiSiswa();
         entryTransaksiSiswa.setJenisTransaksi(createEntryTransaksiSiswaRequestDTO.getJenisTransaksi());
@@ -60,20 +66,35 @@ public class EntryTransaksiSiswaService {
     }
 
     public EntryTransaksiSiswa createEntryTransaksiSiswaKursus(CreateEntryKursusSiswaRequestDTO createEntryKursusSiswaRequestDTO) {
-        var entryTransaksiSiswa = new EntryTransaksiSiswa();
-        entryTransaksiSiswa.setJenisTransaksi(createEntryKursusSiswaRequestDTO.getJenisTransaksi());
-        entryTransaksiSiswa.setTanggalPembayaran(createEntryKursusSiswaRequestDTO.getTanggalPembayaran());
-
         var siswa = siswaDb.findById(createEntryKursusSiswaRequestDTO.getSiswa()).get();
-        entryTransaksiSiswa.setSiswa(siswa);
-        entryTransaksiSiswa.setUangPendaftaran(createEntryKursusSiswaRequestDTO.getUangPendaftaran());
-        entryTransaksiSiswa.setUangKursus(createEntryKursusSiswaRequestDTO.getUangKursus());
-        entryTransaksiSiswa.setUangBuku(createEntryKursusSiswaRequestDTO.getUangBuku());
-        entryTransaksiSiswa.setCash(createEntryKursusSiswaRequestDTO.getCash());
-        entryTransaksiSiswa.setTransfer(createEntryKursusSiswaRequestDTO.getTransfer());
-        entryTransaksiSiswa.setKeterangan(createEntryKursusSiswaRequestDTO.getKeterangan());
-    
-        return entryTransaksiSiswaDb.save(entryTransaksiSiswa);
+
+        if (iuranSiswaDb.existsBySiswaAndTahunAndBulan(siswa, createEntryKursusSiswaRequestDTO.getTahunKursus(), createEntryKursusSiswaRequestDTO.getBulanKursus()) == true) {
+            return null;
+        }
+        else {
+            var iuranSiswa = new IuranSiswa();
+            iuranSiswa.setSiswa(siswa);
+            iuranSiswa.setTahun(createEntryKursusSiswaRequestDTO.getTahunKursus());
+            iuranSiswa.setBulan(createEntryKursusSiswaRequestDTO.getBulanKursus());
+
+            var entryTransaksiSiswa = new EntryTransaksiSiswa();
+            entryTransaksiSiswa.setJenisTransaksi(createEntryKursusSiswaRequestDTO.getJenisTransaksi());
+            entryTransaksiSiswa.setTanggalPembayaran(createEntryKursusSiswaRequestDTO.getTanggalPembayaran());
+
+            entryTransaksiSiswa.setSiswa(siswa);
+            entryTransaksiSiswa.setUangPendaftaran(createEntryKursusSiswaRequestDTO.getUangPendaftaran());
+            entryTransaksiSiswa.setUangKursus(createEntryKursusSiswaRequestDTO.getUangKursus());
+            entryTransaksiSiswa.setUangBuku(createEntryKursusSiswaRequestDTO.getUangBuku());
+            entryTransaksiSiswa.setCash(createEntryKursusSiswaRequestDTO.getCash());
+            entryTransaksiSiswa.setTransfer(createEntryKursusSiswaRequestDTO.getTransfer());
+            entryTransaksiSiswa.setKeterangan(createEntryKursusSiswaRequestDTO.getKeterangan());
+
+            var entryKursus = entryTransaksiSiswaDb.save(entryTransaksiSiswa);
+            iuranSiswa.setEntryKursus(entryKursus);
+            iuranSiswaDb.save(iuranSiswa);
+
+            return entryKursus;
+        }
     }
 
     public EntryTransaksiSiswa createEntryTransaksiSiswaLainnya(CreateEntryLainnyaSiswaRequestDTO createEntryLainnyaSiswaRequestDTO) {
@@ -90,7 +111,7 @@ public class EntryTransaksiSiswaService {
         entryTransaksiSiswa.setCash(createEntryLainnyaSiswaRequestDTO.getCash());
         entryTransaksiSiswa.setTransfer(createEntryLainnyaSiswaRequestDTO.getTransfer());
         entryTransaksiSiswa.setKeterangan(createEntryLainnyaSiswaRequestDTO.getKeterangan());
-    
+
         siswaDb.save(siswa);
         return entryTransaksiSiswaDb.save(entryTransaksiSiswa);
     }
@@ -99,6 +120,7 @@ public class EntryTransaksiSiswaService {
         EntryTransaksiSiswa entryTransaksiSiswa = getEntryTransaksiSiswaById(updateEntryTransaksiSiswaFromDTO.getIdEntryTransaksiSiswa());
 
         var siswa = siswaDb.findById(updateEntryTransaksiSiswaFromDTO.getSiswa()).get();
+
         if (entryTransaksiSiswa.getJenisTransaksi() == 1) {
             siswa.setTanggalDaftar(updateEntryTransaksiSiswaFromDTO.getTanggalPembayaran());
         }
@@ -116,6 +138,32 @@ public class EntryTransaksiSiswaService {
         entryTransaksiSiswaDb.save(entryTransaksiSiswa);
         return entryTransaksiSiswa;
     }
+
+    public EntryTransaksiSiswa updateEntryKursus(UpdateEntryKursusSiswaRequestDTO updateEntryKursusSiswaRequestDTO){
+        EntryTransaksiSiswa entryTransaksiSiswa = getEntryTransaksiSiswaById(updateEntryKursusSiswaRequestDTO.getIdEntryTransaksiSiswa());
+
+        var siswa = siswaDb.findById(updateEntryKursusSiswaRequestDTO.getSiswa()).get();
+        var iuranSiswa = iuranSiswaDb.findByEntryKursus(entryTransaksiSiswa);
+
+        entryTransaksiSiswa.setTanggalPembayaran(updateEntryKursusSiswaRequestDTO.getTanggalPembayaran());
+        entryTransaksiSiswa.setUangPendaftaran(updateEntryKursusSiswaRequestDTO.getUangPendaftaran());
+        entryTransaksiSiswa.setUangKursus(updateEntryKursusSiswaRequestDTO.getUangKursus());
+        entryTransaksiSiswa.setUangBuku(updateEntryKursusSiswaRequestDTO.getUangBuku());
+        entryTransaksiSiswa.setCash(updateEntryKursusSiswaRequestDTO.getCash());
+        entryTransaksiSiswa.setTransfer(updateEntryKursusSiswaRequestDTO.getTransfer());
+        entryTransaksiSiswa.setKeterangan(updateEntryKursusSiswaRequestDTO.getKeterangan());
+        entryTransaksiSiswa.setSiswa(siswa);
+
+        entryTransaksiSiswaDb.save(entryTransaksiSiswa);
+
+        iuranSiswa.setBulan(updateEntryKursusSiswaRequestDTO.getBulanKursus());
+        iuranSiswa.setTahun(updateEntryKursusSiswaRequestDTO.getTahunKursus());
+
+        iuranSiswaDb.save(iuranSiswa);
+
+        return entryTransaksiSiswa;
+    }
+
 
     public List<EntryTransaksiSiswa> getAllEntryTransaksiSiswa() {
         return entryTransaksiSiswaDb.findAll();
@@ -143,6 +191,8 @@ public class EntryTransaksiSiswaService {
             siswaDb.save(siswa);
         } else if (entryTransaksiSiswa.getJenisTransaksi() == 2) {
             var siswa = siswaDb.findById(entryTransaksiSiswa.getSiswa().getIdSiswa()).get();
+            var iuranSiswa = iuranSiswaDb.findByEntryKursus(entryTransaksiSiswa);
+            iuranSiswaDb.delete(iuranSiswa);
             for (Entry<Integer, List<Long>> entry : siswa.getTanggalKursusPerTahun().entrySet()) {
                 List<Long> list = entry.getValue();
                 if (list.contains(entryTransaksiSiswa.getIdEntryTransaksiSiswa())) {
@@ -157,5 +207,13 @@ public class EntryTransaksiSiswaService {
     public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(Date startDate, Date endDate, long idJurusan) {
         var jurusan = jurusanKursusDb.findById(idJurusan).get();
         return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenAndIsDeletedAndSiswaJurusanKursusOrderByTanggalPembayaranAsc(startDate, endDate, false, jurusan);
+    }
+
+    public IuranSiswa getIuranSiswaByEntryKursus(Long idEntryKursus) {
+        return iuranSiswaDb.findByEntryKursus(entryTransaksiSiswaDb.findById(idEntryKursus).get());
+    }
+
+    public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(long idJurusanKursus, int tahun) {
+        return iuranSiswaDb.findBySiswa_JurusanKursus_IdJurusanKursusAndTahun(idJurusanKursus, tahun);
     }
 }

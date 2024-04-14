@@ -215,4 +215,3 @@ public class EntryTransaksiSiswaService {
         return iuranSiswaDb.findBySiswa_JurusanKursus_IdJurusanKursusAndTahun(idJurusanKursus, tahun);
     }
 }
-}

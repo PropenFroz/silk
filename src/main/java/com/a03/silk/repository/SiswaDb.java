@@ -15,4 +15,7 @@ public interface SiswaDb extends JpaRepository<Siswa, Long> {
 
     @Query("SELECT s FROM Siswa s JOIN s.tanggalKursusPerTahun t WHERE s.jurusanKursus = ?1 AND KEY(t) = ?2")
     List<Siswa> findByJurusanKursusAndTahun(JurusanKursus jurusanKursus, Integer tahun);
+    
+    List<Siswa> findByJurusanKursusIdJurusanKursus(long idJurusan);
 }
+

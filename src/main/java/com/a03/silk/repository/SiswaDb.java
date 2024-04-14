@@ -10,4 +10,5 @@ import com.a03.silk.model.Siswa;
 @Repository
 public interface SiswaDb extends JpaRepository<Siswa, Long> {
     List<Siswa> findByIsDeletedFalse();
+    List<Siswa> findByJurusanKursusIdJurusanKursus(long idJurusan);
 }

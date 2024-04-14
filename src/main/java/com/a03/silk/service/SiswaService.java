@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.a03.silk.dto.request.UpdateStatusSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.model.Siswa;
 import com.a03.silk.repository.SiswaDb;
@@ -23,8 +24,18 @@ public class SiswaService {
         return siswaDb.findByIsDeletedFalse();
     }
 
+    public List<Siswa> getAllSiswaByJurusan(long idJurusan) {
+        return siswaDb.findByJurusanKursusIdJurusanKursus(idJurusan);
+    }
+
     public Siswa getSiswaById(long idSiswa) {
         return siswaDb.findById(idSiswa).get();
+    }
+    
+    public Siswa updateStatusSiswa(UpdateStatusSiswaRequestDTO updateStatusSiswaRequestDTO) {
+        var siswa = siswaDb.findById(updateStatusSiswaRequestDTO.getIdSiswa()).get();
+        siswa.setStatus(updateStatusSiswaRequestDTO.getStatus());
+        return siswaDb.save(siswa);
     }
 
     public void updateIdPendaftaran(long idSiswa, long idEntry) {

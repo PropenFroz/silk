@@ -1,5 +1,8 @@
 package com.a03.silk.controller;
 
+import com.a03.silk.model.JurusanKursus;
+import com.a03.silk.repository.JurusanKursusDb;
+import com.a03.silk.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,9 +23,6 @@ import com.a03.silk.dto.request.UpdateEntryKursusSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.model.IuranSiswa;
-import com.a03.silk.service.EntryTransaksiSiswaService;
-import com.a03.silk.service.LaporanTransaksiSiswaPDF;
-import com.a03.silk.service.SiswaService;
 import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,6 +41,9 @@ public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    JurusanKursusService jurusanKursusService;
 
     @Autowired
     SiswaService siswaService;
@@ -180,5 +183,28 @@ public class EntryTransaksiSiswaController {
     public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus, @RequestParam("tahun") int tahun) {
         return entryTransaksiSiswaService.getIuranSiswaByJurusanAndTahun(idJurusanKursus, tahun);
     }
+
+    @GetMapping("/iuran-siswa/laporan-jurusan-filter")
+    public void generateLaporanIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus,
+                                                           @RequestParam("tahun") int tahun,
+                                                           HttpServletResponse response) throws DocumentException, IOException {
+
+        String title = String.valueOf(tahun);
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=LaporanIuranSiswaByJurusanAndTahun_" + currentDateTime + ".pdf";
+        response.setHeader(headerkey, headervalue);
+
+        List<IuranSiswa> iuranSiswaList = entryTransaksiSiswaService.getIuranSiswaByJurusanAndTahun(idJurusanKursus, tahun);
+
+        LaporanIuranSiswaPDF laporanIuranSiswaPDF = new LaporanIuranSiswaPDF();
+
+        JurusanKursus namaJurusan = jurusanKursusService.getJurusanKursusById(idJurusanKursus);
+        laporanIuranSiswaPDF.generateLaporanIuranSiswa(response, title, iuranSiswaList, namaJurusan);
+    }
+
     
 }

@@ -21,5 +21,4 @@ public class CreateEntryTransaksiSiswaRequestDTO {
     private long cash;
     private long transfer;
     private String keterangan;
-    private Boolean isDeleted;
 }

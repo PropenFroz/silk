@@ -4,15 +4,14 @@ import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class UpdateEntryTransaksiSiswaRequestDTO {
-    private long idEntryTransaksiSiswa;
+public class CreateEntryLainnyaSiswaRequestDTO {
+
+    private int jenisTransaksi;
     private Date tanggalPembayaran;
     private long siswa;
     private long uangPendaftaran;
@@ -21,4 +20,5 @@ public class UpdateEntryTransaksiSiswaRequestDTO {
     private long cash;
     private long transfer;
     private String keterangan;
+    
 }

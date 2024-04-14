@@ -1,5 +1,8 @@
 package com.a03.silk.controller;
 
+import com.a03.silk.model.JurusanKursus;
+import com.a03.silk.repository.JurusanKursusDb;
+import com.a03.silk.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a03.silk.dto.request.CreateEntryKursusSiswaRequestDTO;
+import com.a03.silk.dto.request.CreateEntryLainnyaSiswaRequestDTO;
 import com.a03.silk.dto.request.CreateEntryTransaksiSiswaRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryKursusSiswaRequestDTO;
 import com.a03.silk.dto.request.UpdateEntryTransaksiSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
-import com.a03.silk.service.EntryTransaksiSiswaService;
-import com.a03.silk.service.LaporanTransaksiSiswaPDF;
+import com.a03.silk.model.IuranSiswa;
 import com.lowagie.text.DocumentException;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,10 +41,30 @@ public class EntryTransaksiSiswaController {
 
     @Autowired
     EntryTransaksiSiswaService entryTransaksiSiswaService;
+
+    @Autowired
+    JurusanKursusService jurusanKursusService;
+
+    @Autowired
+    SiswaService siswaService;
     
-    @PostMapping("/entry-transaksi-siswa")
-    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
-        return entryTransaksiSiswaService.createEntryTransaksiSiswa(createEntryTransaksiSiswaRequestDTO);
+    @PostMapping("/entry-transaksi-siswa-daftar")
+    public EntryTransaksiSiswa createEntryDaftarSiswa(@RequestBody CreateEntryTransaksiSiswaRequestDTO createEntryTransaksiSiswaRequestDTO) {
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaDaftar(createEntryTransaksiSiswaRequestDTO);
+        siswaService.updateIdPendaftaran(entry.getSiswa().getIdSiswa(), entry.getIdEntryTransaksiSiswa());
+        return entry;
+    }
+
+    @PostMapping("/entry-transaksi-siswa-kursus")
+    public EntryTransaksiSiswa createEntryKursusSiswa(@RequestBody CreateEntryKursusSiswaRequestDTO createEntryKursusSiswaRequestDTO) {
+        var entry = entryTransaksiSiswaService.createEntryTransaksiSiswaKursus(createEntryKursusSiswaRequestDTO);
+        siswaService.updateKursus(entry.getSiswa(), entry, createEntryKursusSiswaRequestDTO.getTahunKursus());
+        return entry;
+    }
+
+    @PostMapping("/entry-transaksi-siswa-lainnya")
+    public EntryTransaksiSiswa createEntryLainnyaSiswa(@RequestBody CreateEntryLainnyaSiswaRequestDTO createEntryLainnyaSiswaRequestDTO) {
+        return entryTransaksiSiswaService.createEntryTransaksiSiswaLainnya(createEntryLainnyaSiswaRequestDTO);
     }
 
     @GetMapping("/entry-transaksi-siswa/all")
@@ -98,10 +123,88 @@ public class EntryTransaksiSiswaController {
         return entryTransaksiSiswaService.updateEntry(entryTransaksiSiswaDTO);
     }
 
+    @PutMapping("/entry-transaksi-kursus/update/{id}")
+    public EntryTransaksiSiswa updateEntryTransaksiKursus(@RequestBody UpdateEntryKursusSiswaRequestDTO entryKursusSiswaDTO, @PathVariable("id") long idEntryTransaksi){
+        entryKursusSiswaDTO.setIdEntryTransaksiSiswa(idEntryTransaksi);
+        return entryTransaksiSiswaService.updateEntryKursus(entryKursusSiswaDTO);
+    }
+
     @GetMapping("/entry-transaksi-siswa/{id}")
     public EntryTransaksiSiswa getEntryTransaksiSiswaById(@PathVariable("id") long id) {
         var entryTransaksiSiswa = entryTransaksiSiswaService.getEntryTransaksiSiswaById(id);
-
         return entryTransaksiSiswa;
     }
+
+    @GetMapping("/entry-transaksi-siswa/filter-by-date-jurusan")
+        public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate, @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam("idJurusan") long idJurusan) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
+        return entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
+    }
+
+    @GetMapping("/entry-transaksi-siswa/laporan-jurusan")
+    public void generateLaporanTransaksiSiswaByJurusan(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                              @RequestParam("endDate") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                              @RequestParam("idJurusan") long idJurusan,
+                                              HttpServletResponse response) throws DocumentException, IOException {
+
+        DateFormat dateString = new SimpleDateFormat("yyyy-MM-dd");
+        String startDateStr = dateString.format(startDate);
+        String endDateStr = dateString.format(endDate);
+
+        String title = startDateStr + " - " + endDateStr;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(endDate);
+        calendar.add(Calendar.DATE, 1);
+        endDate = calendar.getTime();
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=LaporanTransaksiSiswaByJurusan_" + currentDateTime + ".pdf";
+        response.setHeader(headerkey, headervalue);
+
+        List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
+
+        LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
+        laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
+    }
+
+    @GetMapping("/iuran-siswa/{id}")
+    public IuranSiswa getIuranSiswaByEntryKursus(@PathVariable("id") long idEntryTransaksi) {
+        return entryTransaksiSiswaService.getIuranSiswaByEntryKursus(idEntryTransaksi); 
+    }
+
+    @GetMapping("/iuran-siswa/filter")
+    public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus, @RequestParam("tahun") int tahun) {
+        return entryTransaksiSiswaService.getIuranSiswaByJurusanAndTahun(idJurusanKursus, tahun);
+    }
+
+    @GetMapping("/iuran-siswa/laporan-jurusan-filter")
+    public void generateLaporanIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus,
+                                                           @RequestParam("tahun") int tahun,
+                                                           HttpServletResponse response) throws DocumentException, IOException {
+
+        String title = String.valueOf(tahun);
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=LaporanIuranSiswaByJurusanAndTahun_" + currentDateTime + ".pdf";
+        response.setHeader(headerkey, headervalue);
+
+        List<IuranSiswa> iuranSiswaList = entryTransaksiSiswaService.getIuranSiswaByJurusanAndTahun(idJurusanKursus, tahun);
+
+        LaporanIuranSiswaPDF laporanIuranSiswaPDF = new LaporanIuranSiswaPDF();
+
+        JurusanKursus namaJurusan = jurusanKursusService.getJurusanKursusById(idJurusanKursus);
+        laporanIuranSiswaPDF.generateLaporanIuranSiswa(response, title, iuranSiswaList, namaJurusan);
+    }
+
+    
 }

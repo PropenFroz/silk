@@ -36,4 +36,5 @@ public class BukuPurwacarakaController {
     public List<BukuPurwacaraka> getAllBukuPurwacaraka() {
         return bukuPurwacarakaService.getAllBukuPurwacaraka();
     }
+
 }

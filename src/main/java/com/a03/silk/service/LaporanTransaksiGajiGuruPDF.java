@@ -196,8 +196,7 @@ public class LaporanTransaksiGajiGuruPDF {
         fontContent.setSize(10);
 
         table.addCell(new Phrase(String.valueOf(entryCounter), fontContent));
-        table.addCell(new Phrase(entry.getMurid(), fontContent));
-        table.addCell(new Phrase(entry.getGradeKursus().getNamaGrade(), fontContent));
+        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent)); // YG INI JD GINI KAH
         table.addCell(new Phrase(entry.getTanggal().toString(), fontContent));
         table.addCell(new Phrase(String.valueOf(entry.getMinggu1()), fontContent));
         table.addCell(new Phrase(String.valueOf(entry.getMinggu2()), fontContent));

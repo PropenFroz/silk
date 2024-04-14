@@ -98,9 +98,8 @@ public class EntryGajiGuruService {
 
     public EntryGajiGuruDetail updateEntry(UpdateEntryGajiGuruRequestDTO updateEntryGajiGuruFormDTO){
         EntryGajiGuruDetail entryGajiGuru = getEntryGajiGuruDetailById(updateEntryGajiGuruFormDTO.getIdEntryGajiGuruDetail());
-        entryGajiGuru.setMurid(updateEntryGajiGuruFormDTO.getMurid());
-        entryGajiGuru.setGradeKursus(gradeKursusDb.findById(updateEntryGajiGuruFormDTO.getIdGradeKursus()).orElse(null));
-        entryGajiGuru.setUangKursus(updateEntryGajiGuruFormDTO.getUangKursus());
+        var siswa = siswaDb.findById(updateEntryGajiGuruFormDTO.getSiswa()).get();
+        entryGajiGuru.setSiswa(siswa);
         entryGajiGuru.setTanggal(updateEntryGajiGuruFormDTO.getTanggal());
         entryGajiGuru.setMinggu1(updateEntryGajiGuruFormDTO.getMinggu1());
         entryGajiGuru.setMinggu2(updateEntryGajiGuruFormDTO.getMinggu2());
@@ -108,6 +107,7 @@ public class EntryGajiGuruService {
         entryGajiGuru.setMinggu4(updateEntryGajiGuruFormDTO.getMinggu4());
         entryGajiGuru.setFeeGuru(updateEntryGajiGuruFormDTO.getFeeGuru());
         entryGajiGuru.setKeterangan(updateEntryGajiGuruFormDTO.getKeterangan());
+        siswaDb.save(siswa);
         entryGajiGuruDetailDb.save(entryGajiGuru);
         return entryGajiGuru;
     }

@@ -90,6 +90,15 @@ public class UserRestController {
                 return new ResponseEntity<>("Password setidaknya harus 8 karakter.", HttpStatus.BAD_REQUEST);
             }
 
+            if (userDariDatabase != null) {
+                // Ubah password pengguna dengan password baru
+
+                userDariDatabase.setPassword(userRestService.encryptPassword(updateUserRequestDTO.getPassword()));
+            }
+
+            // Simpan pembaruan ke database
+            userRestService.saveRestUser(userDariDatabase);
+
             return new ResponseEntity<>(userFromDTO, HttpStatus.OK);
         }
     }

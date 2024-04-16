@@ -188,7 +188,6 @@ public class EntryTransaksiSiswaController {
     public void generateLaporanIuranSiswaByJurusanAndTahun(@RequestParam("idJurusanKursus") long idJurusanKursus,
                                                            @RequestParam("tahun") int tahun,
                                                            HttpServletResponse response) throws DocumentException, IOException {
-
         String title = String.valueOf(tahun);
 
         response.setContentType("application/pdf");
@@ -205,6 +204,5 @@ public class EntryTransaksiSiswaController {
         JurusanKursus namaJurusan = jurusanKursusService.getJurusanKursusById(idJurusanKursus);
         laporanIuranSiswaPDF.generateLaporanIuranSiswa(response, title, iuranSiswaList, namaJurusan);
     }
-
     
 }

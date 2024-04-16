@@ -83,7 +83,7 @@ public class UserRestController {
 
             var userDariDatabase = userRestService.getRestUserById(id);
 
-            if (userFromDTO.getPassword().equals(userDariDatabase.getPassword())) {
+            if (userDariDatabase != null && userRestService.verifyPassword(updateUserRequestDTO.getPassword(), userDariDatabase.getPassword())) {
                 return new ResponseEntity<>("Password baru tidak boleh sama dengan password lama.", HttpStatus.BAD_REQUEST);
             }
             if (userFromDTO.getPassword()== null || userFromDTO.getPassword().length() < 8) {

@@ -1,7 +1,6 @@
 package com.a03.silk.controller;
 
 import com.a03.silk.model.JurusanKursus;
-import com.a03.silk.repository.JurusanKursusDb;
 import com.a03.silk.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;

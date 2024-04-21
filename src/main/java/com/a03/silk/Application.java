@@ -67,12 +67,6 @@ public class Application {
 				jurusanKursus.setNamaJurusan("Vocal");
 				jurusanKursusDb.save(jurusanKursus);
 			}
-
-			if (guruDb.findAll().size() == 0) {
-				Guru guru = new Guru();
-				guru.setNamaGuru("Ahmad Dhani");
-				guruDb.save(guru);
-			}
 		};
 	}
 }

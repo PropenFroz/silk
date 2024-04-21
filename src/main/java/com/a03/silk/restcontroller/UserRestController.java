@@ -6,7 +6,9 @@ import com.a03.silk.dto.request.UpdateUserRequestDTO;
 import com.a03.silk.dto.response.CreateUserResponseDTO;
 import com.a03.silk.dto.response.LoginJwtResponseDTO;
 import com.a03.silk.dto.response.UserResponseDTO;
+import com.a03.silk.model.Guru;
 import com.a03.silk.model.UserModel;
+import com.a03.silk.repository.GuruDb;
 import com.a03.silk.repository.UserDb;
 import com.a03.silk.restservice.UserRestService;
 import com.a03.silk.service.UserService;
@@ -41,6 +43,9 @@ public class UserRestController {
     @Autowired
     UserDb userDb;
 
+    @Autowired
+    GuruDb guruDb;
+
     @PostMapping(value = "/user/create")
     public ResponseEntity<?> restAddUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
@@ -67,6 +72,13 @@ public class UserRestController {
 
                 CreateUserResponseDTO createUserResponseDTO = userMapper.createUserResponseDTOToUserModel(userModel);
                 createUserResponseDTO.setRole(userModel.getRole().getRole());
+
+                if (userModel.getRole().getRole().equals("Guru")) {
+                    Guru guru = new Guru();
+                    guru.setNamaGuru(userModel.getName());
+                    guru.setUserId(userModel.getId());
+                    guruDb.save(guru);
+                }
                 return new ResponseEntity<>(createUserResponseDTO, HttpStatus.OK);
             }
         }

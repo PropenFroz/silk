@@ -17,5 +17,7 @@ public interface SiswaDb extends JpaRepository<Siswa, Long> {
     List<Siswa> findByJurusanKursusAndTahun(JurusanKursus jurusanKursus, Integer tahun);
     
     List<Siswa> findByJurusanKursusIdJurusanKursus(long idJurusan);
+
+    long countByStatusAndJurusanKursus(int status, JurusanKursus jurusan);
 }
 

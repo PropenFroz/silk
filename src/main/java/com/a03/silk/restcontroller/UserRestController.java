@@ -121,6 +121,11 @@ public class UserRestController {
         try {
             var user = userRestService.getRestUserById(id);
 
+            if (user.getRole().getRole().equals("Guru")) {
+                Guru guru = guruDb.findByUserId(id);
+                guruDb.delete(guru);
+            }
+            
             // Soft delete by updating the 'deleted' flag
             userRestService.deleteUser(user);
 

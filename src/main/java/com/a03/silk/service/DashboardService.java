@@ -1,5 +1,7 @@
 package com.a03.silk.service;
 
+import com.a03.silk.model.EntryGajiGuruDetail;
+import com.a03.silk.repository.EntryGajiGuruDetailDb;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,9 @@ public class DashboardService {
 
     @Autowired
     EntryTransaksiSiswaDb entryTransaksiSiswaDb;
+
+    @Autowired
+    EntryGajiGuruDetailDb entryGajiGuruDetailDb;
 
     public long getTotalPendapatanSiswaByYear(int tahun) {
         Calendar cal = Calendar.getInstance();
@@ -51,6 +56,21 @@ public class DashboardService {
             totalPendapatan += (transaksi.getHargaJual() - transaksi.getHargaBeli()) * transaksi.getJumlahJual();
         }
         return totalPendapatan;
+    }
+
+    public long getTotalPengeluaranByYear(int tahun) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(tahun, Calendar.JANUARY, 1);
+        Date startDate = cal.getTime();
+        cal.set(tahun, Calendar.DECEMBER, 31);
+        Date endDate = cal.getTime();
+
+        List<EntryGajiGuruDetail> transaksiGajiGuru = entryGajiGuruDetailDb.findByTanggalBetweenOrderByTanggalAsc(startDate, endDate);
+        long totalPengeluaran = 0;
+        for (EntryGajiGuruDetail transaksi : transaksiGajiGuru) {
+            totalPengeluaran += transaksi.getFeeGuru();
+        }
+        return totalPengeluaran;
     }
     
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class CreateBukuPurwacarakaRequestDTO {
 
     private String namaBuku;
-    private JurusanKursus jurusanKursus;
+    private long jurusanKursus;
     private int jumlah;
 
 }

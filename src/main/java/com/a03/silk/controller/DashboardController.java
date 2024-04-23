@@ -21,4 +21,9 @@ public class DashboardController {
     public long getPendapatanPerTahun(@RequestParam("tahun") int tahun) {
         return dashboardService.getTotalPendapatanBukuByYear(tahun) + dashboardService.getTotalPendapatanSiswaByYear(tahun);
     }
+
+    @GetMapping("/dashboard/pengeluaran")
+    public long getPengeluaranPerTahun(@RequestParam("tahun") int tahun) {
+        return dashboardService.getTotalPengeluaranByYear(tahun);
+    }
 }

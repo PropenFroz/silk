@@ -1,7 +1,13 @@
 package com.a03.silk;
 
+import com.a03.silk.model.GradeKursus;
+import com.a03.silk.model.Guru;
+import com.a03.silk.model.JurusanKursus;
 import com.a03.silk.model.Role;
 import com.a03.silk.model.UserModel;
+import com.a03.silk.repository.GradeKursusDb;
+import com.a03.silk.repository.GuruDb;
+import com.a03.silk.repository.JurusanKursusDb;
 import com.a03.silk.repository.RoleDb;
 import com.a03.silk.repository.UserDb;
 import com.a03.silk.restservice.UserRestService;
@@ -20,7 +26,7 @@ public class Application {
 
 	@Bean
 	@Transactional
-	CommandLineRunner run(RoleDb roleDb, UserDb userDb, RoleService roleService, UserRestService userRestService) {
+	CommandLineRunner run(RoleDb roleDb, UserDb userDb, GradeKursusDb gradeKursusDb, JurusanKursusDb jurusanKursusDb, GuruDb guruDb, RoleService roleService, UserRestService userRestService) {
 		return args -> {
 			if (roleDb.findAll().size() == 0) {
 				Role admin = new Role();
@@ -50,7 +56,17 @@ public class Application {
 				userDb.save(adminSafa);
 			}
 
+			if (gradeKursusDb.findAll().size() == 0) {
+				GradeKursus gradeKursus = new GradeKursus();
+				gradeKursus.setNamaGrade("Prep A");
+				gradeKursusDb.save(gradeKursus);
+			}
 
+			if (jurusanKursusDb.findAll().size() == 0) {
+				JurusanKursus jurusanKursus = new JurusanKursus();
+				jurusanKursus.setNamaJurusan("Vocal");
+				jurusanKursusDb.save(jurusanKursus);
+			}
 		};
 	}
 }

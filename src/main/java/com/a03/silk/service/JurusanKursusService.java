@@ -22,6 +22,10 @@ public class JurusanKursusService {
         return jurusanKursusDb.save(jurusanKursus);
     }
 
+    public JurusanKursus getJurusanKursusById(Long idJurusanKursus) {
+        return jurusanKursusDb.findByIdJurusanKursus(idJurusanKursus);
+    }
+
     public List<JurusanKursus> getAllJurusanKursus() {
         return jurusanKursusDb.findAll();
     }

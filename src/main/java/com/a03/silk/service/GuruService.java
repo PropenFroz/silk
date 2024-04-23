@@ -24,4 +24,8 @@ public class GuruService {
     public List<Guru> getAllGuru() {
         return guruDb.findAll();
     }
+
+    public Guru getGuruByUserId(long userId) {
+        return guruDb.findByUserId(userId);
+    }
 }

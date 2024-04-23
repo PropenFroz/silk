@@ -35,6 +35,10 @@ public class Guru {
     @Column(name = "nama_guru")
     private String namaGuru;
 
+    @NotNull
+    @Column(name = "user_id")
+    private long userId;
+
     @JsonIgnore
     @OneToMany(mappedBy = "guru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<GuruJurusan> listGuruJurusan;

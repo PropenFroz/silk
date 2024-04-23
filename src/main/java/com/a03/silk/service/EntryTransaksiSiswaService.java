@@ -206,7 +206,7 @@ public class EntryTransaksiSiswaService {
 
     public List<EntryTransaksiSiswa> getEntryTransaksiSiswaByDateJurusan(Date startDate, Date endDate, long idJurusan) {
         var jurusan = jurusanKursusDb.findById(idJurusan).get();
-        return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenAndIsDeletedAndSiswaJurusanKursusOrderByTanggalPembayaranAsc(startDate, endDate, false, jurusan);
+        return entryTransaksiSiswaDb.findByTanggalPembayaranBetweenAndIsDeletedAndSiswaJurusanKursusAndJenisTransaksiOrderByTanggalPembayaranAsc(startDate, endDate, false, jurusan, 2);
     }
 
     public IuranSiswa getIuranSiswaByEntryKursus(Long idEntryKursus) {

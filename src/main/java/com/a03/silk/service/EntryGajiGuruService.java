@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.a03.silk.dto.request.CreateEntryGajiGuruDetailRequestDTO;
 import com.a03.silk.dto.request.CreateEntryGajiGuruRequestDTO;
+import com.a03.silk.dto.request.UpdateEntryGajiGuruRequestDTO;
 import com.a03.silk.model.EntryGajiGuru;
 import com.a03.silk.model.EntryGajiGuruDetail;
 import com.a03.silk.model.GuruJurusan;
@@ -94,4 +95,22 @@ public class EntryGajiGuruService {
     public EntryGajiGuruDetail getEntryGajiGuruDetailById(long id) {
         return entryGajiGuruDetailDb.findById(id).get();
     }
+
+    public EntryGajiGuruDetail updateEntry(UpdateEntryGajiGuruRequestDTO updateEntryGajiGuruFormDTO){
+        EntryGajiGuruDetail entryGajiGuru = getEntryGajiGuruDetailById(updateEntryGajiGuruFormDTO.getIdEntryGajiGuruDetail());
+        var siswa = siswaDb.findById(updateEntryGajiGuruFormDTO.getSiswa()).get();
+        entryGajiGuru.setSiswa(siswa);
+        entryGajiGuru.setUangKursus(updateEntryGajiGuruFormDTO.getUangKursus());
+        entryGajiGuru.setTanggal(updateEntryGajiGuruFormDTO.getTanggal());
+        entryGajiGuru.setMinggu1(updateEntryGajiGuruFormDTO.getMinggu1());
+        entryGajiGuru.setMinggu2(updateEntryGajiGuruFormDTO.getMinggu2());
+        entryGajiGuru.setMinggu3(updateEntryGajiGuruFormDTO.getMinggu3());
+        entryGajiGuru.setMinggu4(updateEntryGajiGuruFormDTO.getMinggu4());
+        entryGajiGuru.setFeeGuru(updateEntryGajiGuruFormDTO.getFeeGuru());
+        entryGajiGuru.setKeterangan(updateEntryGajiGuruFormDTO.getKeterangan());
+        siswaDb.save(siswa);
+        entryGajiGuruDetailDb.save(entryGajiGuru);
+        return entryGajiGuru;
+    }
+
 }

@@ -7,5 +7,7 @@ import com.a03.silk.model.Guru;
 
 @Repository
 public interface GuruDb extends JpaRepository<Guru, Long> {
+
+    Guru findByUserId(long userId);
     
 }

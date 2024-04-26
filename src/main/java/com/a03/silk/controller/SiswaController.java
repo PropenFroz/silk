@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.a03.silk.dto.request.UpdateStatusSiswaRequestDTO;
+import com.a03.silk.dto.response.DashboardSiswaPerJurusanResponseDTO;
 import com.a03.silk.model.Siswa;
+import com.a03.silk.service.JurusanKursusService;
 import com.a03.silk.service.SiswaService;
 
 @RestController
@@ -23,6 +25,9 @@ public class SiswaController {
 
     @Autowired
     SiswaService siswaService;
+
+    @Autowired
+    JurusanKursusService jurusanKursusService;
 
     @GetMapping("/siswa/all")
     public List<Siswa> getAllSiswa() {
@@ -49,4 +54,15 @@ public class SiswaController {
     public List<Siswa> getEntryTransaksiSiswaByDateJurusan(@RequestParam("tahun") int tahun, @RequestParam("idJurusan") long idJurusan) {
         return siswaService.getIuranSiswaByTahunJurusan(idJurusan, tahun);
     }
+
+    @GetMapping("/siswa/dashboard/{idJurusan}")
+    public DashboardSiswaPerJurusanResponseDTO dashboardSiswaPerJurusan(@PathVariable("idJurusan") long idJurusan) {
+        DashboardSiswaPerJurusanResponseDTO dashboardSiswaPerJurusanResponseDTO = new DashboardSiswaPerJurusanResponseDTO();
+        dashboardSiswaPerJurusanResponseDTO.setBaru(siswaService.countByStatusAndJurusanKursus(1, jurusanKursusService.getJurusanKursusById(idJurusan)));
+        dashboardSiswaPerJurusanResponseDTO.setCuti(siswaService.countByStatusAndJurusanKursus(2, jurusanKursusService.getJurusanKursusById(idJurusan)));
+        dashboardSiswaPerJurusanResponseDTO.setCutiMasukKembali(siswaService.countByStatusAndJurusanKursus(3, jurusanKursusService.getJurusanKursusById(idJurusan)));
+        dashboardSiswaPerJurusanResponseDTO.setOff(siswaService.countByStatusAndJurusanKursus(4, jurusanKursusService.getJurusanKursusById(idJurusan)));
+        return dashboardSiswaPerJurusanResponseDTO;
+    }
+    
 }

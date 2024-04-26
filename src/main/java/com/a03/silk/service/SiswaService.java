@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.a03.silk.dto.request.UpdateStatusSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
+import com.a03.silk.model.JurusanKursus;
 import com.a03.silk.model.Siswa;
 import com.a03.silk.repository.JurusanKursusDb;
 import com.a03.silk.repository.SiswaDb;
@@ -64,5 +65,9 @@ public class SiswaService {
     public List<Siswa> getIuranSiswaByTahunJurusan(long idJurusan, int tahun) {
         var jurusanKursus = jurusanKursusDb.findById(idJurusan).get();
         return siswaDb.findByJurusanKursusAndTahun(jurusanKursus, tahun);
+    }
+
+    public long countByStatusAndJurusanKursus(int status, JurusanKursus jurusan) {
+        return siswaDb.countByStatusAndJurusanKursus(status, jurusan);
     }
 }

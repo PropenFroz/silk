@@ -17,6 +17,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Getter
@@ -24,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SQLDelete(sql = "UPDATE guru SET is_deleted = true WHERE id_guru=?")
+@Where(clause = "is_deleted=false")
 @Table(name = "guru")
 public class Guru {
     
@@ -34,6 +39,14 @@ public class Guru {
     @NotNull
     @Column(name = "nama_guru")
     private String namaGuru;
+
+    @NotNull
+    @Column(name = "user_id")
+    private long userId;
+
+    @NotNull
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = Boolean.FALSE;
 
     @JsonIgnore
     @OneToMany(mappedBy = "guru", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

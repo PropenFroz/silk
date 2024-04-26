@@ -15,6 +15,8 @@ public interface EntryTransaksiSiswaDb extends JpaRepository<EntryTransaksiSiswa
 
     List<EntryTransaksiSiswa> findByTanggalPembayaranBetweenAndIsDeletedOrderByTanggalPembayaranAsc(Date startDate, Date endDate, boolean isDeleted);
 
-    List<EntryTransaksiSiswa> findByTanggalPembayaranBetweenAndIsDeletedAndSiswaJurusanKursusOrderByTanggalPembayaranAsc(Date startDate, Date endDate, boolean isDeleted, JurusanKursus jurusan);
+    List<EntryTransaksiSiswa> findByTanggalPembayaranBetweenAndIsDeletedAndSiswaJurusanKursusAndJenisTransaksiOrderByTanggalPembayaranAsc(
+        Date startDate, Date endDate, boolean isDeleted, JurusanKursus jurusan, int jenisTransaksi
+    );
 
 }

@@ -1,11 +1,17 @@
 package com.a03.silk.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.a03.silk.dto.request.LaporanDataSiswaDTO;
 import com.a03.silk.dto.request.UpdateStatusSiswaRequestDTO;
 import com.a03.silk.model.EntryTransaksiSiswa;
 import com.a03.silk.model.JurusanKursus;
@@ -70,4 +76,75 @@ public class SiswaService {
     public long countByStatusAndJurusanKursus(int status, JurusanKursus jurusan) {
         return siswaDb.countByStatusAndJurusanKursus(status, jurusan);
     }
+
+    public List<LaporanDataSiswaDTO> getDataJumlahSiswaByTahun(int tahun) {
+        List<LaporanDataSiswaDTO> laporanSiswa = new ArrayList<>();
+    
+        String[] namaBulan = {
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        };
+    
+        // Inisialisasi array untuk menyimpan jumlah siswa setiap bulan
+        int[] jumlahSiswaBaruBulan = new int[13];
+        int[] jumlahSiswaCutiBulan = new int[13];
+        int[] jumlahSiswaCutiMasukKembaliBulan = new int[13];
+        int[] jumlahSiswaOffBulan = new int[13];
+        int[] jumlahTotalSiswaAktif = new int[13];
+    
+        for (int bulan = 1; bulan <= 12; bulan++) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, tahun);
+            cal.set(Calendar.MONTH, bulan - 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date startDate = cal.getTime();
+            System.out.println(startDate.toString());
+            
+            cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            Date endDate = cal.getTime();
+            System.out.println(endDate.toString());
+
+            // Menghitung jumlah siswa baru, cuti, cuti kembali, dan off di setiap bulan
+            int jumlahSiswaBaru = siswaDb.countByTanggalDaftarBetweenAndStatus(startDate, endDate, 1);
+            int jumlahSiswaCuti = siswaDb.countByTanggalDaftarBetweenAndStatus(startDate, endDate, 2);
+            int jumlahSiswaCutiMasukKembali = siswaDb.countByTanggalDaftarBetweenAndStatus(startDate, endDate, 3);
+            int jumlahSiswaOff = siswaDb.countByTanggalDaftarBetweenAndStatus(startDate, endDate, 4);
+    
+            // Akumulasi jumlah siswa untuk bulan yang sedang diproses
+            jumlahSiswaBaruBulan[bulan] = jumlahSiswaBaru;
+
+            jumlahSiswaCutiBulan[bulan] = jumlahSiswaCuti;
+
+            jumlahSiswaCutiMasukKembaliBulan[bulan] = jumlahSiswaCutiMasukKembali;
+
+            jumlahSiswaOffBulan[bulan] = jumlahSiswaOff;
+
+            jumlahTotalSiswaAktif[bulan] = jumlahSiswaBaru + jumlahSiswaCutiMasukKembali + jumlahTotalSiswaAktif[bulan -1];
+        }
+    
+
+      
+        // Buat DTO untuk setiap bulan dan tambahkan ke dalam list
+        for (int i = 0; i < 12; i++) {
+            LaporanDataSiswaDTO dto = new LaporanDataSiswaDTO();
+            dto.setBulan(namaBulan[i]);
+            dto.setJumlahSiswaBaru(jumlahSiswaBaruBulan[i]);
+            dto.setJumlahSiswaCuti(jumlahSiswaCutiBulan[i]);
+            dto.setJumlahSiswaCutiMasukKembali(jumlahSiswaCutiMasukKembaliBulan[i]);
+            dto.setJumlahSiswaOff(jumlahSiswaOffBulan[i]);
+            dto.setJumlahTotalSiswaAktif(jumlahTotalSiswaAktif[i]);
+            laporanSiswa.add(dto);
+        }
+    
+        return laporanSiswa;
+    }
+    
 }

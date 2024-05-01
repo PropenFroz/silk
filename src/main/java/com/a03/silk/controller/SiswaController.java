@@ -3,6 +3,7 @@ package com.a03.silk.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.a03.silk.dto.request.LaporanDataSiswaDTO;
 import com.a03.silk.dto.request.UpdateStatusSiswaRequestDTO;
 import com.a03.silk.dto.response.DashboardSiswaPerJurusanResponseDTO;
 import com.a03.silk.model.Siswa;
@@ -63,6 +65,12 @@ public class SiswaController {
         dashboardSiswaPerJurusanResponseDTO.setCutiMasukKembali(siswaService.countByStatusAndJurusanKursus(3, jurusanKursusService.getJurusanKursusById(idJurusan)));
         dashboardSiswaPerJurusanResponseDTO.setOff(siswaService.countByStatusAndJurusanKursus(4, jurusanKursusService.getJurusanKursusById(idJurusan)));
         return dashboardSiswaPerJurusanResponseDTO;
+    }
+    
+    @GetMapping("/siswa/jumlah/{tahun}")
+    public ResponseEntity<List<LaporanDataSiswaDTO>> getJumlahSiswaByTahun(@PathVariable int tahun) {
+        List<LaporanDataSiswaDTO> laporanSiswa = siswaService.getDataJumlahSiswaByTahun(tahun);
+        return ResponseEntity.ok(laporanSiswa);
     }
     
 }

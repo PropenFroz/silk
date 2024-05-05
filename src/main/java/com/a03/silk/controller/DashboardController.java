@@ -60,5 +60,9 @@ public class DashboardController {
         response.setNovember(totalPendapatanPerBulan[10]);
         response.setDesember(totalPendapatanPerBulan[11]);
         return response;
+        
+    @GetMapping("/dashboard/pengeluaran")
+    public long getPengeluaranPerTahun(@RequestParam("tahun") int tahun) {
+        return dashboardService.getTotalPengeluaranByYear(tahun);
     }
 }

@@ -1,10 +1,10 @@
 package com.a03.silk.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
 @Data
 public class LaporanDataSiswaDTO{

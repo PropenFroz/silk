@@ -1,7 +1,17 @@
 package com.a03.silk.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import com.a03.silk.model.IuranSiswa;
+import com.a03.silk.model.JurusanKursus;
+import com.a03.silk.service.LaporanDataSiswaPDF;
+import com.a03.silk.service.LaporanIuranSiswaPDF;
+import com.lowagie.text.DocumentException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -71,6 +81,24 @@ public class SiswaController {
     public ResponseEntity<List<LaporanDataSiswaDTO>> getJumlahSiswaByTahun(@PathVariable int tahun) {
         List<LaporanDataSiswaDTO> laporanSiswa = siswaService.getDataJumlahSiswaByTahun(tahun);
         return ResponseEntity.ok(laporanSiswa);
+    }
+
+    @GetMapping("/siswa/jumlah/laporan/{tahun}")
+    public void generateLaporanDataSiswa(@PathVariable int tahun, HttpServletResponse response) throws DocumentException, IOException {
+        String title = String.valueOf(tahun);
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+        String currentDateTime = dateFormat.format(new Date());
+        String headerkey = "Content-Disposition";
+        String headervalue = "attachment; filename=LaporanDataSiswaByTahun_" + tahun + ".pdf";
+        response.setHeader(headerkey, headervalue);
+
+        List<LaporanDataSiswaDTO> laporanSiswa = siswaService.getDataJumlahSiswaByTahun(tahun);
+
+        LaporanDataSiswaPDF laporanDataSiswaPDF = new LaporanDataSiswaPDF();
+
+        laporanDataSiswaPDF.generateLaporanDataSiswa(response, title, laporanSiswa);
     }
     
 }

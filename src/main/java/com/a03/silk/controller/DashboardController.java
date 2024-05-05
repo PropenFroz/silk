@@ -44,7 +44,7 @@ public class DashboardController {
     }
 
     @GetMapping("/dashboard/grafik-pengeluaran")
-    public DashboardGrafikTotalPengeluaranResponseDTO getGrafikPengeluaranPerTahun(@RequestParam("tahun") int tahun) { 
+    public DashboardGrafikTotalPengeluaranResponseDTO getGrafikPengeluaranPerTahun(@RequestParam("tahun") int tahun) {
         DashboardGrafikTotalPengeluaranResponseDTO response = new DashboardGrafikTotalPengeluaranResponseDTO();
         long[] totalPendapatanPerBulan = dashboardService.getTotalPengeluaranSetahun(tahun);
         response.setJanuari(totalPendapatanPerBulan[0]);
@@ -60,6 +60,7 @@ public class DashboardController {
         response.setNovember(totalPendapatanPerBulan[10]);
         response.setDesember(totalPendapatanPerBulan[11]);
         return response;
+    }
         
     @GetMapping("/dashboard/pengeluaran")
     public long getPengeluaranPerTahun(@RequestParam("tahun") int tahun) {

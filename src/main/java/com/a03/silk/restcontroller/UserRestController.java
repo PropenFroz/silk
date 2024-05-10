@@ -6,8 +6,12 @@ import com.a03.silk.dto.request.UpdateUserRequestDTO;
 import com.a03.silk.dto.response.CreateUserResponseDTO;
 import com.a03.silk.dto.response.LoginJwtResponseDTO;
 import com.a03.silk.dto.response.UserResponseDTO;
+import com.a03.silk.model.EntryGajiGuru;
+import com.a03.silk.model.EntryGajiGuruDetail;
 import com.a03.silk.model.Guru;
 import com.a03.silk.model.UserModel;
+import com.a03.silk.repository.EntryGajiGuruDb;
+import com.a03.silk.repository.EntryGajiGuruDetailDb;
 import com.a03.silk.repository.GuruDb;
 import com.a03.silk.repository.UserDb;
 import com.a03.silk.restservice.UserRestService;
@@ -45,6 +49,12 @@ public class UserRestController {
 
     @Autowired
     GuruDb guruDb;
+
+    @Autowired
+    EntryGajiGuruDb entryGajiGuruDb;
+
+    @Autowired
+    EntryGajiGuruDetailDb entryGajiGuruDetailDb;
 
     @PostMapping(value = "/user/create")
     public ResponseEntity<?> restAddUser(@Valid @RequestBody CreateUserRequestDTO createUserRequestDTO, BindingResult bindingResult) {
@@ -121,6 +131,30 @@ public class UserRestController {
         try {
             var user = userRestService.getRestUserById(id);
 
+            if (user.getRole().getRole().equals("Guru")) {
+                Guru guru = guruDb.findByUserId(id);
+
+                // Dapatkan daftar EntryGajiGuru yang terkait dengan guru tersebut
+                List<EntryGajiGuru> daftarEntryGajiGuru = guru.getDaftarGajiGuru();
+
+                // Periksa apakah daftarEntryGajiGuru tidak null sebelum mengaksesnya
+                if (daftarEntryGajiGuru != null) {
+                    // Hapus semua EntryGajiGuruDetail yang terkait dengan EntryGajiGuru
+                    for (EntryGajiGuru entryGajiGuru : daftarEntryGajiGuru) {
+                        List<EntryGajiGuruDetail> daftarEntryGajiGuruDetail = entryGajiGuru.getDaftarEntryGajiGuruDetail();
+                        if (daftarEntryGajiGuruDetail != null) {
+                            entryGajiGuruDetailDb.deleteAll(daftarEntryGajiGuruDetail);
+                        }
+                    }
+                }
+
+                // Hapus semua EntryGajiGuru yang terkait dengan Guru
+                entryGajiGuruDb.deleteAll(daftarEntryGajiGuru);
+
+                // Hapus Guru dari guruDb
+                guruDb.delete(guru);
+            }
+            
             // Soft delete by updating the 'deleted' flag
             userRestService.deleteUser(user);
 

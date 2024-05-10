@@ -1,5 +1,6 @@
 package com.a03.silk.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,7 @@ public interface SiswaDb extends JpaRepository<Siswa, Long> {
     List<Siswa> findByJurusanKursusIdJurusanKursus(long idJurusan);
 
     long countByStatusAndJurusanKursus(int status, JurusanKursus jurusan);
+
+    int countByTanggalDaftarBetweenAndStatus(Date startDate, Date endDate, int status);
 }
 

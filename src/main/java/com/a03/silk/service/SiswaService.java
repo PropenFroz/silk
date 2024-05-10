@@ -136,11 +136,11 @@ public class SiswaService {
         for (int i = 0; i < 12; i++) {
             LaporanDataSiswaDTO dto = new LaporanDataSiswaDTO();
             dto.setBulan(namaBulan[i]);
-            dto.setJumlahSiswaBaru(jumlahSiswaBaruBulan[i]);
-            dto.setJumlahSiswaCuti(jumlahSiswaCutiBulan[i]);
-            dto.setJumlahSiswaCutiMasukKembali(jumlahSiswaCutiMasukKembaliBulan[i]);
-            dto.setJumlahSiswaOff(jumlahSiswaOffBulan[i]);
-            dto.setJumlahTotalSiswaAktif(jumlahTotalSiswaAktif[i]);
+            dto.setJumlahSiswaBaru(jumlahSiswaBaruBulan[i+1]);
+            dto.setJumlahSiswaCuti(jumlahSiswaCutiBulan[i+1]);
+            dto.setJumlahSiswaCutiMasukKembali(jumlahSiswaCutiMasukKembaliBulan[i+1]);
+            dto.setJumlahSiswaOff(jumlahSiswaOffBulan[i+1]);
+            dto.setJumlahTotalSiswaAktif(jumlahTotalSiswaAktif[i+1]);
             laporanSiswa.add(dto);
         }
     

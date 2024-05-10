@@ -3,11 +3,8 @@ package com.a03.silk.service;
 // LaporanTransaksiGajiGuruPDF.java
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import com.a03.silk.model.EntryGajiGuruDetail;
 import com.lowagie.text.Document;
@@ -203,7 +200,11 @@ public class LaporanTransaksiGajiGuruPDF {
         table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
         table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent)); // Menambahkan Uang Kursus
-        table.addCell(new Phrase(entry.getTanggal().toString(), fontContent));
+        String tanggalBeli = "-";
+        Date date = entry.getTanggal();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        tanggalBeli = sdf.format(date);
+        table.addCell(new Phrase(tanggalBeli, fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getMinggu1()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getMinggu2()), fontContent));
         table.addCell(new Phrase(formatRupiah(entry.getMinggu3()), fontContent));

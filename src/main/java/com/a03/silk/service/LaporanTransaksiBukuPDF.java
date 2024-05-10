@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -52,7 +54,7 @@ public class LaporanTransaksiBukuPDF {
 
         PdfPTable table = new PdfPTable(12);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] { 0.5f, 1.5f, 1.5f, 0.8f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f });
+        table.setWidths(new float[] { 0.5f, 1.5f, 1.2f, 1.0f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.2f, 1.0f });
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(CMYKColor.lightGray);
@@ -117,12 +119,21 @@ public class LaporanTransaksiBukuPDF {
 
         table.addCell(new Phrase(entry.getBukuPurwacaraka().getJurusanKursus().getNamaJurusan(), fontContent));
 
-        table.addCell(new Phrase(entry.getTanggalBeli().toString(), fontContent));
+        String tanggalBeli = "-";
+        Date date = entry.getTanggalBeli();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        tanggalBeli = sdf.format(date);
+
+        table.addCell(new Phrase(tanggalBeli, fontContent));
 
         long jumlahBeli = entry.getJumlahBeli();
         table.addCell(new Phrase(String.valueOf(jumlahBeli), fontContent));
 
-        table.addCell(new Phrase(entry.getTanggalJual().toString(), fontContent));
+        String tanggalJual = "-";
+        Date dateTanggalJual = entry.getTanggalJual();
+        tanggalJual = sdf.format(dateTanggalJual);
+
+        table.addCell(new Phrase(tanggalJual, fontContent));
 
         long jumlahJual = entry.getJumlahJual();
         table.addCell(new Phrase(String.valueOf(entry.getJumlahJual()), fontContent));

@@ -1,5 +1,13 @@
 package com.a03.silk.service;
 
+import com.a03.silk.model.EntryTransaksiSiswa;
+import com.lowagie.text.*;
+import com.lowagie.text.pdf.CMYKColor;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -7,23 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.a03.silk.model.EntryTransaksiSiswa;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.CMYKColor;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
-
-import jakarta.servlet.http.HttpServletResponse;
-
-public class LaporanTransaksiSiswaPDF {
+public class LaporanPembayaranKursusPDF {
 
     private int entryCounter = 1;
 
@@ -43,7 +35,7 @@ public class LaporanTransaksiSiswaPDF {
 
         PdfPTable table = new PdfPTable(12);
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] { 0.5f, 1.5f, 1.5f, 0.8f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.5f });
+        table.setWidths(new float[] { 0.5f, 1.5f, 1.2f, 1.2f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.5f });
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(CMYKColor.lightGray);
@@ -55,11 +47,11 @@ public class LaporanTransaksiSiswaPDF {
 
         cell.setPhrase(new Phrase("No", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Tanggal Pembayaran", font));
-        table.addCell(cell);
         cell.setPhrase(new Phrase("Nama Siswa", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Jurusan", font));
+        cell.setPhrase(new Phrase("Tanggal Pembayaran", font));
+        table.addCell(cell);
+        cell.setPhrase(new Phrase("Tanggal Daftar", font)); // Ubah nama kolom menjadi "Tanggal Daftar"
         table.addCell(cell);
         cell.setPhrase(new Phrase("Grade", font));
         table.addCell(cell);
@@ -77,6 +69,7 @@ public class LaporanTransaksiSiswaPDF {
         table.addCell(cell);
         cell.setPhrase(new Phrase("Keterangan", font));
         table.addCell(cell);
+
 
         Font fontContent = FontFactory.getFont(FontFactory.TIMES_ROMAN);
         fontContent.setSize(10);
@@ -130,39 +123,64 @@ public class LaporanTransaksiSiswaPDF {
     }
 
     private void addEntryLainnyaToTable(PdfPTable table, String counter, EntryTransaksiSiswa entry, Font fontContent) {
-        table.addCell(new Phrase(counter, fontContent));
-        table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getJurusanKursus().getNamaJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getCash()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getTransfer()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getTransfer() + entry.getCash()), fontContent));
-        table.addCell(new Phrase(entry.getKeterangan(), fontContent));
-    }
+        table.addCell(new Phrase(String.valueOf(counter), fontContent)); // No
+        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent)); // Nama Siswa
 
+        // Tanggal Pembayaran
+        String tanggalPembayaran = "-";
+        if (entry.getTanggalPembayaran() != null) {
+            Date date = entry.getTanggalPembayaran();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            tanggalPembayaran = sdf.format(date);
+        }
+        table.addCell(new Phrase(tanggalPembayaran, fontContent)); // Tanggal Bayar
+
+        // Tanggal Daftar
+        table.addCell(new Phrase(tanggalPembayaran, fontContent)); // Tanggal Daftar
+
+        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent)); // Grade
+        table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent)); // Uang Pendaftaran
+        table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent)); // Uang Kursus
+        table.addCell(new Phrase(formatRupiah(entry.getCash()), fontContent)); // Cash
+        table.addCell(new Phrase(formatRupiah(entry.getTransfer()), fontContent)); // Transfer
+
+        // Jumlah
+        long jumlah = entry.getCash() + entry.getTransfer();
+        table.addCell(new Phrase(formatRupiah(jumlah), fontContent));
+
+        table.addCell(new Phrase(entry.getKeterangan(), fontContent)); // Keterangan
+    }
     private void addEntryToTable(PdfPTable table, int counter, EntryTransaksiSiswa entry, Font fontContent) {
-        table.addCell(new Phrase(String.valueOf(counter), fontContent));
-        String tanggalBeli = "-";
-        Date date = entry.getTanggalPembayaran();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        tanggalBeli = sdf.format(date);
+        table.addCell(new Phrase(String.valueOf(counter), fontContent)); // No
+        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent)); // Nama Siswa
 
-        table.addCell(new Phrase(tanggalBeli, fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getJurusanKursus().getNamaJurusan(), fontContent));
-        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getCash()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getTransfer()), fontContent));
-        table.addCell(new Phrase(formatRupiah(entry.getTransfer() + entry.getCash()), fontContent));
-        table.addCell(new Phrase(entry.getKeterangan(), fontContent));
+        // Tanggal Pembayaran
+        String tanggalPembayaran = "-";
+        if (entry.getTanggalPembayaran() != null) {
+            Date date = entry.getTanggalPembayaran();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            tanggalPembayaran = sdf.format(date);
+        }
+        table.addCell(new Phrase(tanggalPembayaran, fontContent)); // Tanggal Bayar
+
+        // Tanggal Daftar
+        table.addCell(new Phrase(tanggalPembayaran, fontContent)); // Tanggal Daftar
+
+        table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent)); // Grade
+        table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent)); // Uang Pendaftaran
+        table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent)); // Uang Kursus
+        table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent)); // Uang Buku
+        table.addCell(new Phrase(formatRupiah(entry.getCash()), fontContent)); // Cash
+        table.addCell(new Phrase(formatRupiah(entry.getTransfer()), fontContent)); // Transfer
+
+        // Jumlah
+        long jumlah = entry.getCash() + entry.getTransfer();
+        table.addCell(new Phrase(formatRupiah(jumlah), fontContent));
+
+        table.addCell(new Phrase(entry.getKeterangan(), fontContent)); // Keterangan
     }
+
+
 
     private String formatRupiah(long nominal) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));

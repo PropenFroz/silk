@@ -14,5 +14,6 @@ public interface EntryGajiGuruDetailDb extends JpaRepository<EntryGajiGuruDetail
 
     List<EntryGajiGuruDetail> findByEntryGajiGuru_GuruAndTanggalBetween(Guru guru, Date startDate, Date endDate);
 
-    List<EntryGajiGuruDetail> findByTanggalBetweenOrderByTanggalAsc(Date startDate, Date endDate); //wasis
+
+    List<EntryGajiGuruDetail> findByTanggalBetweenOrderByTanggalAsc(Date startDate, Date endDate);
 }

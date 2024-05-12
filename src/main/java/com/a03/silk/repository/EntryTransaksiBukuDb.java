@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.a03.silk.model.BukuPurwacaraka;
 import com.a03.silk.model.EntryTransaksiBuku;
 
 @Repository
@@ -21,4 +22,5 @@ public interface EntryTransaksiBukuDb extends JpaRepository<EntryTransaksiBuku, 
             @Param("endDate") Date endDate
     );
 
+    List<EntryTransaksiBuku> findByBukuPurwacaraka(BukuPurwacaraka buku);
 }

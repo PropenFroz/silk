@@ -58,11 +58,23 @@ public class EntryTransaksiBukuService {
         entryToUpdate.setJumlahJual(updateEntryTransaksiBukuFromDTO.getJumlahJual());
         entryToUpdate.setHargaBeli(updateEntryTransaksiBukuFromDTO.getHargaBeli());
         entryToUpdate.setHargaJual(updateEntryTransaksiBukuFromDTO.getHargaJual());
-    
-        BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToUpdate.getBukuPurwacaraka().getIdBukuPurwacaraka());
-        bukuToUpdate.setJumlah((int)entryToUpdate.getJumlah() + entryToUpdate.getJumlahBeli() - entryToUpdate.getJumlahJual());
 
-        return entryTransaksiBukuDb.save(entryToUpdate);
+        entryTransaksiBukuDb.save(entryToUpdate);
+        
+        BukuPurwacaraka bukuToUpdate = bukuPurwacarakaDb.findByIdBukuPurwacaraka(entryToUpdate.getBukuPurwacaraka().getIdBukuPurwacaraka());
+        List<EntryTransaksiBuku> listEntryByBuku = entryTransaksiBukuDb.findByBukuPurwacaraka(bukuToUpdate);
+
+        int totalJumlahBeli = 0;
+        int totalJumlahJual = 0;
+
+        for (EntryTransaksiBuku entryTransaksiBuku : listEntryByBuku) {
+            totalJumlahBeli += entryTransaksiBuku.getJumlahBeli();
+            totalJumlahJual += entryTransaksiBuku.getJumlahJual();
+        }
+
+        bukuToUpdate.setJumlah(totalJumlahBeli - totalJumlahJual);
+        bukuPurwacarakaDb.save(bukuToUpdate);
+        return entryToUpdate;
     }
 
     public void deleteEntryTransaksiBuku(Long idEntryBuku) {

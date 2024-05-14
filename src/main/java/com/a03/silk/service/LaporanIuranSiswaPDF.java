@@ -2,6 +2,8 @@ package com.a03.silk.service;
 
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -139,7 +141,13 @@ public class LaporanIuranSiswaPDF {
         document.close();
     }
     private void addEntryToTable(PdfPTable table, int counter, IuranSiswa entry, Font fontContent, EntryTransaksiSiswa entryKursus) {
-        String tanggalPembayaran = (entryKursus != null) ? entryKursus.getTanggalPembayaran().toString() : "-";
+        String tanggalPembayaran = "-";
+        if (entryKursus != null && entryKursus.getTanggalPembayaran() != null) {
+            Date date = entryKursus.getTanggalPembayaran();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            tanggalPembayaran = sdf.format(date);
+        }
+
         String namaSiswa = entry.getSiswa().getNamaSiswa();
         String namaJurusan = entry.getSiswa().getJurusanKursus().getNamaJurusan();
         String namaGrade = entry.getSiswa().getGradeKursus().getNamaGrade();

@@ -169,8 +169,8 @@ public class EntryTransaksiSiswaController {
 
         List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);
 
-        LaporanTransaksiSiswaPDF laporanTransaksiSiswaPDF = new LaporanTransaksiSiswaPDF();
-        laporanTransaksiSiswaPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
+        LaporanPembayaranKursusPDF laporanPembayaranKursusPDF = new LaporanPembayaranKursusPDF();
+        laporanPembayaranKursusPDF.generateLaporanTransaksiSiswa(response, title, entryTransaksiSiswaList);
     }
 
     @GetMapping("/iuran-siswa/{id}")

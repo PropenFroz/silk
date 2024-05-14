@@ -164,7 +164,7 @@ public class EntryTransaksiSiswaController {
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD:HH:MM:SS");
         String currentDateTime = dateFormat.format(new Date());
         String headerkey = "Content-Disposition";
-        String headervalue = "attachment; filename=LaporanTransaksiSiswaByJurusan_" + currentDateTime + ".pdf";
+        String headervalue = "attachment; filename=LaporanPembayaranPerJurusan_" + currentDateTime + ".pdf";
         response.setHeader(headerkey, headervalue);
 
         List<EntryTransaksiSiswa> entryTransaksiSiswaList = entryTransaksiSiswaService.getEntryTransaksiSiswaByDateJurusan(startDate, endDate, idJurusan);

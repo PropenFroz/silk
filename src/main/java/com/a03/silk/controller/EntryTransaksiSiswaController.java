@@ -203,5 +203,10 @@ public class EntryTransaksiSiswaController {
         JurusanKursus namaJurusan = jurusanKursusService.getJurusanKursusById(idJurusanKursus);
         laporanIuranSiswaPDF.generateLaporanIuranSiswa(response, title, iuranSiswaList, namaJurusan);
     }
+
+    @GetMapping("/iuran-siswa/all")
+    public List<IuranSiswa> getAllIuranSiswa() {
+        return entryTransaksiSiswaService.getAllIuranSiswa();
+    }
     
 }

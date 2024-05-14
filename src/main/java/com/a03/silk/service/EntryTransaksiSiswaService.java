@@ -216,4 +216,8 @@ public class EntryTransaksiSiswaService {
     public List<IuranSiswa> getIuranSiswaByJurusanAndTahun(long idJurusanKursus, int tahun) {
         return iuranSiswaDb.findBySiswa_JurusanKursus_IdJurusanKursusAndTahun(idJurusanKursus, tahun);
     }
+
+    public List<IuranSiswa> getAllIuranSiswa() {
+        return iuranSiswaDb.findAll();
+    }
 }

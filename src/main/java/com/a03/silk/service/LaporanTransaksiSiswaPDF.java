@@ -131,7 +131,12 @@ public class LaporanTransaksiSiswaPDF {
 
     private void addEntryLainnyaToTable(PdfPTable table, String counter, EntryTransaksiSiswa entry, Font fontContent) {
         table.addCell(new Phrase(counter, fontContent));
-        table.addCell(new Phrase(entry.getTanggalPembayaran().toString(), fontContent));
+        String tanggalPembayaran = "-";
+        Date date = entry.getTanggalPembayaran();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        tanggalPembayaran = sdf.format(date);
+
+        table.addCell(new Phrase(tanggalPembayaran, fontContent));
         table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent));
         table.addCell(new Phrase(entry.getSiswa().getJurusanKursus().getNamaJurusan(), fontContent));
         table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent));

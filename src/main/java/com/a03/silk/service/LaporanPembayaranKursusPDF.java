@@ -28,14 +28,14 @@ public class LaporanPembayaranKursusPDF {
         Font fontTiltle = FontFactory.getFont(FontFactory.TIMES_ROMAN);
         fontTiltle.setSize(20);
 
-        Paragraph paragraph = new Paragraph("LAPORAN TRANSAKSI SISWA UNTUK PERIODE " + title, fontTiltle);
+        Paragraph paragraph = new Paragraph("LAPORAN PEMBAYARAN PER JURUSAN UNTUK PERIODE " + title, fontTiltle);
         paragraph.setSpacingAfter(20);
         paragraph.setAlignment(Paragraph.ALIGN_CENTER);
         document.add(paragraph);
 
-        PdfPTable table = new PdfPTable(12);
+        PdfPTable table = new PdfPTable(11); // Ubah jumlah kolom menjadi 11
         table.setWidthPercentage(100f);
-        table.setWidths(new float[] { 0.5f, 1.5f, 1.2f, 1.2f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.5f });
+        table.setWidths(new float[] { 0.5f, 1.5f, 1.2f, 1.2f, 1.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.5f }); // Sesuaikan lebar kolom
 
         PdfPCell cell = new PdfPCell();
         cell.setBackgroundColor(CMYKColor.lightGray);
@@ -59,8 +59,6 @@ public class LaporanPembayaranKursusPDF {
         table.addCell(cell);
         cell.setPhrase(new Phrase("Uang Kursus", font));
         table.addCell(cell);
-        cell.setPhrase(new Phrase("Uang Buku", font));
-        table.addCell(cell);
         cell.setPhrase(new Phrase("Cash", font));
         table.addCell(cell);
         cell.setPhrase(new Phrase("Transfer", font));
@@ -70,13 +68,11 @@ public class LaporanPembayaranKursusPDF {
         cell.setPhrase(new Phrase("Keterangan", font));
         table.addCell(cell);
 
-
         Font fontContent = FontFactory.getFont(FontFactory.TIMES_ROMAN);
         fontContent.setSize(10);
 
         long totalUangPendaftaran = 0;
         long totalUangKursus = 0;
-        long totalUangBuku = 0;
         long totalCash = 0;
         long totalTransfer = 0;
 
@@ -85,14 +81,12 @@ public class LaporanPembayaranKursusPDF {
                 addEntryLainnyaToTable(table, "", entry, fontContent);
                 totalUangPendaftaran += entry.getUangPendaftaran();
                 totalUangKursus += entry.getUangKursus();
-                totalUangBuku += entry.getUangBuku();
                 totalCash += entry.getCash();
                 totalTransfer += entry.getTransfer();
             } else {
                 addEntryToTable(table, entryCounter++, entry, fontContent);
                 totalUangPendaftaran += entry.getUangPendaftaran();
                 totalUangKursus += entry.getUangKursus();
-                totalUangBuku += entry.getUangBuku();
                 totalCash += entry.getCash();
                 totalTransfer += entry.getTransfer();
             }
@@ -109,13 +103,12 @@ public class LaporanPembayaranKursusPDF {
         table.addCell(totalCell);
         table.addCell(new Phrase(formatRupiah(totalUangPendaftaran), fontTotal));
         table.addCell(new Phrase(formatRupiah(totalUangKursus), fontTotal));
-        table.addCell(new Phrase(formatRupiah(totalUangBuku), fontTotal));
         table.addCell(new Phrase(formatRupiah(totalCash), fontTotal));
         table.addCell(new Phrase(formatRupiah(totalTransfer), fontTotal));
         table.addCell(new Phrase(formatRupiah(totalCash + totalTransfer), fontTotal));
-        
+
         PdfPCell emptyCell = new PdfPCell(new Phrase(""));
-        emptyCell.setColspan(12);
+        emptyCell.setColspan(11); // Sesuaikan jumlah kolom menjadi 11
         table.addCell(emptyCell);
 
         document.add(table);
@@ -150,6 +143,7 @@ public class LaporanPembayaranKursusPDF {
 
         table.addCell(new Phrase(entry.getKeterangan(), fontContent)); // Keterangan
     }
+
     private void addEntryToTable(PdfPTable table, int counter, EntryTransaksiSiswa entry, Font fontContent) {
         table.addCell(new Phrase(String.valueOf(counter), fontContent)); // No
         table.addCell(new Phrase(entry.getSiswa().getNamaSiswa(), fontContent)); // Nama Siswa
@@ -169,7 +163,6 @@ public class LaporanPembayaranKursusPDF {
         table.addCell(new Phrase(entry.getSiswa().getGradeKursus().getNamaGrade(), fontContent)); // Grade
         table.addCell(new Phrase(formatRupiah(entry.getUangPendaftaran()), fontContent)); // Uang Pendaftaran
         table.addCell(new Phrase(formatRupiah(entry.getUangKursus()), fontContent)); // Uang Kursus
-        table.addCell(new Phrase(formatRupiah(entry.getUangBuku()), fontContent)); // Uang Buku
         table.addCell(new Phrase(formatRupiah(entry.getCash()), fontContent)); // Cash
         table.addCell(new Phrase(formatRupiah(entry.getTransfer()), fontContent)); // Transfer
 
@@ -179,8 +172,6 @@ public class LaporanPembayaranKursusPDF {
 
         table.addCell(new Phrase(entry.getKeterangan(), fontContent)); // Keterangan
     }
-
-
 
     private String formatRupiah(long nominal) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));

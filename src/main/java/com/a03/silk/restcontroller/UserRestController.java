@@ -108,6 +108,9 @@ public class UserRestController {
             if (userDariDatabase != null && userRestService.verifyPassword(updateUserRequestDTO.getPassword(), userDariDatabase.getPassword())) {
                 return new ResponseEntity<>("Password baru tidak boleh sama dengan password lama.", HttpStatus.BAD_REQUEST);
             }
+            if (userDariDatabase != null && !userRestService.verifyPassword(updateUserRequestDTO.getCurrentPassword(), userDariDatabase.getPassword())) {
+                return new ResponseEntity<>("Masukkan Current Password yang benar, tidak bisa mengganti password.", HttpStatus.BAD_REQUEST);
+            }
             if (userFromDTO.getPassword()== null || userFromDTO.getPassword().length() < 8) {
                 return new ResponseEntity<>("Password setidaknya harus 8 karakter.", HttpStatus.BAD_REQUEST);
             }
@@ -120,6 +123,25 @@ public class UserRestController {
 
             // Simpan pembaruan ke database
             userRestService.saveRestUser(userDariDatabase);
+
+            return new ResponseEntity<>(userFromDTO, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping(value = "/user/{id}/password")
+    public ResponseEntity<?> restGetPassword(@PathVariable("id") Long id, @Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO, BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
+        }
+        else {
+
+            var userFromDTO = userMapper.updateUserModelRequestDTOToUserModel(updateUserRequestDTO);
+
+            var userDariDatabase = userRestService.getRestUserById(id);
+
+            if (userDariDatabase != null && userRestService.verifyPassword(updateUserRequestDTO.getPassword(), userDariDatabase.getPassword())) {
+                return new ResponseEntity<>("Masukkan Current Password yang benar, tidak bisa mengganti password.", HttpStatus.BAD_REQUEST);
+            }
 
             return new ResponseEntity<>(userFromDTO, HttpStatus.OK);
         }
